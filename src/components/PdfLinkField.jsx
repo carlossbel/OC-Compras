@@ -2,14 +2,20 @@ import { useRef, useState } from "react";
 import { subirPDF } from "../services/ocService";
 import Icon from "./Icon";
 
-// Campo para vincular un PDF: subirlo a Firebase Storage o pegar una URL.
 const MAX_MB = 10;
 
+// Campo para vincular un PDF: por enlace (predeterminado, gratis) o subiéndolo a Storage (requiere Blaze).
 export default function PdfLinkField({ label, value, onChange, carpeta }) {
   const fileRef = useRef(null);
   const [subiendo, setSubiendo] = useState(false);
   const [progreso, setProgreso] = useState(0);
-  const [modoUrl, setModoUrl] = useState(false);
+  const [modoSubir, setModoSubir] = useState(false);
+  const [urlText, setUrlText] = useState("");
+
+  const commitUrl = () => {
+    const v = urlText.trim();
+    if (v) onChange(v);
+  };
 
   const onFile = async (e) => {
     const file = e.target.files?.[0];
@@ -20,10 +26,7 @@ export default function PdfLinkField({ label, value, onChange, carpeta }) {
       return;
     }
     if (file.size > MAX_MB * 1024 * 1024) {
-      alert(
-        `El PDF pesa ${(file.size / 1024 / 1024).toFixed(1)} MB. ` +
-          `Máximo ${MAX_MB} MB — comprímelo o usa “Pegar URL” con un enlace (Drive/SharePoint).`
-      );
+      alert(`El PDF pesa ${(file.size / 1024 / 1024).toFixed(1)} MB. Máximo ${MAX_MB} MB.`);
       if (fileRef.current) fileRef.current.value = "";
       return;
     }
@@ -35,59 +38,72 @@ export default function PdfLinkField({ label, value, onChange, carpeta }) {
     } catch (err) {
       console.error(err);
       alert(
-        "No se pudo subir el PDF. Verifica que Firebase Storage esté habilitado " +
-          "y con reglas publicadas. Mientras tanto puedes pegar un enlace con “Pegar URL”."
+        "No se pudo subir el PDF. Firebase Storage requiere el plan Blaze. " +
+          "Usa mejor la opción de pegar un enlace (Drive/OneDrive/SharePoint)."
       );
-      setModoUrl(true);
+      setModoSubir(false);
     } finally {
       setSubiendo(false);
       if (fileRef.current) fileRef.current.value = "";
     }
   };
 
-  return (
-    <div className="field">
-      <label>{label}</label>
-
-      {value ? (
+  // Ya hay un PDF vinculado
+  if (value) {
+    return (
+      <div className="field">
+        <label>{label}</label>
         <div className="pdf-row">
           <a href={value} target="_blank" rel="noopener noreferrer" className="pdf-link">
             <Icon name="file" size={16} /> Ver PDF
           </a>
-          <button type="button" className="btn btn-outline btn-sm" onClick={() => fileRef.current?.click()}>
-            Cambiar
-          </button>
-          <button type="button" className="btn btn-danger btn-sm" onClick={() => onChange("")}>
+          <button type="button" className="btn btn-danger btn-sm" onClick={() => { onChange(""); setUrlText(""); }}>
             Quitar
           </button>
         </div>
-      ) : modoUrl ? (
-        <div className="pdf-row">
-          <input
-            placeholder="Pega el enlace del PDF (Drive, SharePoint…)"
-            defaultValue=""
-            onBlur={(e) => e.target.value.trim() && onChange(e.target.value.trim())}
-          />
-          <button type="button" className="btn btn-outline btn-sm" onClick={() => setModoUrl(false)}>
-            Subir archivo
-          </button>
-        </div>
-      ) : (
-        <div className="pdf-row">
-          <button type="button" className="btn btn-ghost btn-sm" onClick={() => fileRef.current?.click()} disabled={subiendo}>
-            {subiendo ? `Subiendo… ${progreso}%` : (<><Icon name="upload" size={15} /> Subir PDF</>)}
-          </button>
-          {subiendo ? (
-            <div className="upload-bar"><span style={{ width: `${progreso}%` }} /></div>
-          ) : (
-            <button type="button" className="btn btn-outline btn-sm" onClick={() => setModoUrl(true)}>
-              Pegar URL
-            </button>
-          )}
-        </div>
-      )}
+      </div>
+    );
+  }
 
-      <input ref={fileRef} type="file" accept="application/pdf" onChange={onFile} style={{ display: "none" }} />
+  return (
+    <div className="field">
+      <label>{label}</label>
+
+      {modoSubir ? (
+        <>
+          <div className="pdf-row">
+            <button type="button" className="btn btn-ghost btn-sm" onClick={() => fileRef.current?.click()} disabled={subiendo}>
+              {subiendo ? `Subiendo… ${progreso}%` : (<><Icon name="upload" size={15} /> Elegir PDF</>)}
+            </button>
+            {subiendo && <div className="upload-bar"><span style={{ width: `${progreso}%` }} /></div>}
+          </div>
+          {!subiendo && (
+            <span className="pdf-hint">
+              Requiere plan Blaze.{" "}
+              <button type="button" className="linkbtn" onClick={() => setModoSubir(false)}>Mejor pegar un enlace</button>
+            </span>
+          )}
+          <input ref={fileRef} type="file" accept="application/pdf" onChange={onFile} style={{ display: "none" }} />
+        </>
+      ) : (
+        <>
+          <div className="pdf-row">
+            <input
+              placeholder="Pega el enlace del PDF (Drive, OneDrive, SharePoint…)"
+              value={urlText}
+              onChange={(e) => setUrlText(e.target.value)}
+              onBlur={commitUrl}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); commitUrl(); } }}
+            />
+            <button type="button" className="btn btn-ghost btn-sm" onClick={commitUrl} disabled={!urlText.trim()}>
+              Guardar
+            </button>
+          </div>
+          <span className="pdf-hint">
+            <button type="button" className="linkbtn" onClick={() => setModoSubir(true)}>Subir archivo</button> (requiere Blaze)
+          </span>
+        </>
+      )}
     </div>
   );
 }

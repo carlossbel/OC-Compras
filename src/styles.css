@@ -244,6 +244,8 @@ tbody tr:last-child td { border-bottom: none; }
 .pdf-link:hover { text-decoration: underline; }
 .upload-bar { flex: 1; height: 8px; background: var(--border); border-radius: 20px; overflow: hidden; min-width: 120px; }
 .upload-bar span { display: block; height: 100%; background: var(--navy-700); transition: width .2s; }
+.pdf-hint { font-size: 12px; color: var(--muted); margin-top: 5px; display: block; }
+.linkbtn { background: none; border: none; color: var(--navy-700); font-weight: 600; padding: 0; font-size: 12px; cursor: pointer; text-decoration: underline; }
 
 /* Semáforo */
 .semaforo { display: inline-flex; align-items: center; gap: 7px; }

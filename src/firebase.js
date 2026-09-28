@@ -15,3 +15,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+// Cortar reintentos rápido: si Storage no responde, falla en ~12s en vez de colgarse 2 min.
+storage.maxUploadRetryTime = 12000;
+storage.maxOperationRetryTime = 12000;
