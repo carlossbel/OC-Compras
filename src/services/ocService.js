@@ -9,7 +9,7 @@ import {
   orderBy,
   serverTimestamp,
 } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../firebase";
 import { etapaDeEstado } from "../utils/format";
 
@@ -78,10 +78,28 @@ export async function eliminarOrden(id) {
   return deleteDoc(doc(db, COL, id));
 }
 
-// Sube un PDF a Firebase Storage y devuelve la URL para vincularlo.
-export async function subirPDF(file, carpeta = "comprobantes") {
+// Sube un PDF a Firebase Storage con progreso y devuelve la URL para vincularlo.
+// onProgress recibe un número 0-100.
+export function subirPDF(file, carpeta = "comprobantes", onProgress) {
   const limpio = file.name.replace(/[^\w.\-]+/g, "_");
   const r = ref(storage, `${carpeta}/${Date.now()}_${limpio}`);
-  await uploadBytes(r, file);
-  return getDownloadURL(r);
+  const task = uploadBytesResumable(r, file, { contentType: "application/pdf" });
+  return new Promise((resolve, reject) => {
+    task.on(
+      "state_changed",
+      (snap) => {
+        if (onProgress && snap.totalBytes) {
+          onProgress(Math.round((snap.bytesTransferred / snap.totalBytes) * 100));
+        }
+      },
+      reject,
+      async () => {
+        try {
+          resolve(await getDownloadURL(task.snapshot.ref));
+        } catch (e) {
+          reject(e);
+        }
+      }
+    );
+  });
 }

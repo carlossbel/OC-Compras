@@ -9,7 +9,6 @@ import { estimarFecha } from "../utils/estimacion";
 import PdfLinkField from "./PdfLinkField";
 
 const VACIO = {
-  fuente: "",
   cliente: "",
   ocCliente: "",
   fechaRecepcionOC: "",
@@ -87,33 +86,30 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
     <form onSubmit={submit}>
       <div className="form-grid">
         <div className="field">
-          <label>Fuente</label>
-          <input value={f.fuente} onChange={set("fuente")} placeholder="Origen de la OC (correo, cotización…)" />
-        </div>
-        <div className="field">
           <label>Cliente <span className="req">*</span></label>
           <input value={f.cliente} onChange={set("cliente")} placeholder="De la OC" />
         </div>
-
         <div className="field">
           <label>OC del Cliente</label>
           <input value={f.ocCliente} onChange={set("ocCliente")} placeholder="Ej. ST_26_06" />
         </div>
+
         <div className="field">
           <label>CROL <span className="td-mut" style={{ fontWeight: 400 }}>· consecutivo del ERP</span></label>
           <input value={f.crol} onChange={set("crol")} />
         </div>
-
         <PdfLinkField
           label="Vínculo a la CROL (PDF / enlace)"
           value={f.crolUrl}
           onChange={setVal("crolUrl")}
           carpeta="crol"
         />
+
         <div className="field">
           <label>Clave de Producto</label>
           <input value={f.claveProducto} onChange={set("claveProducto")} placeholder="Se toma de la OC del CROL" />
         </div>
+        <div className="field" />
 
         <div className="field full">
           <label>Descripción <span className="req">*</span></label>

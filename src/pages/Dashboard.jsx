@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import Topbar from "../components/Topbar";
 import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
-import { useAuth } from "../context/AuthContext";
 import { COLOR_ESTADO, ESTADOS_ENVIO } from "../constants/catalogs";
 
 function Donut({ data }) {
@@ -50,7 +49,6 @@ function Donut({ data }) {
 
 export default function Dashboard() {
   const { pendientes, cerradas, inicio, seguimiento, finalizado } = useData();
-  const { user } = useAuth();
   const nav = useNavigate();
 
   const totalCrol = new Set(pendientes.map((o) => o.crol || o.id)).size;
@@ -75,7 +73,7 @@ export default function Dashboard() {
 
       <div className="content">
         <div style={{ marginBottom: 22 }}>
-          <h2 style={{ margin: "0 0 2px" }}>Hola, {user?.nombre}</h2>
+          <h2 style={{ margin: "0 0 2px" }}>Resumen general</h2>
           <p className="td-mut" style={{ margin: 0 }}>Resumen del estado de las órdenes de compra.</p>
         </div>
 

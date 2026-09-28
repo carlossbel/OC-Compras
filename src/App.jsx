@@ -1,8 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "./context/AuthContext";
 import { DataProvider } from "./context/DataContext";
 import Layout from "./components/Layout";
-import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import NuevaOC from "./pages/NuevaOC";
 import Etapa from "./pages/Etapa";
@@ -11,16 +9,6 @@ import Cerradas from "./pages/Cerradas";
 import Buscador from "./pages/Buscador";
 
 export default function App() {
-  const { user } = useAuth();
-
-  if (!user) {
-    return (
-      <Routes>
-        <Route path="*" element={<Login />} />
-      </Routes>
-    );
-  }
-
   return (
     <DataProvider>
       <Layout>

@@ -105,7 +105,6 @@ export default function DetalleOC({ oc, onClose }) {
 
           <div className="card" style={{ marginBottom: 18 }}>
             <div className="detail-grid">
-              <Item k="Fuente" v={oc.fuente} />
               <Item k="Cliente" v={oc.cliente} />
               <Item k="OC Cliente" v={oc.ocCliente} />
               <Item k="CROL" v={oc.crol} />

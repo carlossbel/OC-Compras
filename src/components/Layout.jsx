@@ -1,21 +1,18 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { NavLink } from "react-router-dom";
 import { useData } from "../context/DataContext";
 import Icon from "./Icon";
 
 const link = ({ isActive }) => (isActive ? "active" : "");
 
 export default function Layout({ children }) {
-  const { user, logout } = useAuth();
   const { inicio, seguimiento, finalizado, cerradas } = useData();
-  const nav = useNavigate();
 
   return (
     <div className="app">
       <aside className="sidebar">
         <div className="brand">
           <img
-            src="/logo.png"
+            src="/logo-white.png"
             alt="BLOOBIT"
             className="brand-logo"
             onError={(e) => { e.currentTarget.classList.add("hidden"); e.currentTarget.nextSibling.classList.remove("hidden"); }}
@@ -58,18 +55,6 @@ export default function Layout({ children }) {
             {cerradas.length > 0 && <span className="badge">{cerradas.length}</span>}
           </NavLink>
         </nav>
-
-        <div className="sidebar-foot">
-          <div className="user"><Icon name="user" size={16} /> {user?.nombre}</div>
-          <button
-            onClick={() => {
-              logout();
-              nav("/");
-            }}
-          >
-            <Icon name="logout" size={16} /> Cerrar sesión
-          </button>
-        </div>
       </aside>
 
       <div className="main">{children}</div>

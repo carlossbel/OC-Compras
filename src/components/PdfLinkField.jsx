@@ -3,9 +3,12 @@ import { subirPDF } from "../services/ocService";
 import Icon from "./Icon";
 
 // Campo para vincular un PDF: subirlo a Firebase Storage o pegar una URL.
+const MAX_MB = 10;
+
 export default function PdfLinkField({ label, value, onChange, carpeta }) {
   const fileRef = useRef(null);
   const [subiendo, setSubiendo] = useState(false);
+  const [progreso, setProgreso] = useState(0);
   const [modoUrl, setModoUrl] = useState(false);
 
   const onFile = async (e) => {
@@ -13,11 +16,21 @@ export default function PdfLinkField({ label, value, onChange, carpeta }) {
     if (!file) return;
     if (file.type !== "application/pdf") {
       alert("Selecciona un archivo PDF.");
+      if (fileRef.current) fileRef.current.value = "";
+      return;
+    }
+    if (file.size > MAX_MB * 1024 * 1024) {
+      alert(
+        `El PDF pesa ${(file.size / 1024 / 1024).toFixed(1)} MB. ` +
+          `Máximo ${MAX_MB} MB — comprímelo o usa “Pegar URL” con un enlace (Drive/SharePoint).`
+      );
+      if (fileRef.current) fileRef.current.value = "";
       return;
     }
     setSubiendo(true);
+    setProgreso(0);
     try {
-      const url = await subirPDF(file, carpeta);
+      const url = await subirPDF(file, carpeta, setProgreso);
       onChange(url);
     } catch (err) {
       console.error(err);
@@ -62,11 +75,15 @@ export default function PdfLinkField({ label, value, onChange, carpeta }) {
       ) : (
         <div className="pdf-row">
           <button type="button" className="btn btn-ghost btn-sm" onClick={() => fileRef.current?.click()} disabled={subiendo}>
-            {subiendo ? "Subiendo…" : (<><Icon name="upload" size={15} /> Subir PDF</>)}
+            {subiendo ? `Subiendo… ${progreso}%` : (<><Icon name="upload" size={15} /> Subir PDF</>)}
           </button>
-          <button type="button" className="btn btn-outline btn-sm" onClick={() => setModoUrl(true)}>
-            Pegar URL
-          </button>
+          {subiendo ? (
+            <div className="upload-bar"><span style={{ width: `${progreso}%` }} /></div>
+          ) : (
+            <button type="button" className="btn btn-outline btn-sm" onClick={() => setModoUrl(true)}>
+              Pegar URL
+            </button>
+          )}
         </div>
       )}
 

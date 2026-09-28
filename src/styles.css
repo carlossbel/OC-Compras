@@ -46,8 +46,7 @@ button { font-family: inherit; cursor: pointer; }
   color: #fff;
 }
 .brand-logo {
-  height: 34px; width: auto; max-width: 150px; object-fit: contain;
-  background: #fff; padding: 7px 11px; border-radius: 9px;
+  height: 40px; width: auto; max-width: 180px; object-fit: contain;
 }
 .brand-fallback { font-size: 22px; font-weight: 800; letter-spacing: .5px; }
 .brand-sub { font-size: 11px; font-weight: 500; color:#9db2e8; letter-spacing:.6px; }
@@ -211,7 +210,7 @@ tbody tr:last-child td { border-bottom: none; }
   display:flex; flex-direction:column; justify-content:center; padding: 60px;
 }
 .login-art .logo-big { width: 60px; height:60px; border-radius: 15px; background:#fff; color:var(--navy); display:grid; place-items:center; font-weight:900; font-size:34px; margin-bottom: 26px; }
-.login-logo { height: 58px; width: auto; max-width: 260px; object-fit: contain; margin-bottom: 26px; background:#fff; padding: 16px 22px; border-radius: 16px; }
+.login-logo { height: 72px; width: auto; max-width: 300px; object-fit: contain; margin-bottom: 26px; }
 .login-art h1 { font-size: 36px; margin: 0 0 12px; }
 .login-art p { color:#b9c8ee; font-size: 15px; line-height: 1.6; max-width: 420px; }
 .login-art .feat { margin-top: 30px; display:flex; flex-direction:column; gap: 12px; }
@@ -243,6 +242,8 @@ tbody tr:last-child td { border-bottom: none; }
 .pdf-row input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(59,130,246,.15); }
 .pdf-link { color: var(--navy-700); font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
 .pdf-link:hover { text-decoration: underline; }
+.upload-bar { flex: 1; height: 8px; background: var(--border); border-radius: 20px; overflow: hidden; min-width: 120px; }
+.upload-bar span { display: block; height: 100%; background: var(--navy-700); transition: width .2s; }
 
 /* Semáforo */
 .semaforo { display: inline-flex; align-items: center; gap: 7px; }
