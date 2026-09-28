@@ -102,7 +102,6 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
           label="Vínculo a la CROL (PDF / enlace)"
           value={f.crolUrl}
           onChange={setVal("crolUrl")}
-          carpeta="crol"
         />
 
         <div className="field">
@@ -189,7 +188,6 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
           label="Factura — acuse firmado (PDF / enlace)"
           value={f.facturaUrl}
           onChange={setVal("facturaUrl")}
-          carpeta="facturas"
         />
 
         <div className="field">
