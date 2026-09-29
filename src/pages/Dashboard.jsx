@@ -3,6 +3,7 @@ import Topbar from "../components/Topbar";
 import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
 import { COLOR_ESTADO, ESTADOS_ENVIO } from "../constants/catalogs";
+import { estimarFecha } from "../utils/estimacion";
 
 function Donut({ data }) {
   const total = data.reduce((s, d) => s + d.value, 0);
@@ -47,22 +48,45 @@ function Donut({ data }) {
   );
 }
 
+// Indicador de entregas a tiempo para las OC cerradas.
+// Compara la fecha de entrega real al cliente contra la fecha estimada al cliente.
+function calcularIndicador(cerradas) {
+  let aTiempo = 0, atrasadas = 0;
+  for (const o of cerradas) {
+    const real = o.fechaEntregaRealCliente;
+    const est = o.fechaEstimadaCliente || estimarFecha(o.fechaRecepcionOC, o.tiempoEntregaCliente);
+    if (!real || !est) continue;
+    if (real <= est) aTiempo++;
+    else atrasadas++;
+  }
+  const total = aTiempo + atrasadas;
+  const pct = total ? Math.round((aTiempo / total) * 100) : null;
+  return { aTiempo, atrasadas, total, pct };
+}
+
 export default function Dashboard() {
   const { pendientes, cerradas, inicio, seguimiento, finalizado } = useData();
   const nav = useNavigate();
 
-  const totalCrol = new Set(pendientes.map((o) => o.crol || o.id)).size;
   const donut = ESTADOS_ENVIO.map((s) => ({
     label: s,
     value: pendientes.filter((o) => o.estadoEnvio === s).length,
     color: COLOR_ESTADO[s],
   })).filter((d) => d.value > 0);
 
+  const ind = calcularIndicador(cerradas);
+
   const stats = [
-    { label: "OC Pendientes", value: pendientes.length, sub: `${totalCrol} folios CROL`, color: "#3b82f6" },
-    { label: "Inicio", value: inicio.length, sub: "Por procesar", color: "#f59e0b" },
-    { label: "Seguimiento", value: seguimiento.length, sub: "Producción / tránsito", color: "#6366f1" },
-    { label: "Finalizados", value: finalizado.length, sub: "Recibidas / entregadas", color: "#10b981" },
+    { label: "Inicio", value: inicio.length, sub: "Por procesar", color: "#f59e0b", to: "/inicio" },
+    { label: "Seguimiento", value: seguimiento.length, sub: "Producción / tránsito", color: "#6366f1", to: "/seguimiento" },
+    { label: "Finalizados", value: finalizado.length, sub: "Recibidas / entregadas", color: "#10b981", to: "/finalizados" },
+    {
+      label: "Cerradas",
+      value: cerradas.length,
+      sub: ind.pct !== null ? `${ind.pct}% entregas a tiempo` : "Histórico",
+      color: "#64748b",
+      to: "/cerradas",
+    },
   ];
 
   return (
@@ -74,12 +98,12 @@ export default function Dashboard() {
       <div className="content">
         <div style={{ marginBottom: 22 }}>
           <h2 style={{ margin: "0 0 2px" }}>Resumen general</h2>
-          <p className="td-mut" style={{ margin: 0 }}>Resumen del estado de las órdenes de compra.</p>
+          <p className="td-mut" style={{ margin: 0 }}>Órdenes de compra por etapa e indicador de cumplimiento.</p>
         </div>
 
         <div className="grid cards-4">
           {stats.map((s) => (
-            <div className="stat" key={s.label}>
+            <div className="stat" key={s.label} style={{ cursor: "pointer" }} onClick={() => nav(s.to)}>
               <span className="accent" style={{ background: s.color }} />
               <div className="label">{s.label}</div>
               <div className="value">{s.value}</div>
@@ -101,18 +125,43 @@ export default function Dashboard() {
           </div>
 
           <div className="card">
-            <div className="section-title" style={{ margin: "0 0 14px" }}>Accesos rápidos</div>
-            <div className="grid cards-2">
-              <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/nueva")}><Icon name="plus" size={16} /> Registrar nueva OC</button>
-              <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/pendientes")}><Icon name="list" size={16} /> Ver OC pendientes</button>
-              <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/seguimiento")}><Icon name="truck" size={16} /> Ir a Seguimiento</button>
-              <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/cerradas")}><Icon name="archive" size={16} /> Órdenes cerradas</button>
+            <div className="section-title" style={{ margin: "0 0 14px" }}>
+              Indicador · Entregas a tiempo (cerradas)
             </div>
-            <div style={{ marginTop: 18, padding: 16, background: "var(--blue-soft)", borderRadius: 12 }}>
-              <div className="td-mut" style={{ fontSize: 12, fontWeight: 600, textTransform: "uppercase" }}>Histórico</div>
-              <div style={{ fontSize: 28, fontWeight: 800, color: "var(--navy-700)" }}>{cerradas.length}</div>
-              <div className="td-mut" style={{ fontSize: 13 }}>órdenes cerradas</div>
-            </div>
+            {ind.total > 0 ? (
+              <>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 14 }}>
+                  <span style={{ fontSize: 42, fontWeight: 800, color: "var(--green)" }}>{ind.pct}%</span>
+                  <span className="td-mut">a tiempo · {ind.total} órdenes evaluadas</span>
+                </div>
+                <div className="ind-bar">
+                  <span style={{ width: `${ind.pct}%`, background: "var(--green)" }} />
+                  <span style={{ width: `${100 - ind.pct}%`, background: "var(--red)" }} />
+                </div>
+                <div style={{ display: "flex", gap: 20, marginTop: 14 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ width: 11, height: 11, borderRadius: 3, background: "var(--green)" }} />
+                    <span className="td-mut">A tiempo</span> <b>{ind.aTiempo}</b>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ width: 11, height: 11, borderRadius: 3, background: "var(--red)" }} />
+                    <span className="td-mut">Atrasadas</span> <b>{ind.atrasadas}</b>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="empty"><Icon name="checkCircle" size={40} strokeWidth={1.4} style={{ opacity: .5, marginBottom: 8 }} /><div>Aún no hay órdenes cerradas con fecha de entrega para evaluar.</div></div>
+            )}
+          </div>
+        </div>
+
+        <div className="card" style={{ marginTop: 16 }}>
+          <div className="section-title" style={{ margin: "0 0 14px" }}>Accesos rápidos</div>
+          <div className="grid cards-4">
+            <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/nueva")}><Icon name="plus" size={16} /> Registrar nueva OC</button>
+            <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/inicio")}><Icon name="inbox" size={16} /> Ir a Inicio</button>
+            <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/seguimiento")}><Icon name="truck" size={16} /> Ir a Seguimiento</button>
+            <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/cerradas")}><Icon name="archive" size={16} /> Órdenes cerradas</button>
           </div>
         </div>
       </div>
