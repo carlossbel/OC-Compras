@@ -4,7 +4,7 @@ import {
   TIEMPOS_ENTREGA,
   PROVEEDORES,
 } from "../constants/catalogs";
-import { generarCrol, fmtFecha } from "../utils/format";
+import { fmtFecha } from "../utils/format";
 import { estimarFecha } from "../utils/estimacion";
 import PdfLinkField from "./PdfLinkField";
 
@@ -53,7 +53,6 @@ function EstimadaCalc({ label, base, tiempo, alerta }) {
 export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) {
   const [f, setF] = useState({
     ...VACIO,
-    crol: modo === "crear" ? generarCrol() : "",
     fechaRecepcionOC:
       modo === "crear" ? new Date().toISOString().slice(0, 10) : "",
     ...(inicial || {}),
@@ -95,8 +94,8 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
         </div>
 
         <div className="field">
-          <label>CROL <span className="td-mut" style={{ fontWeight: 400 }}>· consecutivo del ERP</span></label>
-          <input value={f.crol} onChange={set("crol")} />
+          <label>CROL</label>
+          <input value={f.crol} onChange={set("crol")} placeholder="Folio de la OC en CROL" />
         </div>
         <PdfLinkField
           label="Vínculo a la CROL (PDF / enlace)"

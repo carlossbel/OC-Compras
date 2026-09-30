@@ -5,6 +5,7 @@ import FlowStepper from "./FlowStepper";
 import { EstadoChip, EtapaChip } from "./Chip";
 import Semaforo from "./Semaforo";
 import Icon from "./Icon";
+import { useAuth } from "../context/AuthContext";
 import { ESTADOS_ENVIO } from "../constants/catalogs";
 import { fmtFecha, fmtNum } from "../utils/format";
 import { estaAtrasada } from "../utils/estimacion";
@@ -45,6 +46,7 @@ function PdfLink({ k, url }) {
 }
 
 export default function DetalleOC({ oc, onClose }) {
+  const { esAdmin } = useAuth();
   const [editar, setEditar] = useState(false);
 
   const onGuardar = async (data) => {
@@ -93,13 +95,16 @@ export default function DetalleOC({ oc, onClose }) {
             <EtapaChip etapa={oc.etapa} cerrada={oc.cerrada} />
             <EstadoChip estado={oc.estadoEnvio} />
             <Semaforo oc={oc} showLabel />
-            {!oc.cerrada && (
+            {esAdmin && !oc.cerrada && (
               <label style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center", fontSize: 13 }}>
                 Cambiar estado:
                 <select className="select-inline" value={oc.estadoEnvio} onChange={avanzar}>
                   {ESTADOS_ENVIO.map((s) => <option key={s} value={s}>{s}</option>)}
                 </select>
               </label>
+            )}
+            {!esAdmin && (
+              <span className="chip soft" style={{ marginLeft: "auto" }}><Icon name="eye" size={14} /> Solo lectura</span>
             )}
           </div>
 
@@ -138,17 +143,19 @@ export default function DetalleOC({ oc, onClose }) {
             )}
           </div>
 
-          <div className="form-actions" style={{ justifyContent: "space-between" }}>
-            <button className="btn btn-danger" onClick={borrar}><Icon name="trash" size={16} /> Eliminar</button>
-            <div style={{ display: "flex", gap: 10 }}>
-              <button className="btn btn-outline" onClick={() => setEditar(true)}><Icon name="edit" size={16} /> Editar</button>
-              {oc.cerrada ? (
-                <button className="btn btn-ghost" onClick={reabrir}>Reabrir</button>
-              ) : (
-                <button className="btn btn-green" onClick={cerrar}><Icon name="check" size={16} /> Cerrar OC</button>
-              )}
+          {esAdmin && (
+            <div className="form-actions" style={{ justifyContent: "space-between" }}>
+              <button className="btn btn-danger" onClick={borrar}><Icon name="trash" size={16} /> Eliminar</button>
+              <div style={{ display: "flex", gap: 10 }}>
+                <button className="btn btn-outline" onClick={() => setEditar(true)}><Icon name="edit" size={16} /> Editar</button>
+                {oc.cerrada ? (
+                  <button className="btn btn-ghost" onClick={reabrir}>Reabrir</button>
+                ) : (
+                  <button className="btn btn-green" onClick={cerrar}><Icon name="check" size={16} /> Cerrar OC</button>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </>
       )}
     </Modal>

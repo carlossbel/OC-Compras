@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Topbar from "../components/Topbar";
 import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
+import { useAuth } from "../context/AuthContext";
 import { COLOR_ESTADO, ESTADOS_ENVIO } from "../constants/catalogs";
 import { estimarFecha } from "../utils/estimacion";
 
@@ -66,6 +67,7 @@ function calcularIndicador(cerradas) {
 
 export default function Dashboard() {
   const { pendientes, cerradas, inicio, seguimiento, finalizado } = useData();
+  const { esAdmin } = useAuth();
   const nav = useNavigate();
 
   const donut = ESTADOS_ENVIO.map((s) => ({
@@ -92,7 +94,7 @@ export default function Dashboard() {
   return (
     <>
       <Topbar title="Dashboard">
-        <button className="btn btn-primary" onClick={() => nav("/nueva")}><Icon name="plus" size={16} /> Nueva OC</button>
+        {esAdmin && <button className="btn btn-primary" onClick={() => nav("/nueva")}><Icon name="plus" size={16} /> Nueva OC</button>}
       </Topbar>
 
       <div className="content">
@@ -158,7 +160,9 @@ export default function Dashboard() {
         <div className="card" style={{ marginTop: 16 }}>
           <div className="section-title" style={{ margin: "0 0 14px" }}>Accesos rápidos</div>
           <div className="grid cards-4">
-            <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/nueva")}><Icon name="plus" size={16} /> Registrar nueva OC</button>
+            {esAdmin
+              ? <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/nueva")}><Icon name="plus" size={16} /> Registrar nueva OC</button>
+              : <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/reportes")}><Icon name="chart" size={16} /> Ver reportes</button>}
             <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/inicio")}><Icon name="inbox" size={16} /> Ir a Inicio</button>
             <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/seguimiento")}><Icon name="truck" size={16} /> Ir a Seguimiento</button>
             <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/cerradas")}><Icon name="archive" size={16} /> Órdenes cerradas</button>

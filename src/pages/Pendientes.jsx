@@ -4,10 +4,12 @@ import Topbar from "../components/Topbar";
 import OCTable from "../components/OCTable";
 import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
+import { useAuth } from "../context/AuthContext";
 import { ETAPAS } from "../constants/catalogs";
 
 export default function Pendientes() {
   const { pendientes, cargando } = useData();
+  const { esAdmin } = useAuth();
   const nav = useNavigate();
   const [q, setQ] = useState("");
   const [etapa, setEtapa] = useState("Todas");
@@ -26,7 +28,7 @@ export default function Pendientes() {
   return (
     <>
       <Topbar title="OC Pendientes">
-        <button className="btn btn-primary" onClick={() => nav("/nueva")}><Icon name="plus" size={16} /> Nueva OC</button>
+        {esAdmin && <button className="btn btn-primary" onClick={() => nav("/nueva")}><Icon name="plus" size={16} /> Nueva OC</button>}
       </Topbar>
       <div className="content">
         <div className="toolbar">

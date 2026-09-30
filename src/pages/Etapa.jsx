@@ -4,6 +4,7 @@ import Topbar from "../components/Topbar";
 import OCTable from "../components/OCTable";
 import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
+import { useAuth } from "../context/AuthContext";
 
 const INFO = {
   Inicio: { titulo: "Inicio", desc: "Órdenes recién ingresadas · por procesar", key: "inicio" },
@@ -13,6 +14,7 @@ const INFO = {
 
 export default function Etapa({ etapa }) {
   const data = useData();
+  const { esAdmin } = useAuth();
   const nav = useNavigate();
   const [q, setQ] = useState("");
   const info = INFO[etapa];
@@ -30,7 +32,7 @@ export default function Etapa({ etapa }) {
   return (
     <>
       <Topbar title={info.titulo}>
-        <button className="btn btn-primary" onClick={() => nav("/nueva")}><Icon name="plus" size={16} /> Nueva OC</button>
+        {esAdmin && <button className="btn btn-primary" onClick={() => nav("/nueva")}><Icon name="plus" size={16} /> Nueva OC</button>}
       </Topbar>
       <div className="content">
         <p className="td-mut" style={{ marginTop: 0 }}>{info.desc}</p>

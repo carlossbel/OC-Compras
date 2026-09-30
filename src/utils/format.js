@@ -30,12 +30,3 @@ export function fmtNum(n) {
   if (n === null || n === undefined || n === "") return "—";
   return Number(n).toLocaleString("es-MX");
 }
-
-// Genera un folio CROL legible: CROL-AAMM-#### (secuencial simple por timestamp)
-export function generarCrol() {
-  const d = new Date();
-  const yy = String(d.getFullYear()).slice(-2);
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const rand = Math.floor(1000 + Math.random() * 9000);
-  return `CROL-${yy}${mm}-${rand}`;
-}
