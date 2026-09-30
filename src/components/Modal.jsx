@@ -1,7 +1,10 @@
+import { createPortal } from "react-dom";
 import Icon from "./Icon";
 
 export default function Modal({ title, onClose, children, maxWidth }) {
-  return (
+  // Se renderiza en document.body con un portal para que el efecto vidrio (backdrop-filter)
+  // de las tarjetas/tablas no rompa el position:fixed del modal.
+  return createPortal(
     <div className="modal-back" onClick={onClose}>
       <div
         className="modal"
@@ -16,6 +19,7 @@ export default function Modal({ title, onClose, children, maxWidth }) {
         </div>
         <div className="modal-body">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
