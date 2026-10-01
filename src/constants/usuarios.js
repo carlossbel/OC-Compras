@@ -8,7 +8,6 @@ export const USUARIOS = [
   // Administración (acceso total)
   { nombre: "Karla Arriaga", pass: "030226", rol: "admin" },
   { nombre: "Ana Garcia", pass: "020625", rol: "admin" },
-  { nombre: "Claudia Oseguera", pass: "040926", rol: "admin" },
   // Sistemas (acceso total)
   { nombre: "Carlos Beltran", pass: "1312", rol: "admin" },
 
