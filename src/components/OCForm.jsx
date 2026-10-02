@@ -184,7 +184,7 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
           <input value={f.facturaBloobit} onChange={set("facturaBloobit")} placeholder="Ej. B15563" />
         </div>
         <PdfLinkField
-          label="Factura — acuse firmado (PDF / enlace)"
+          label="Factura (PDF / enlace)"
           value={f.facturaUrl}
           onChange={setVal("facturaUrl")}
         />
