@@ -514,3 +514,36 @@ tbody tr:last-child td { border-bottom: none; }
 :root[data-tema="azulf"] .login-blob.b1 { background: #93c5fd; }
 :root[data-tema="azulf"] .login-blob.b2 { background: #3b82f6; }
 :root[data-tema="azulf"] .login-blob.b3 { background: #bfdbfe; }
+
+/* ============================================================
+   TEMA MORADO (Jovanna) — morados con azules
+   ============================================================ */
+:root[data-tema="morado"] {
+  --navy: #6d28d9;       /* violeta */
+  --navy-700: #7c3aed;
+  --navy-600: #8b5cf6;
+  --blue: #6366f1;
+  --blue-soft: #efedff;
+}
+:root[data-tema="morado"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(124, 58, 237, 0.26), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(99, 102, 241, 0.30), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(59, 130, 246, 0.18), transparent 55%),
+    linear-gradient(135deg, #f0edff 0%, #eae7ff 45%, #eef1ff 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="morado"] .sidebar {
+  background: linear-gradient(165deg, rgba(124, 58, 237, 0.85) 0%, rgba(99, 102, 241, 0.87) 45%, rgba(79, 70, 229, 0.9) 100%);
+}
+:root[data-tema="morado"] .nav a { color: #e7e2ff; }
+:root[data-tema="morado"] .nav-section { color: #c3b9fb; }
+:root[data-tema="morado"] .brand-sub { color: #d6ccff; }
+:root[data-tema="morado"] .btn-primary {
+  background: linear-gradient(165deg, rgba(124, 58, 237, 0.92) 0%, rgba(99, 102, 241, 0.93) 50%, rgba(79, 70, 229, 0.95) 100%);
+}
+:root[data-tema="morado"] .rol-lector { background: #c4b5fd; color: #3b0764; }
+:root[data-tema="morado"] .login-page { background: linear-gradient(135deg, #7c3aed 0%, #4338ca 55%, #6366f1 100%); }
+:root[data-tema="morado"] .login-blob.b1 { background: #a855f7; }
+:root[data-tema="morado"] .login-blob.b2 { background: #4f46e5; }
+:root[data-tema="morado"] .login-blob.b3 { background: #818cf8; }

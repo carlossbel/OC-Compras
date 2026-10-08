@@ -15,7 +15,7 @@ export const USUARIOS = [
   // Vendedores (solo lectura)
   { nombre: "Laura Valle", pass: "030625", rol: "lector" },
   { nombre: "Carlos Medina", pass: "251125", rol: "lector" },
-  { nombre: "Jovanna Hernandez", pass: "181125", rol: "lector" },
+  { nombre: "Jovanna Hernandez", pass: "181125", rol: "lector", tema: "morado" },
   { nombre: "Leo Torrero", pass: "030625", rol: "lector" },
 
   // Solo lectura (contraseña temporal 0000 — actualizar)
