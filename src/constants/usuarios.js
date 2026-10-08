@@ -8,7 +8,7 @@ export const USUARIOS = [
   // Administración (acceso total)
   // tema "rosa" -> interfaz en tonos rosas (en lugar del azul)
   { nombre: "Karla Arriaga", pass: "030226", rol: "admin", tema: "rosa" },
-  { nombre: "Ana Garcia", pass: "020625", rol: "admin" },
+  { nombre: "Ana Garcia", pass: "020625", rol: "admin", tema: "turquesa" },
   // Sistemas (acceso total + puede administrar catálogos: agregar/borrar proveedores)
   { nombre: "Carlos Beltran", pass: "1312", rol: "admin", super: true },
 

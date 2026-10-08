@@ -15,11 +15,11 @@
   --radius: 14px;
 
   /* Glass tokens (cajas blancas con efecto cristal sobre fondo azul) */
-  --glass: rgba(255, 255, 255, 0.66);
-  --glass-strong: rgba(255, 255, 255, 0.82);
-  --glass-border: rgba(255, 255, 255, 0.75);
-  --glass-blur: blur(20px) saturate(150%);
-  --shadow: 0 2px 8px rgba(23, 48, 122, 0.06), 0 12px 34px rgba(23, 48, 122, 0.10);
+  --glass: rgba(255, 255, 255, 0.58);
+  --glass-strong: rgba(255, 255, 255, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --glass-blur: blur(28px) saturate(170%);
+  --shadow: 0 2px 10px rgba(23, 48, 122, 0.07), 0 14px 40px rgba(23, 48, 122, 0.12);
 }
 
 * { box-sizing: border-box; }
@@ -252,12 +252,13 @@ tbody tr:last-child td { border-bottom: none; }
   position: fixed; inset: 0; background: rgba(15,23,42,.5); display: grid; place-items: center;
   z-index: 50; padding: 20px; backdrop-filter: blur(2px);
 }
+.modal-back { background: rgba(15, 23, 42, 0.55); }
 .modal {
-  background: rgba(255, 255, 255, 0.82); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border); border-radius: 16px; width: 100%; max-width: 780px; max-height: 92vh;
-  overflow-y: auto; box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+  background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 18px; width: 100%; max-width: 780px; max-height: 92vh;
+  overflow-y: auto; box-shadow: 0 30px 70px rgba(15, 23, 42, 0.4);
 }
-.modal-head { display:flex; align-items:center; padding: 18px 22px; border-bottom: 1px solid var(--glass-border); position: sticky; top:0; background: rgba(255, 255, 255, 0.7); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); z-index:2; }
+.modal-head { display:flex; align-items:center; padding: 18px 22px; border-bottom: 1px solid var(--border); position: sticky; top:0; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%); z-index:2; }
 .modal-head h2 { margin: 0; font-size: 18px; }
 .modal-head .x { margin-left: auto; background: var(--bg); border:none; width: 34px; height: 34px; border-radius: 9px; color: var(--muted); display:flex; align-items:center; justify-content:center; }
 .modal-head .x:hover { background: #e9edf5; }
@@ -417,38 +418,67 @@ tbody tr:last-child td { border-bottom: none; }
 .semaforo-txt { font-size: 12.5px; font-weight: 600; color: var(--muted); }
 
 /* ============================================================
-   TEMA ROSA (usuario con tema "rosa", ej. Karla) — reemplaza azules por rosas claros
+   TEMA ROSA (Karla) — rosa claro + rosa mexicano + morado
    ============================================================ */
 :root[data-tema="rosa"] {
-  --navy: #8f2f5c;
-  --navy-700: #a83a6e;
-  --navy-600: #c24d85;
+  --navy: #c2185b;       /* rosa mexicano oscuro */
+  --navy-700: #d81b60;
+  --navy-600: #e91e63;
   --blue: #ec4899;
-  --blue-soft: #fdeef5;
+  --blue-soft: #fdeef6;
 }
 :root[data-tema="rosa"] body {
   background:
-    radial-gradient(1100px 780px at 8% -5%, rgba(236, 72, 153, 0.22), transparent 55%),
-    radial-gradient(1000px 720px at 105% 15%, rgba(244, 114, 182, 0.20), transparent 55%),
-    radial-gradient(900px 900px at 50% 115%, rgba(190, 24, 93, 0.16), transparent 55%),
-    linear-gradient(135deg, #fdeef6 0%, #fbe6f0 45%, #fdf0f7 100%);
+    radial-gradient(1100px 780px at 8% -5%, rgba(233, 30, 99, 0.24), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(168, 85, 247, 0.22), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(236, 72, 153, 0.18), transparent 55%),
+    linear-gradient(135deg, #fdeef6 0%, #fbe6f3 45%, #f5ecfd 100%);
   background-attachment: fixed;
 }
 :root[data-tema="rosa"] .sidebar {
-  background: linear-gradient(165deg, rgba(168, 58, 110, 0.82) 0%, rgba(143, 47, 92, 0.85) 45%, rgba(110, 33, 70, 0.9) 100%);
+  background: linear-gradient(165deg, rgba(233, 30, 99, 0.84) 0%, rgba(194, 24, 120, 0.86) 45%, rgba(123, 44, 191, 0.9) 100%);
 }
-:root[data-tema="rosa"] .nav a { color: #f6d6e6; }
-:root[data-tema="rosa"] .nav-section { color: #ecacc9; }
-:root[data-tema="rosa"] .brand-sub { color: #f1c3da; }
+:root[data-tema="rosa"] .nav a { color: #fbd6e8; }
+:root[data-tema="rosa"] .nav-section { color: #f0a9cf; }
+:root[data-tema="rosa"] .brand-sub { color: #f5c3de; }
 :root[data-tema="rosa"] .btn-primary {
-  background: linear-gradient(165deg, rgba(168, 58, 110, 0.9) 0%, rgba(143, 47, 92, 0.92) 50%, rgba(110, 33, 70, 0.95) 100%);
+  background: linear-gradient(165deg, rgba(233, 30, 99, 0.92) 0%, rgba(194, 24, 120, 0.93) 50%, rgba(123, 44, 191, 0.95) 100%);
 }
 :root[data-tema="rosa"] .rol-admin { background: #ec4899; color: #4a0f2e; }
-
-/* Login en tema rosa */
-:root[data-tema="rosa"] .login-page {
-  background: linear-gradient(135deg, #9d3c66 0%, #6e2246 55%, #b1477a 100%);
-}
+:root[data-tema="rosa"] .login-page { background: linear-gradient(135deg, #e4007c 0%, #7b2cbf 55%, #c2185b 100%); }
 :root[data-tema="rosa"] .login-blob.b1 { background: #ec4899; }
-:root[data-tema="rosa"] .login-blob.b2 { background: #be185d; }
+:root[data-tema="rosa"] .login-blob.b2 { background: #9333ea; }
 :root[data-tema="rosa"] .login-blob.b3 { background: #f472b6; }
+
+/* ============================================================
+   TEMA TURQUESA (Ana) — turquesa + baby blue
+   ============================================================ */
+:root[data-tema="turquesa"] {
+  --navy: #0e7490;       /* teal oscuro */
+  --navy-700: #0891b2;
+  --navy-600: #06b6d4;
+  --blue: #06b6d4;
+  --blue-soft: #e0f6fb;
+}
+:root[data-tema="turquesa"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(6, 182, 212, 0.24), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(125, 211, 252, 0.26), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(20, 184, 166, 0.18), transparent 55%),
+    linear-gradient(135deg, #e6f7fb 0%, #ddf2f9 45%, #e8f6fd 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="turquesa"] .sidebar {
+  background: linear-gradient(165deg, rgba(8, 145, 178, 0.84) 0%, rgba(14, 116, 144, 0.86) 45%, rgba(12, 74, 110, 0.9) 100%);
+}
+:root[data-tema="turquesa"] .nav a { color: #cdeef7; }
+:root[data-tema="turquesa"] .nav-section { color: #8fd6e8; }
+:root[data-tema="turquesa"] .brand-sub { color: #aee3ef; }
+:root[data-tema="turquesa"] .btn-primary {
+  background: linear-gradient(165deg, rgba(8, 145, 178, 0.92) 0%, rgba(14, 116, 144, 0.93) 50%, rgba(12, 74, 110, 0.95) 100%);
+}
+:root[data-tema="turquesa"] .rol-admin { background: #06b6d4; color: #063b45; }
+:root[data-tema="turquesa"] .login-page { background: linear-gradient(135deg, #0891b2 0%, #0c4a6e 55%, #0e7490 100%); }
+:root[data-tema="turquesa"] .login-blob.b1 { background: #06b6d4; }
+:root[data-tema="turquesa"] .login-blob.b2 { background: #0284c7; }
+:root[data-tema="turquesa"] .login-blob.b3 { background: #7dd3fc; }
