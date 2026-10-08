@@ -10,7 +10,7 @@ export const USUARIOS = [
   { nombre: "Karla Arriaga", pass: "030226", rol: "admin", tema: "rosa" },
   { nombre: "Ana Garcia", pass: "020625", rol: "admin", tema: "turquesa" },
   // Sistemas (acceso total + puede administrar catálogos: agregar/borrar proveedores)
-  { nombre: "Carlos Beltran", pass: "1312", rol: "admin", super: true },
+  { nombre: "Carlos Beltran", pass: "1312", rol: "admin", super: true, tema: "azulf" },
 
   // Vendedores (solo lectura)
   { nombre: "Laura Valle", pass: "030625", rol: "lector" },
