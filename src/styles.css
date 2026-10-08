@@ -487,30 +487,30 @@ tbody tr:last-child td { border-bottom: none; }
    TEMA AZUL FUERTE (Carlos Beltran) — azul claro + azul fuerte
    ============================================================ */
 :root[data-tema="azulf"] {
-  --navy: #1e40af;       /* azul fuerte */
-  --navy-700: #2563eb;
-  --navy-600: #3b82f6;
+  --navy: #2563eb;       /* azul (más claro) */
+  --navy-700: #3b82f6;
+  --navy-600: #60a5fa;
   --blue: #3b82f6;
-  --blue-soft: #e0edff;
+  --blue-soft: #eaf2ff;
 }
 :root[data-tema="azulf"] body {
   background:
-    radial-gradient(1100px 780px at 8% -5%, rgba(37, 99, 235, 0.28), transparent 55%),
-    radial-gradient(1000px 720px at 105% 12%, rgba(96, 165, 250, 0.30), transparent 55%),
-    radial-gradient(900px 900px at 50% 115%, rgba(30, 64, 175, 0.20), transparent 55%),
-    linear-gradient(135deg, #e3eeff 0%, #dbe8ff 45%, #e8f1ff 100%);
+    radial-gradient(1100px 780px at 8% -5%, rgba(96, 165, 250, 0.28), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(147, 197, 253, 0.32), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(59, 130, 246, 0.18), transparent 55%),
+    linear-gradient(135deg, #eef5ff 0%, #e7f0ff 45%, #f1f7ff 100%);
   background-attachment: fixed;
 }
 :root[data-tema="azulf"] .sidebar {
-  background: linear-gradient(165deg, rgba(37, 99, 235, 0.85) 0%, rgba(29, 78, 216, 0.88) 45%, rgba(30, 58, 138, 0.92) 100%);
+  background: linear-gradient(165deg, rgba(96, 165, 250, 0.82) 0%, rgba(59, 130, 246, 0.85) 45%, rgba(37, 99, 235, 0.88) 100%);
 }
-:root[data-tema="azulf"] .nav a { color: #d6e4ff; }
-:root[data-tema="azulf"] .nav-section { color: #9dbcf5; }
-:root[data-tema="azulf"] .brand-sub { color: #bcd3f8; }
+:root[data-tema="azulf"] .nav a { color: #eaf2ff; }
+:root[data-tema="azulf"] .nav-section { color: #c3dbff; }
+:root[data-tema="azulf"] .brand-sub { color: #dbeafe; }
 :root[data-tema="azulf"] .btn-primary {
-  background: linear-gradient(165deg, rgba(37, 99, 235, 0.92) 0%, rgba(29, 78, 216, 0.93) 50%, rgba(30, 58, 138, 0.95) 100%);
+  background: linear-gradient(165deg, rgba(96, 165, 250, 0.92) 0%, rgba(59, 130, 246, 0.93) 50%, rgba(37, 99, 235, 0.95) 100%);
 }
-:root[data-tema="azulf"] .login-page { background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 55%, #1d4ed8 100%); }
-:root[data-tema="azulf"] .login-blob.b1 { background: #3b82f6; }
-:root[data-tema="azulf"] .login-blob.b2 { background: #1d4ed8; }
-:root[data-tema="azulf"] .login-blob.b3 { background: #60a5fa; }
+:root[data-tema="azulf"] .login-page { background: linear-gradient(135deg, #60a5fa 0%, #2563eb 55%, #3b82f6 100%); }
+:root[data-tema="azulf"] .login-blob.b1 { background: #93c5fd; }
+:root[data-tema="azulf"] .login-blob.b2 { background: #3b82f6; }
+:root[data-tema="azulf"] .login-blob.b3 { background: #bfdbfe; }
