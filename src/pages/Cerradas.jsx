@@ -26,7 +26,7 @@ export default function Cerradas() {
           <div className="spacer" />
           <span className="chip soft">{rows.length} órdenes</span>
         </div>
-        <OCTable rows={rows} mostrarEtapa={false} vacio={cargando ? "Cargando…" : "Aún no hay órdenes cerradas."} />
+        <OCTable rows={rows} mostrarEtapa={false} mostrarIndicador vacio={cargando ? "Cargando…" : "Aún no hay órdenes cerradas."} />
       </div>
     </>
   );

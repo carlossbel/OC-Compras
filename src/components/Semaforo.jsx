@@ -1,7 +1,7 @@
 import { colorSemaforo } from "../utils/estimacion";
 
 const COLORES = { rojo: "#ef4444", amarillo: "#f59e0b", verde: "#10b981" };
-const TITULO = { rojo: "Atrasada", amarillo: "En proceso", verde: "A tiempo / entregada" };
+const TITULO = { rojo: "Atrasada", amarillo: "En proceso", verde: "A tiempo" };
 
 export default function Semaforo({ oc, showLabel = false }) {
   const c = colorSemaforo(oc);

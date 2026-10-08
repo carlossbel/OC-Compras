@@ -228,6 +228,25 @@ tbody tr:last-child td { border-bottom: none; }
 .field textarea { resize: vertical; min-height: 74px; }
 .form-actions { display:flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
 
+/* Secciones de partidas y facturas */
+.form-section { margin: 18px 0; padding: 16px; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(255, 255, 255, 0.35); }
+.form-section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
+.form-section-head h3 { margin: 0; font-size: 14px; display: flex; align-items: center; gap: 7px; color: var(--navy-700); }
+/* Pestañas de partidas */
+.partida-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.partida-tab { background: rgba(255, 255, 255, 0.45); border: 1px solid var(--glass-border); color: var(--muted); padding: 7px 15px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; transition: background .15s, color .15s; }
+.partida-tab:hover { background: rgba(255, 255, 255, 0.75); color: var(--navy-700); }
+.partida-tab.active { background: var(--navy-700); color: #fff; border-color: var(--navy-700); }
+.partida-tab.add { border-style: dashed; color: var(--navy-700); background: transparent; display: inline-flex; align-items: center; gap: 5px; }
+.partida-tab.add:hover { background: rgba(255, 255, 255, 0.5); }
+.partida-pane { background: rgba(255, 255, 255, 0.4); border: 1px solid var(--glass-border); border-radius: 12px; padding: 16px; }
+
+.partida-row, .factura-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 12px; flex-wrap: wrap; }
+.partida-row:last-child, .factura-row:last-child { margin-bottom: 0; }
+.icon-btn-del { background: rgba(255, 255, 255, 0.55); border: 1px solid rgba(239, 68, 68, 0.35); color: var(--red); width: 38px; height: 40px; border-radius: 10px; display: grid; place-items: center; flex-shrink: 0; }
+.icon-btn-del:hover:not(:disabled) { background: #fef2f2; }
+.icon-btn-del:disabled { opacity: 0.4; cursor: not-allowed; }
+
 /* ---------- Modal ---------- */
 .modal-back {
   position: fixed; inset: 0; background: rgba(15,23,42,.5); display: grid; place-items: center;
@@ -340,6 +359,12 @@ tbody tr:last-child td { border-bottom: none; }
 .detail-item .k { font-size: 11.5px; text-transform:uppercase; letter-spacing:.4px; color: var(--muted); font-weight:600; }
 .detail-item .v { font-size: 14px; margin-top: 3px; }
 
+/* Mini-tabla de partidas en el detalle */
+.mini-table { border: 1px solid var(--glass-border); border-radius: 10px; overflow: hidden; background: rgba(255,255,255,0.4); }
+.mini-row { display: flex; gap: 10px; padding: 8px 12px; font-size: 13px; border-bottom: 1px solid rgba(230, 234, 243, 0.6); }
+.mini-row:last-child { border-bottom: none; }
+.mini-head { background: rgba(248, 250, 252, 0.7); font-weight: 600; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
+
 /* PDF link field */
 .pdf-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .pdf-row input { flex: 1; min-width: 180px; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 14px; outline: none; }
@@ -374,6 +399,13 @@ tbody tr:last-child td { border-bottom: none; }
 .ayuda-sem .ayuda-desc { color: var(--muted); font-size: 13px; }
 .ayuda-rol { padding: 14px; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(255, 255, 255, 0.4); }
 .linkbtn { background: none; border: none; color: var(--navy-700); font-weight: 600; padding: 0; font-size: 12px; cursor: pointer; text-decoration: underline; }
+
+/* Barra de progreso por CROL */
+.prog { display: flex; flex-direction: column; gap: 4px; min-width: 110px; }
+.prog-track { position: relative; height: 8px; border-radius: 20px; background: rgba(100, 116, 139, 0.18); overflow: hidden; }
+.prog-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 20px; transition: width .3s; }
+.prog-tick { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(255, 255, 255, 0.7); }
+.prog-lbl { font-size: 11px; color: var(--muted); font-weight: 600; }
 
 /* Semáforo */
 .semaforo { display: inline-flex; align-items: center; gap: 7px; }

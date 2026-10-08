@@ -4,7 +4,7 @@ import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
 import { useAuth } from "../context/AuthContext";
 import { COLOR_ESTADO, ESTADOS_ENVIO } from "../constants/catalogs";
-import { estimarFecha } from "../utils/estimacion";
+import { indicadorEntregas } from "../utils/estimacion";
 
 function Donut({ data }) {
   const total = data.reduce((s, d) => s + d.value, 0);
@@ -49,22 +49,6 @@ function Donut({ data }) {
   );
 }
 
-// Indicador de entregas a tiempo para las OC cerradas.
-// Compara la fecha de entrega real al cliente contra la fecha estimada al cliente.
-function calcularIndicador(cerradas) {
-  let aTiempo = 0, atrasadas = 0;
-  for (const o of cerradas) {
-    const real = o.fechaEntregaRealCliente;
-    const est = o.fechaEstimadaCliente || estimarFecha(o.fechaRecepcionOC, o.tiempoEntregaCliente);
-    if (!real || !est) continue;
-    if (real <= est) aTiempo++;
-    else atrasadas++;
-  }
-  const total = aTiempo + atrasadas;
-  const pct = total ? Math.round((aTiempo / total) * 100) : null;
-  return { aTiempo, atrasadas, total, pct };
-}
-
 export default function Dashboard() {
   const { pendientes, cerradas, inicio, seguimiento, finalizado } = useData();
   const { esAdmin } = useAuth();
@@ -76,7 +60,7 @@ export default function Dashboard() {
     color: COLOR_ESTADO[s],
   })).filter((d) => d.value > 0);
 
-  const ind = calcularIndicador(cerradas);
+  const ind = indicadorEntregas(cerradas);
 
   const stats = [
     { label: "Inicio", value: inicio.length, sub: "Por procesar", color: "#f59e0b", to: "/inicio" },

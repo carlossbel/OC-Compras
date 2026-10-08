@@ -4,10 +4,11 @@ import OCForm from "./OCForm";
 import FlowStepper from "./FlowStepper";
 import { EstadoChip, EtapaChip } from "./Chip";
 import Semaforo from "./Semaforo";
+import Progreso from "./Progreso";
 import Icon from "./Icon";
 import { useAuth } from "../context/AuthContext";
 import { ESTADOS_ENVIO } from "../constants/catalogs";
-import { fmtFecha, fmtNum } from "../utils/format";
+import { fmtFecha, fmtNum, partidasDe, facturasDe, cantidadTotal } from "../utils/format";
 import { estaAtrasada } from "../utils/estimacion";
 import {
   actualizarOrden,
@@ -90,11 +91,13 @@ export default function DetalleOC({ oc, onClose }) {
       ) : (
         <>
           <FlowStepper etapa={oc.etapa} cerrada={oc.cerrada} />
+          <div style={{ margin: "14px 0 4px" }}><Progreso etapa={oc.etapa} cerrada={oc.cerrada} showLabel /></div>
 
-          <div style={{ display: "flex", gap: 10, alignItems: "center", margin: "16px 0 20px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 10, alignItems: "center", margin: "12px 0 18px", flexWrap: "wrap" }}>
             <EtapaChip etapa={oc.etapa} cerrada={oc.cerrada} />
             <EstadoChip estado={oc.estadoEnvio} />
             <Semaforo oc={oc} showLabel />
+            {oc.noAplica && <span className="chip" style={{ background: "#64748b" }}>No aplica · {oc.noAplica}</span>}
             {esAdmin && !oc.cerrada && (
               <label style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center", fontSize: 13 }}>
                 Cambiar estado:
@@ -114,10 +117,9 @@ export default function DetalleOC({ oc, onClose }) {
               <Item k="OC Cliente" v={oc.ocCliente} />
               <Item k="CROL" v={oc.crol} />
               <PdfLink k="Vínculo CROL" url={oc.crolUrl} />
-              <Item k="Clave Producto" v={oc.claveProducto} />
-              <Item k="Cantidad" v={fmtNum(oc.cantidad)} />
               <Item k="Proveedor" v={oc.proveedor} />
               <Item k="Estado Envío" v={oc.estadoEnvio} />
+              <Item k="Cantidad total" v={fmtNum(cantidadTotal(oc))} />
               <Item k="Recepción OC" v={fmtFecha(oc.fechaRecepcionOC)} />
               <Item k="Envío a compras" v={fmtFecha(oc.fechaEnvioCompras)} />
               <Item k="T. entrega cliente" v={oc.tiempoEntregaCliente} />
@@ -125,18 +127,54 @@ export default function DetalleOC({ oc, onClose }) {
               <Item k="Fecha del proceso" v={fmtFecha(oc.fechaProceso)} />
               <Item k="T. entrega Bloobit" v={oc.tiempoEntregaBloobit} />
               <Item k="Estimada Bloobit" v={fmtFecha(oc.fechaEstimadaBloobit)} alerta={estaAtrasada(oc)} />
-              <Item k="Factura Bloobit" v={oc.facturaBloobit} />
-              <PdfLink k="Factura (acuse)" url={oc.facturaUrl} />
               <Item k="Entrega real cliente" v={fmtFecha(oc.fechaEntregaRealCliente)} />
+              <Item k="Indicador" v={oc.noAplica ? `No aplica · ${oc.noAplica}` : "Sí aplica"} />
             </div>
-            {oc.descripcion && (
-              <div style={{ marginTop: 16 }}>
-                <div className="k" style={{ fontSize: 11.5, textTransform: "uppercase", color: "var(--muted)", fontWeight: 600 }}>Descripción</div>
-                <div style={{ marginTop: 4 }}>{oc.descripcion}</div>
+
+            {/* Partidas */}
+            <div style={{ marginTop: 16 }}>
+              <div className="k" style={{ fontSize: 11.5, textTransform: "uppercase", color: "var(--muted)", fontWeight: 600, marginBottom: 6 }}>Partidas</div>
+              <div className="mini-table">
+                <div className="mini-row mini-head">
+                  <span style={{ width: 50 }}>#</span>
+                  <span style={{ width: 130 }}>Clave</span>
+                  <span style={{ flex: 1 }}>Descripción</span>
+                  <span style={{ width: 60, textAlign: "right" }}>Cant.</span>
+                </div>
+                {partidasDe(oc).map((pt, i) => (
+                  <div className="mini-row" key={i}>
+                    <span style={{ width: 50 }}>{pt.partida}</span>
+                    <span style={{ width: 130 }}>{pt.claveProducto || "—"}</span>
+                    <span style={{ flex: 1 }}>{pt.descripcion || "—"}</span>
+                    <span style={{ width: 60, textAlign: "right" }}>{fmtNum(pt.cantidad)}</span>
+                  </div>
+                ))}
               </div>
-            )}
+            </div>
+
+            {/* Facturas */}
+            <div style={{ marginTop: 16 }}>
+              <div className="k" style={{ fontSize: 11.5, textTransform: "uppercase", color: "var(--muted)", fontWeight: 600, marginBottom: 6 }}>Facturas</div>
+              {facturasDe(oc).length ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {facturasDe(oc).map((fc, i) => (
+                    <div key={i} style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                      <span style={{ fontWeight: 600 }}>{fc.numero || "(sin número)"}</span>
+                      {fc.url ? (
+                        <a href={fc.url} target="_blank" rel="noopener noreferrer" className="pdf-link"><Icon name="file" size={15} /> Ver PDF</a>
+                      ) : (
+                        <span className="td-mut">sin enlace</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="td-mut">—</div>
+              )}
+            </div>
+
             {oc.comentario && (
-              <div style={{ marginTop: 14 }}>
+              <div style={{ marginTop: 16 }}>
                 <div className="k" style={{ fontSize: 11.5, textTransform: "uppercase", color: "var(--muted)", fontWeight: 600 }}>Comentario</div>
                 <div style={{ marginTop: 4 }}>{oc.comentario}</div>
               </div>

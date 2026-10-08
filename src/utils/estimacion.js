@@ -64,15 +64,49 @@ const hoyISO = () => new Date().toISOString().slice(0, 10);
 // ¿La entrega a Bloobit está atrasada? (no cumplió y aún no se recibe/entrega)
 export function estaAtrasada(oc) {
   if (!oc || oc.cerrada) return false;
+  if (oc.noAplica) return false; // backorder/parcial/proyecto/arrendamiento/paquetería no aplican
   if (["Recibido", "Entregado"].includes(oc.estadoEnvio)) return false;
   const est = oc.fechaEstimadaBloobit || estimarFecha(oc.fechaProceso || oc.fechaRecepcionOC, oc.tiempoEntregaBloobit);
   if (!est) return false;
   return est < hoyISO();
 }
 
-// Semáforo del estado de envío: verde (ok/entregado), amarillo (en proceso), rojo (atrasado).
+// Semáforo: verde (entregada a tiempo / en plazo), amarillo (en proceso), rojo (atrasada).
 export function colorSemaforo(oc) {
+  // Si ya hay fecha de entrega real, el color refleja si se cumplió o no.
+  const r = evalEntrega(oc);
+  if (r === "atrasada") return "rojo";
+  if (r === "aTiempo") return "verde";
+  // Sin fecha de entrega aún:
   if (["Recibido", "Entregado"].includes(oc.estadoEnvio)) return "verde";
   if (estaAtrasada(oc)) return "rojo";
   return "amarillo";
+}
+
+// Evalúa una orden individual para el indicador de entrega:
+// "aTiempo" | "atrasada" | "noAplica" | null (sin datos para evaluar).
+export function evalEntrega(o) {
+  if (!o) return null;
+  if (o.noAplica) return "noAplica";
+  const real = o.fechaEntregaRealCliente;
+  const est = o.fechaEstimadaCliente || estimarFecha(o.fechaRecepcionOC, o.tiempoEntregaCliente);
+  if (!real || !est) return null;
+  return real <= est ? "aTiempo" : "atrasada";
+}
+
+// Indicador de entregas a tiempo sobre un conjunto de órdenes.
+// Compara la entrega real al cliente contra la fecha estimada al cliente.
+// Excluye las marcadas como "no aplica" (backorder, parcial, proyecto, arrendamiento, paquetería).
+export function indicadorEntregas(orders) {
+  let aTiempo = 0, atrasadas = 0, excluidas = 0;
+  for (const o of orders || []) {
+    if (o.noAplica) { excluidas++; continue; }
+    const real = o.fechaEntregaRealCliente;
+    const est = o.fechaEstimadaCliente || estimarFecha(o.fechaRecepcionOC, o.tiempoEntregaCliente);
+    if (!real || !est) continue;
+    real <= est ? aTiempo++ : atrasadas++;
+  }
+  const total = aTiempo + atrasadas;
+  const pct = total ? Math.round((aTiempo / total) * 100) : null;
+  return { aTiempo, atrasadas, total, pct, excluidas };
 }

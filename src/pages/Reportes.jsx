@@ -4,8 +4,8 @@ import OCTable from "../components/OCTable";
 import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
 import { ESTADOS_ENVIO, PROVEEDORES, ETAPAS } from "../constants/catalogs";
-import { estimarFecha } from "../utils/estimacion";
-import { fmtFecha } from "../utils/format";
+import { indicadorEntregas } from "../utils/estimacion";
+import { fmtFecha, cantidadTotal } from "../utils/format";
 
 const CAMPOS_FECHA = [
   { v: "fechaRecepcionOC", t: "Recepción OC" },
@@ -29,7 +29,7 @@ function exportarCSV(rows) {
     ["Tiempo entrega cliente", "tiempoEntregaCliente"], ["Estimada cliente", "fechaEstimadaCliente"],
     ["Fecha proceso", "fechaProceso"], ["Tiempo entrega Bloobit", "tiempoEntregaBloobit"],
     ["Estimada Bloobit", "fechaEstimadaBloobit"], ["Entrega real cliente", "fechaEntregaRealCliente"],
-    ["Factura", "facturaBloobit"], ["Comentario", "comentario"],
+    ["Factura", "facturaBloobit"], ["No aplica", "noAplica"], ["Comentario", "comentario"],
   ];
   const head = cols.map((c) => c[0]).join(",");
   const body = rows.map((o) =>
@@ -87,18 +87,14 @@ export default function Reportes() {
 
   const ind = useMemo(() => {
     const porEtapa = { Inicio: 0, Seguimiento: 0, Finalizado: 0, Cerrada: 0 };
-    let cantidad = 0, aTiempo = 0, atrasadas = 0;
+    let cantidad = 0;
     for (const o of rows) {
       if (o.cerrada) porEtapa.Cerrada++;
       else porEtapa[o.etapa] = (porEtapa[o.etapa] || 0) + 1;
-      cantidad += Number(o.cantidad) || 0;
-      const real = o.fechaEntregaRealCliente;
-      const est = o.fechaEstimadaCliente || estimarFecha(o.fechaRecepcionOC, o.tiempoEntregaCliente);
-      if (real && est) { real <= est ? aTiempo++ : atrasadas++; }
+      cantidad += cantidadTotal(o);
     }
-    const evaluadas = aTiempo + atrasadas;
-    const pct = evaluadas ? Math.round((aTiempo / evaluadas) * 100) : null;
-    return { porEtapa, cantidad, aTiempo, atrasadas, evaluadas, pct };
+    const ent = indicadorEntregas(rows); // excluye "no aplica"
+    return { porEtapa, cantidad, aTiempo: ent.aTiempo, atrasadas: ent.atrasadas, evaluadas: ent.total, pct: ent.pct };
   }, [rows]);
 
   return (

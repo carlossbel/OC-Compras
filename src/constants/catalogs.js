@@ -23,6 +23,23 @@ export const ETAPA_POR_ESTADO = {
 
 export const ETAPAS = ["Inicio", "Seguimiento", "Finalizado"];
 
+// Números de partida seleccionables (1 al 10)
+export const PARTIDAS = Array.from({ length: 10 }, (_, i) => i + 1);
+
+// Motivos por los que una orden NO aplica para los indicadores
+// (backorder, parciales, proyectos, arrendamiento, paqueterías).
+export const NO_APLICA_OPCIONES = [
+  "Backorder",
+  "Parcial",
+  "Proyecto",
+  "Arrendamiento",
+  "Paquetería",
+  "Estafeta",
+  "FedEx",
+  "DHL",
+  "Redpack",
+];
+
 export const TIEMPOS_ENTREGA = [
   "INMEDIATO",
   "1-5 Dias Habiles",

@@ -3,15 +3,17 @@ import Topbar from "../components/Topbar";
 import OCForm from "../components/OCForm";
 import FlowStepper from "../components/FlowStepper";
 import { crearOrden } from "../services/ocService";
+import { etapaDeEstado } from "../utils/format";
 
 export default function NuevaOC() {
   const nav = useNavigate();
 
   const onSubmit = async (data) => {
     await crearOrden(data);
+    const etapa = etapaDeEstado(data.estadoEnvio);
     const destino =
-      data.etapa === "Seguimiento" ? "/seguimiento" :
-      data.etapa === "Finalizado" ? "/finalizados" : "/inicio";
+      etapa === "Seguimiento" ? "/seguimiento" :
+      etapa === "Finalizado" ? "/finalizados" : "/inicio";
     nav(destino);
   };
 
