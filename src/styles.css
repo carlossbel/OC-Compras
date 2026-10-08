@@ -502,7 +502,7 @@ tbody tr:last-child td { border-bottom: none; }
   background-attachment: fixed;
 }
 :root[data-tema="azulf"] .sidebar {
-  background: linear-gradient(165deg, rgba(96, 165, 250, 0.82) 0%, rgba(59, 130, 246, 0.85) 45%, rgba(37, 99, 235, 0.88) 100%);
+  background: linear-gradient(165deg, rgba(94, 119, 150, 0.82) 0%, rgba(32, 93, 190, 0.85) 45%, rgba(18, 40, 88, 0.88) 100%);
 }
 :root[data-tema="azulf"] .nav a { color: #eaf2ff; }
 :root[data-tema="azulf"] .nav-section { color: #c3dbff; }
@@ -547,3 +547,99 @@ tbody tr:last-child td { border-bottom: none; }
 :root[data-tema="morado"] .login-blob.b1 { background: #a855f7; }
 :root[data-tema="morado"] .login-blob.b2 { background: #4f46e5; }
 :root[data-tema="morado"] .login-blob.b3 { background: #818cf8; }
+
+/* ============================================================
+   MODO NOCHE (Carlos Beltran) — oscuro con azules apagados
+   ============================================================ */
+:root[data-tema="noche"] {
+  --text: #e6ebf5;
+  --muted: #9aa8c2;
+  --border: rgba(255, 255, 255, 0.10);
+  --bg: #0d1424;
+  --navy: #9db8e0;        /* acentos claros (títulos, section-title, pdf-link) */
+  --navy-700: #a9c1e6;
+  --navy-600: #b7ccec;
+  --blue: #6b8fc7;        /* azul apagado */
+  --blue-soft: rgba(107, 143, 199, 0.18);
+  --glass: rgba(26, 36, 58, 0.60);
+  --glass-strong: rgba(26, 36, 58, 0.80);
+  --glass-border: rgba(255, 255, 255, 0.10);
+}
+:root[data-tema="noche"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(59, 90, 140, 0.22), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(40, 60, 100, 0.26), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(30, 45, 80, 0.22), transparent 55%),
+    linear-gradient(135deg, #0d1424 0%, #0b111f 45%, #101827 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="noche"] .sidebar {
+  background: linear-gradient(165deg, rgba(23, 33, 55, 0.82) 0%, rgba(16, 24, 42, 0.86) 45%, rgba(11, 17, 31, 0.9) 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+:root[data-tema="noche"] .nav a { color: #c3cfe4; }
+:root[data-tema="noche"] .nav a:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
+:root[data-tema="noche"] .nav a.active { background: rgba(107, 143, 199, 0.22); color: #fff; }
+:root[data-tema="noche"] .nav-section { color: #7f8db0; }
+:root[data-tema="noche"] .brand-sub { color: #93a6cc; }
+:root[data-tema="noche"] .topbar { background: rgba(20, 28, 48, 0.6); border-bottom-color: rgba(255, 255, 255, 0.08); }
+
+/* Tablas */
+:root[data-tema="noche"] thead th { background: rgba(30, 41, 66, 0.7); color: #9aa8c2; border-bottom-color: rgba(255, 255, 255, 0.1); }
+:root[data-tema="noche"] tbody td { border-bottom-color: rgba(255, 255, 255, 0.07); }
+:root[data-tema="noche"] tbody tr:hover { background: rgba(255, 255, 255, 0.05); }
+
+/* Inputs */
+:root[data-tema="noche"] .field input,
+:root[data-tema="noche"] .field select,
+:root[data-tema="noche"] .field textarea,
+:root[data-tema="noche"] .filter-input,
+:root[data-tema="noche"] .select-inline,
+:root[data-tema="noche"] .pdf-row input {
+  background: rgba(15, 23, 42, 0.55); color: #e6ebf5; border-color: rgba(255, 255, 255, 0.14);
+}
+:root[data-tema="noche"] .field input[readonly] { background: rgba(255, 255, 255, 0.04) !important; color: #9aa8c2 !important; }
+:root[data-tema="noche"] option { background: #141c2e; color: #e6ebf5; }
+:root[data-tema="noche"] input::placeholder, :root[data-tema="noche"] textarea::placeholder { color: #6f7d98; }
+
+/* Modal */
+:root[data-tema="noche"] .modal { background: rgba(22, 30, 50, 0.97); border-color: rgba(255, 255, 255, 0.12); }
+:root[data-tema="noche"] .modal-head { background: rgba(22, 30, 50, 0.97); border-bottom-color: rgba(255, 255, 255, 0.1); }
+:root[data-tema="noche"] .modal-head .x { background: rgba(255, 255, 255, 0.08); color: #c3cfe4; }
+
+/* Botones (azules apagados) */
+:root[data-tema="noche"] .btn-primary {
+  background: linear-gradient(165deg, rgba(74, 106, 158, 0.92) 0%, rgba(58, 86, 127, 0.93) 50%, rgba(45, 67, 100, 0.95) 100%);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+:root[data-tema="noche"] .btn-ghost { background: rgba(107, 143, 199, 0.16); color: #b7ccec; border-color: rgba(255, 255, 255, 0.12); }
+:root[data-tema="noche"] .btn-ghost:hover { background: rgba(107, 143, 199, 0.26); }
+:root[data-tema="noche"] .btn-outline { background: rgba(255, 255, 255, 0.05); color: #e6ebf5; border-color: rgba(255, 255, 255, 0.14); }
+:root[data-tema="noche"] .btn-outline:hover { background: rgba(255, 255, 255, 0.1); }
+:root[data-tema="noche"] .btn-danger { background: rgba(239, 68, 68, 0.14); color: #fca5a5; border-color: rgba(239, 68, 68, 0.4); }
+:root[data-tema="noche"] .btn-glass { background: #e6ebf5; color: #16233f; }
+
+/* Secciones / mini-tabla / ayuda / pestañas */
+:root[data-tema="noche"] .form-section,
+:root[data-tema="noche"] .partida-pane,
+:root[data-tema="noche"] .prov-manage,
+:root[data-tema="noche"] .mini-table,
+:root[data-tema="noche"] .ayuda-rol { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.1); }
+:root[data-tema="noche"] .partida-tab { background: rgba(255, 255, 255, 0.06); color: #9aa8c2; border-color: rgba(255, 255, 255, 0.12); }
+:root[data-tema="noche"] .partida-tab:hover { background: rgba(255, 255, 255, 0.12); color: #e6ebf5; }
+:root[data-tema="noche"] .partida-tab.active { background: #4a6a9e; color: #fff; border-color: #4a6a9e; }
+:root[data-tema="noche"] .mini-head { background: rgba(255, 255, 255, 0.05); }
+:root[data-tema="noche"] .mini-row { border-bottom-color: rgba(255, 255, 255, 0.07); }
+:root[data-tema="noche"] .ayuda-tip { background: rgba(107, 143, 199, 0.14); border-color: rgba(255, 255, 255, 0.1); color: #c7d9f5; }
+:root[data-tema="noche"] .ayuda-paso { border-bottom-color: rgba(255, 255, 255, 0.08); }
+:root[data-tema="noche"] .section-title .line { background: rgba(255, 255, 255, 0.1); }
+:root[data-tema="noche"] .empty .big { opacity: .6; }
+
+/* Login noche */
+:root[data-tema="noche"] .login-page { background: linear-gradient(135deg, #0f1a30 0%, #0a0f1c 55%, #16233f 100%); }
+:root[data-tema="noche"] .login-blob.b1 { background: #3b5a8f; }
+:root[data-tema="noche"] .login-blob.b2 { background: #1e3a5f; }
+:root[data-tema="noche"] .login-blob.b3 { background: #4a6a9e; }
+
+/* Scrollbar claro en oscuro */
+:root[data-tema="noche"] *::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); background-clip: content-box; }

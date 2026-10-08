@@ -14,7 +14,7 @@ function Donut({ data }) {
     <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}>
       <svg width="180" height="180" viewBox="0 0 180 180">
         <g transform="translate(90,90) rotate(-90)">
-          <circle r={R} fill="none" stroke="#eef1f7" strokeWidth="24" />
+          <circle r={R} fill="none" strokeWidth="24" style={{ stroke: "var(--glass-border)" }} />
           {total > 0 &&
             data.map((d, i) => {
               const len = (d.value / total) * C;
@@ -33,8 +33,8 @@ function Donut({ data }) {
               return el;
             })}
         </g>
-        <text x="90" y="84" textAnchor="middle" fontSize="30" fontWeight="800" fill="#1e2436">{total}</text>
-        <text x="90" y="104" textAnchor="middle" fontSize="12" fill="#6b7280">partidas</text>
+        <text x="90" y="84" textAnchor="middle" fontSize="30" fontWeight="800" style={{ fill: "var(--text)" }}>{total}</text>
+        <text x="90" y="104" textAnchor="middle" fontSize="12" style={{ fill: "var(--muted)" }}>partidas</text>
       </svg>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {data.map((d) => (
