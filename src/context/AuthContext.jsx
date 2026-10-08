@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { USUARIOS } from "../constants/usuarios";
 
 const AuthCtx = createContext(null);
@@ -14,11 +14,21 @@ export function AuthProvider({ children }) {
     }
   });
 
+  // Registro canónico del usuario (por nombre) para obtener tema/super siempre al día,
+  // aunque la sesión guardada sea antigua y no tenga esos campos.
+  const record = user ? USUARIOS.find((u) => u.nombre === user.nombre) : null;
+
+  // Aplica el tema del usuario (ej. "rosa" para Karla) en la raíz del documento.
+  useEffect(() => {
+    const tema = record?.tema || "azul";
+    document.documentElement.setAttribute("data-tema", tema);
+  }, [user?.nombre]);
+
   // Devuelve true si las credenciales son válidas.
   const login = (nombre, pass) => {
     const u = USUARIOS.find((x) => x.nombre === nombre && x.pass === pass);
     if (!u) return false;
-    const sesion = { nombre: u.nombre, rol: u.rol, ts: Date.now() };
+    const sesion = { nombre: u.nombre, rol: u.rol, super: !!u.super, tema: u.tema || "azul", ts: Date.now() };
     setUser(sesion);
     try {
       localStorage.setItem(KEY, JSON.stringify(sesion));
@@ -34,9 +44,10 @@ export function AuthProvider({ children }) {
   };
 
   const esAdmin = user?.rol === "admin";
+  const esSuper = !!(record?.super || user?.super); // Carlos Beltran (sistemas): puede borrar proveedores
 
   return (
-    <AuthCtx.Provider value={{ user, esAdmin, login, logout }}>
+    <AuthCtx.Provider value={{ user, esAdmin, esSuper, login, logout }}>
       {children}
     </AuthCtx.Provider>
   );

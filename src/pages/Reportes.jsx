@@ -3,7 +3,7 @@ import Topbar from "../components/Topbar";
 import OCTable from "../components/OCTable";
 import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
-import { ESTADOS_ENVIO, PROVEEDORES, ETAPAS } from "../constants/catalogs";
+import { ESTADOS_ENVIO, ETAPAS } from "../constants/catalogs";
 import { indicadorEntregas } from "../utils/estimacion";
 import { fmtFecha, cantidadTotal } from "../utils/format";
 
@@ -56,7 +56,7 @@ function Stat({ label, value, color, sub }) {
 }
 
 export default function Reportes() {
-  const { ordenes, cargando } = useData();
+  const { ordenes, cargando, proveedores } = useData();
   const [f, setF] = useState({
     campoFecha: "fechaRecepcionOC",
     desde: "",
@@ -145,7 +145,7 @@ export default function Reportes() {
               <label>Proveedor</label>
               <select value={f.proveedor} onChange={set("proveedor")}>
                 <option value="Todos">Todos</option>
-                {PROVEEDORES.map((p) => <option key={p} value={p}>{p}</option>)}
+                {proveedores.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
             </div>
             <div className="field">

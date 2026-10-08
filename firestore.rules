@@ -1,8 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // MVP: acceso abierto para desarrollo. Restringe con Firebase Auth antes de producción.
-    match /ordenes/{doc} {
+    // MVP: acceso abierto para desarrollo (órdenes, proveedores, etc.).
+    // Restringe con Firebase Auth antes de producción.
+    match /{document=**} {
       allow read, write: if true;
     }
   }

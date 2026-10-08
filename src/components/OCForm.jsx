@@ -2,13 +2,13 @@ import { useState } from "react";
 import {
   ESTADOS_ENVIO,
   TIEMPOS_ENTREGA,
-  PROVEEDORES,
   PARTIDAS,
   NO_APLICA_OPCIONES,
 } from "../constants/catalogs";
 import { fmtFecha, partidasDe, facturasDe } from "../utils/format";
 import { estimarFecha } from "../utils/estimacion";
 import PdfLinkField from "./PdfLinkField";
+import ProveedorField from "./ProveedorField";
 import Icon from "./Icon";
 
 const VACIO = {
@@ -192,13 +192,7 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
 
       {/* ===== Fechas / estado ===== */}
       <div className="form-grid">
-        <div className="field">
-          <label>Proveedor</label>
-          <select value={f.proveedor} onChange={set("proveedor")}>
-            <option value="">— Seleccionar —</option>
-            {PROVEEDORES.map((p) => <option key={p} value={p}>{p}</option>)}
-          </select>
-        </div>
+        <ProveedorField value={f.proveedor} onChange={setVal("proveedor")} />
         <div className="field">
           <label>Estado de envío <span className="td-mut" style={{ fontWeight: 400 }}>· semáforo</span></label>
           <select value={f.estadoEnvio} onChange={set("estadoEnvio")}>

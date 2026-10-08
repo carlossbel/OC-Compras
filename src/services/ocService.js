@@ -76,3 +76,23 @@ export async function reabrirOrden(id) {
 export async function eliminarOrden(id) {
   return deleteDoc(doc(db, COL, id));
 }
+
+// ---- Catálogo de proveedores (agregados por los usuarios) ----
+const COL_PROV = "proveedores";
+
+export function suscribirProveedores(callback) {
+  const q = query(collection(db, COL_PROV), orderBy("nombre"));
+  return onSnapshot(
+    q,
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => { console.error("Error al leer proveedores:", err); callback([]); }
+  );
+}
+
+export async function crearProveedor(nombre) {
+  return addDoc(collection(db, COL_PROV), { nombre: nombre.trim(), creadoEn: serverTimestamp() });
+}
+
+export async function eliminarProveedor(id) {
+  return deleteDoc(doc(db, COL_PROV, id));
+}

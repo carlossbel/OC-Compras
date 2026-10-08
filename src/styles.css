@@ -400,6 +400,10 @@ tbody tr:last-child td { border-bottom: none; }
 .ayuda-rol { padding: 14px; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(255, 255, 255, 0.4); }
 .linkbtn { background: none; border: none; color: var(--navy-700); font-weight: 600; padding: 0; font-size: 12px; cursor: pointer; text-decoration: underline; }
 
+/* Gestión de proveedores agregados */
+.prov-manage { margin-top: 8px; border: 1px solid var(--glass-border); border-radius: 10px; background: rgba(255,255,255,0.4); padding: 8px; display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; }
+.prov-manage-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; padding: 2px 4px; }
+
 /* Barra de progreso por CROL */
 .prog { display: flex; flex-direction: column; gap: 4px; min-width: 110px; }
 .prog-track { position: relative; height: 8px; border-radius: 20px; background: rgba(100, 116, 139, 0.18); overflow: hidden; }
@@ -411,3 +415,40 @@ tbody tr:last-child td { border-bottom: none; }
 .semaforo { display: inline-flex; align-items: center; gap: 7px; }
 .semaforo-luz { width: 13px; height: 13px; border-radius: 50%; box-shadow: 0 0 0 3px rgba(0,0,0,.05); display: inline-block; }
 .semaforo-txt { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+
+/* ============================================================
+   TEMA ROSA (usuario con tema "rosa", ej. Karla) — reemplaza azules por rosas claros
+   ============================================================ */
+:root[data-tema="rosa"] {
+  --navy: #8f2f5c;
+  --navy-700: #a83a6e;
+  --navy-600: #c24d85;
+  --blue: #ec4899;
+  --blue-soft: #fdeef5;
+}
+:root[data-tema="rosa"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(236, 72, 153, 0.22), transparent 55%),
+    radial-gradient(1000px 720px at 105% 15%, rgba(244, 114, 182, 0.20), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(190, 24, 93, 0.16), transparent 55%),
+    linear-gradient(135deg, #fdeef6 0%, #fbe6f0 45%, #fdf0f7 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="rosa"] .sidebar {
+  background: linear-gradient(165deg, rgba(168, 58, 110, 0.82) 0%, rgba(143, 47, 92, 0.85) 45%, rgba(110, 33, 70, 0.9) 100%);
+}
+:root[data-tema="rosa"] .nav a { color: #f6d6e6; }
+:root[data-tema="rosa"] .nav-section { color: #ecacc9; }
+:root[data-tema="rosa"] .brand-sub { color: #f1c3da; }
+:root[data-tema="rosa"] .btn-primary {
+  background: linear-gradient(165deg, rgba(168, 58, 110, 0.9) 0%, rgba(143, 47, 92, 0.92) 50%, rgba(110, 33, 70, 0.95) 100%);
+}
+:root[data-tema="rosa"] .rol-admin { background: #ec4899; color: #4a0f2e; }
+
+/* Login en tema rosa */
+:root[data-tema="rosa"] .login-page {
+  background: linear-gradient(135deg, #9d3c66 0%, #6e2246 55%, #b1477a 100%);
+}
+:root[data-tema="rosa"] .login-blob.b1 { background: #ec4899; }
+:root[data-tema="rosa"] .login-blob.b2 { background: #be185d; }
+:root[data-tema="rosa"] .login-blob.b3 { background: #f472b6; }

@@ -79,6 +79,11 @@ export const PROVEEDORES = [
   "STEREN",
   "OPTIPARTES",
   "NIMAX",
+  "SOLMUT",
+  "VERCON",
+  "GRUPO VERCON",
+  "PCEL",
+  "INTERCOMPRAS",
 ];
 
 // Color por etapa (para chips)

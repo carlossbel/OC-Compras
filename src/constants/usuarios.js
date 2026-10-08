@@ -6,10 +6,11 @@
 // Para seguridad real conviene migrar a Firebase Authentication.
 export const USUARIOS = [
   // Administración (acceso total)
-  { nombre: "Karla Arriaga", pass: "030226", rol: "admin" },
+  // tema "rosa" -> interfaz en tonos rosas (en lugar del azul)
+  { nombre: "Karla Arriaga", pass: "030226", rol: "admin", tema: "rosa" },
   { nombre: "Ana Garcia", pass: "020625", rol: "admin" },
-  // Sistemas (acceso total)
-  { nombre: "Carlos Beltran", pass: "1312", rol: "admin" },
+  // Sistemas (acceso total + puede administrar catálogos: agregar/borrar proveedores)
+  { nombre: "Carlos Beltran", pass: "1312", rol: "admin", super: true },
 
   // Vendedores (solo lectura)
   { nombre: "Laura Valle", pass: "030625", rol: "lector" },
