@@ -613,7 +613,7 @@ tbody tr:last-child td { border-bottom: none; }
 }
 :root[data-modo="noche"] .nav a { color: #c3cfe4; }
 :root[data-modo="noche"] .nav a:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
-:root[data-modo="noche"] .nav a.active { background: rgba(107, 143, 199, 0.22); color: #fff; }
+:root[data-modo="noche"] .nav a.active { background: var(--blue-soft); color: #fff; }
 :root[data-modo="noche"] .nav-section { color: #7f8db0; }
 :root[data-modo="noche"] .brand-sub { color: #93a6cc; }
 :root[data-modo="noche"] .topbar { background: rgba(20, 28, 48, 0.6); border-bottom-color: rgba(255, 255, 255, 0.08); }
@@ -646,8 +646,8 @@ tbody tr:last-child td { border-bottom: none; }
   background: linear-gradient(165deg, rgba(74, 106, 158, 0.92) 0%, rgba(58, 86, 127, 0.93) 50%, rgba(45, 67, 100, 0.95) 100%);
   border-color: rgba(255, 255, 255, 0.14);
 }
-:root[data-modo="noche"] .btn-ghost { background: rgba(107, 143, 199, 0.16); color: #b7ccec; border-color: rgba(255, 255, 255, 0.12); }
-:root[data-modo="noche"] .btn-ghost:hover { background: rgba(107, 143, 199, 0.26); }
+:root[data-modo="noche"] .btn-ghost { background: var(--blue-soft); color: var(--navy-600); border-color: rgba(255, 255, 255, 0.12); }
+:root[data-modo="noche"] .btn-ghost:hover { background: rgba(255, 255, 255, 0.12); }
 :root[data-modo="noche"] .btn-outline { background: rgba(255, 255, 255, 0.05); color: #e6ebf5; border-color: rgba(255, 255, 255, 0.14); }
 :root[data-modo="noche"] .btn-outline:hover { background: rgba(255, 255, 255, 0.1); }
 :root[data-modo="noche"] .btn-danger { background: rgba(239, 68, 68, 0.14); color: #fca5a5; border-color: rgba(239, 68, 68, 0.4); }
@@ -661,10 +661,10 @@ tbody tr:last-child td { border-bottom: none; }
 :root[data-modo="noche"] .ayuda-rol { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.1); }
 :root[data-modo="noche"] .partida-tab { background: rgba(255, 255, 255, 0.06); color: #9aa8c2; border-color: rgba(255, 255, 255, 0.12); }
 :root[data-modo="noche"] .partida-tab:hover { background: rgba(255, 255, 255, 0.12); color: #e6ebf5; }
-:root[data-modo="noche"] .partida-tab.active { background: #4a6a9e; color: #fff; border-color: #4a6a9e; }
+:root[data-modo="noche"] .partida-tab.active { background: var(--navy-600); color: #0b111f; border-color: var(--navy-600); }
 :root[data-modo="noche"] .mini-head { background: rgba(255, 255, 255, 0.05); }
 :root[data-modo="noche"] .mini-row { border-bottom-color: rgba(255, 255, 255, 0.07); }
-:root[data-modo="noche"] .ayuda-tip { background: rgba(107, 143, 199, 0.14); border-color: rgba(255, 255, 255, 0.1); color: #c7d9f5; }
+:root[data-modo="noche"] .ayuda-tip { background: var(--blue-soft); border-color: rgba(255, 255, 255, 0.1); color: var(--navy-600); }
 :root[data-modo="noche"] .ayuda-paso { border-bottom-color: rgba(255, 255, 255, 0.08); }
 :root[data-modo="noche"] .section-title .line { background: rgba(255, 255, 255, 0.1); }
 :root[data-modo="noche"] .empty .big { opacity: .6; }
@@ -677,3 +677,85 @@ tbody tr:last-child td { border-bottom: none; }
 
 /* Scrollbar claro en oscuro */
 :root[data-modo="noche"] *::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); background-clip: content-box; }
+
+/* ============================================================
+   MODO NOCHE + COLOR DE USUARIO (respeta el color de cada quien en oscuro)
+   ============================================================ */
+
+/* --- Karla: rosa en oscuro --- */
+:root[data-tema="rosa"][data-modo="noche"] {
+  --navy: #f3a9d1; --navy-700: #f5b8da; --navy-600: #f8c8e3;
+  --blue: #ec4899; --blue-soft: rgba(236, 72, 153, 0.20);
+}
+:root[data-tema="rosa"][data-modo="noche"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(236, 72, 153, 0.18), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(168, 85, 247, 0.18), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(190, 24, 93, 0.14), transparent 55%),
+    linear-gradient(135deg, #1a0f1c 0%, #140a15 45%, #1c1226 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="rosa"][data-modo="noche"] .sidebar {
+  background: linear-gradient(165deg, rgba(131, 24, 67, 0.86) 0%, rgba(88, 20, 54, 0.88) 45%, rgba(74, 33, 90, 0.92) 100%);
+}
+:root[data-tema="rosa"][data-modo="noche"] .nav-section { color: #c98fb0; }
+:root[data-tema="rosa"][data-modo="noche"] .brand-sub { color: #dba9ca; }
+:root[data-tema="rosa"][data-modo="noche"] .btn-primary {
+  background: linear-gradient(165deg, rgba(190, 24, 93, 0.92) 0%, rgba(131, 24, 67, 0.93) 50%, rgba(107, 33, 168, 0.95) 100%);
+}
+:root[data-tema="rosa"][data-modo="noche"] .login-page { background: linear-gradient(135deg, #3b0d2e 0%, #1a0b22 55%, #4a0f2e 100%); }
+:root[data-tema="rosa"][data-modo="noche"] .login-blob.b1 { background: #ec4899; }
+:root[data-tema="rosa"][data-modo="noche"] .login-blob.b2 { background: #7e22ce; }
+:root[data-tema="rosa"][data-modo="noche"] .login-blob.b3 { background: #db2777; }
+
+/* --- Ana: turquesa en oscuro --- */
+:root[data-tema="turquesa"][data-modo="noche"] {
+  --navy: #86e3f0; --navy-700: #9ae8f3; --navy-600: #b0ecf6;
+  --blue: #06b6d4; --blue-soft: rgba(6, 182, 212, 0.20);
+}
+:root[data-tema="turquesa"][data-modo="noche"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(6, 182, 212, 0.18), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(20, 184, 166, 0.18), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(8, 145, 178, 0.14), transparent 55%),
+    linear-gradient(135deg, #07171c 0%, #04121a 45%, #0a1a20 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="turquesa"][data-modo="noche"] .sidebar {
+  background: linear-gradient(165deg, rgba(8, 90, 108, 0.86) 0%, rgba(6, 64, 80, 0.88) 45%, rgba(7, 48, 64, 0.92) 100%);
+}
+:root[data-tema="turquesa"][data-modo="noche"] .nav-section { color: #7fc3d2; }
+:root[data-tema="turquesa"][data-modo="noche"] .brand-sub { color: #9fd9e4; }
+:root[data-tema="turquesa"][data-modo="noche"] .btn-primary {
+  background: linear-gradient(165deg, rgba(8, 145, 178, 0.92) 0%, rgba(14, 116, 144, 0.93) 50%, rgba(12, 74, 110, 0.95) 100%);
+}
+:root[data-tema="turquesa"][data-modo="noche"] .login-page { background: linear-gradient(135deg, #073b47 0%, #04171f 55%, #0a4a5a 100%); }
+:root[data-tema="turquesa"][data-modo="noche"] .login-blob.b1 { background: #06b6d4; }
+:root[data-tema="turquesa"][data-modo="noche"] .login-blob.b2 { background: #0e7490; }
+:root[data-tema="turquesa"][data-modo="noche"] .login-blob.b3 { background: #22d3ee; }
+
+/* --- Jovanna: morado en oscuro --- */
+:root[data-tema="morado"][data-modo="noche"] {
+  --navy: #cdbcf9; --navy-700: #d7c9fb; --navy-600: #e0d4fc;
+  --blue: #8b5cf6; --blue-soft: rgba(139, 92, 246, 0.22);
+}
+:root[data-tema="morado"][data-modo="noche"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(124, 58, 237, 0.20), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(99, 102, 241, 0.20), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(59, 130, 246, 0.12), transparent 55%),
+    linear-gradient(135deg, #150f27 0%, #100b1d 45%, #181231 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="morado"][data-modo="noche"] .sidebar {
+  background: linear-gradient(165deg, rgba(76, 29, 149, 0.86) 0%, rgba(55, 22, 110, 0.88) 45%, rgba(49, 46, 129, 0.92) 100%);
+}
+:root[data-tema="morado"][data-modo="noche"] .nav-section { color: #a492da; }
+:root[data-tema="morado"][data-modo="noche"] .brand-sub { color: #c3b4ef; }
+:root[data-tema="morado"][data-modo="noche"] .btn-primary {
+  background: linear-gradient(165deg, rgba(124, 58, 237, 0.92) 0%, rgba(79, 70, 229, 0.93) 50%, rgba(67, 56, 202, 0.95) 100%);
+}
+:root[data-tema="morado"][data-modo="noche"] .login-page { background: linear-gradient(135deg, #3b1178 0%, #140b26 55%, #312e81 100%); }
+:root[data-tema="morado"][data-modo="noche"] .login-blob.b1 { background: #a855f7; }
+:root[data-tema="morado"][data-modo="noche"] .login-blob.b2 { background: #4f46e5; }
+:root[data-tema="morado"][data-modo="noche"] .login-blob.b3 { background: #818cf8; }
