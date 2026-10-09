@@ -8,7 +8,7 @@ const link = ({ isActive }) => (isActive ? "active" : "");
 
 export default function Layout({ children }) {
   const { inicio, seguimiento, finalizado, cerradas } = useData();
-  const { user, esAdmin, logout } = useAuth();
+  const { user, esAdmin, logout, modo, toggleModo } = useAuth();
   const nav = useNavigate();
 
   return (
@@ -78,6 +78,10 @@ export default function Layout({ children }) {
               <span className={`rol-chip ${esAdmin ? "rol-admin" : "rol-lector"}`}>{ROL_LABEL[user?.rol]}</span>
             </div>
           </div>
+          <button className="modo-toggle" onClick={toggleModo} title="Cambiar modo claro / noche">
+            <Icon name={modo === "noche" ? "sun" : "moon"} size={16} />
+            {modo === "noche" ? "Modo claro" : "Modo noche"}
+          </button>
           <button
             onClick={() => {
               logout();

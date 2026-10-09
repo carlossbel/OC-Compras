@@ -18,11 +18,27 @@ export function AuthProvider({ children }) {
   // aunque la sesión guardada sea antigua y no tenga esos campos.
   const record = user ? USUARIOS.find((u) => u.nombre === user.nombre) : null;
 
-  // Aplica el tema del usuario (ej. "rosa" para Karla) en la raíz del documento.
+  // Aplica el tema (color) del usuario en la raíz del documento.
   useEffect(() => {
     const tema = record?.tema || "azul";
     document.documentElement.setAttribute("data-tema", tema);
   }, [user?.nombre]);
+
+  // Modo claro / noche — preferencia global (todos los usuarios), guardada en el equipo.
+  const [modo, setModo] = useState(() => {
+    try {
+      return localStorage.getItem("oc_bloobit_modo") || "claro";
+    } catch {
+      return "claro";
+    }
+  });
+  useEffect(() => {
+    document.documentElement.setAttribute("data-modo", modo);
+    try {
+      localStorage.setItem("oc_bloobit_modo", modo);
+    } catch {}
+  }, [modo]);
+  const toggleModo = () => setModo((m) => (m === "noche" ? "claro" : "noche"));
 
   // Devuelve true si las credenciales son válidas.
   const login = (nombre, pass) => {
@@ -47,7 +63,7 @@ export function AuthProvider({ children }) {
   const esSuper = !!(record?.super || user?.super); // Carlos Beltran (sistemas): puede borrar proveedores
 
   return (
-    <AuthCtx.Provider value={{ user, esAdmin, esSuper, login, logout }}>
+    <AuthCtx.Provider value={{ user, esAdmin, esSuper, modo, toggleModo, login, logout }}>
       {children}
     </AuthCtx.Provider>
   );
