@@ -583,6 +583,39 @@ tbody tr:last-child td { border-bottom: none; }
 :root[data-tema="azulprofundo"] .login-blob.b3 { background: #3b82f6; }
 
 /* ============================================================
+   TEMA VIOLETA (Laura) — violeta / púrpura
+   ============================================================ */
+:root[data-tema="violeta"] {
+  --navy: #7e22ce;       /* púrpura */
+  --navy-700: #9333ea;
+  --navy-600: #a855f7;
+  --blue: #a855f7;
+  --blue-soft: #f5ecff;
+}
+:root[data-tema="violeta"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(168, 85, 247, 0.26), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(147, 51, 234, 0.24), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(126, 34, 206, 0.18), transparent 55%),
+    linear-gradient(135deg, #f5ecff 0%, #f1e6ff 45%, #f7eeff 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="violeta"] .sidebar {
+  background: linear-gradient(165deg, rgba(147, 51, 234, 0.85) 0%, rgba(126, 34, 206, 0.88) 45%, rgba(107, 33, 168, 0.92) 100%);
+}
+:root[data-tema="violeta"] .nav a { color: #ecd9ff; }
+:root[data-tema="violeta"] .nav-section { color: #cfa9f0; }
+:root[data-tema="violeta"] .brand-sub { color: #ddc3f6; }
+:root[data-tema="violeta"] .btn-primary {
+  background: linear-gradient(165deg, rgba(147, 51, 234, 0.92) 0%, rgba(126, 34, 206, 0.93) 50%, rgba(107, 33, 168, 0.95) 100%);
+}
+:root[data-tema="violeta"] .rol-lector { background: #d8b4fe; color: #3b0764; }
+:root[data-tema="violeta"] .login-page { background: linear-gradient(135deg, #9333ea 0%, #581c87 55%, #7e22ce 100%); }
+:root[data-tema="violeta"] .login-blob.b1 { background: #a855f7; }
+:root[data-tema="violeta"] .login-blob.b2 { background: #7e22ce; }
+:root[data-tema="violeta"] .login-blob.b3 { background: #c084fc; }
+
+/* ============================================================
    MODO NOCHE (para todos los usuarios) — oscuro con azules apagados
    ============================================================ */
 :root[data-modo="noche"] {
@@ -759,3 +792,29 @@ tbody tr:last-child td { border-bottom: none; }
 :root[data-tema="morado"][data-modo="noche"] .login-blob.b1 { background: #a855f7; }
 :root[data-tema="morado"][data-modo="noche"] .login-blob.b2 { background: #4f46e5; }
 :root[data-tema="morado"][data-modo="noche"] .login-blob.b3 { background: #818cf8; }
+
+/* --- Laura: violeta en oscuro --- */
+:root[data-tema="violeta"][data-modo="noche"] {
+  --navy: #d8b4fe; --navy-700: #e0c4fe; --navy-600: #e9d5ff;
+  --blue: #a855f7; --blue-soft: rgba(168, 85, 247, 0.22);
+}
+:root[data-tema="violeta"][data-modo="noche"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(168, 85, 247, 0.20), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(147, 51, 234, 0.20), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(126, 34, 206, 0.14), transparent 55%),
+    linear-gradient(135deg, #190f28 0%, #130b1e 45%, #1d1230 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="violeta"][data-modo="noche"] .sidebar {
+  background: linear-gradient(165deg, rgba(107, 33, 168, 0.86) 0%, rgba(88, 28, 135, 0.88) 45%, rgba(74, 29, 118, 0.92) 100%);
+}
+:root[data-tema="violeta"][data-modo="noche"] .nav-section { color: #b48fd9; }
+:root[data-tema="violeta"][data-modo="noche"] .brand-sub { color: #cbb0ee; }
+:root[data-tema="violeta"][data-modo="noche"] .btn-primary {
+  background: linear-gradient(165deg, rgba(147, 51, 234, 0.92) 0%, rgba(107, 33, 168, 0.93) 50%, rgba(88, 28, 135, 0.95) 100%);
+}
+:root[data-tema="violeta"][data-modo="noche"] .login-page { background: linear-gradient(135deg, #4a1d76 0%, #160b22 55%, #581c87 100%); }
+:root[data-tema="violeta"][data-modo="noche"] .login-blob.b1 { background: #a855f7; }
+:root[data-tema="violeta"][data-modo="noche"] .login-blob.b2 { background: #7e22ce; }
+:root[data-tema="violeta"][data-modo="noche"] .login-blob.b3 { background: #c084fc; }

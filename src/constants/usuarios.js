@@ -13,7 +13,7 @@ export const USUARIOS = [
   { nombre: "Carlos Beltran", pass: "1312", rol: "admin", super: true, tema: "azulprofundo" },
 
   // Vendedores (solo lectura)
-  { nombre: "Laura Valle", pass: "030625", rol: "lector" },
+  { nombre: "Laura Valle", pass: "030625", rol: "lector", tema: "violeta" },
   { nombre: "Carlos Medina", pass: "251125", rol: "lector" },
   { nombre: "Jovanna Hernandez", pass: "181125", rol: "lector", tema: "morado" },
   { nombre: "Leo Torrero", pass: "030625", rol: "lector" },
