@@ -616,6 +616,39 @@ tbody tr:last-child td { border-bottom: none; }
 :root[data-tema="violeta"] .login-blob.b3 { background: #c084fc; }
 
 /* ============================================================
+   TEMA VIOLETA CON AZUL (Jovanna) — violeta mezclado con azul
+   ============================================================ */
+:root[data-tema="violetazul"] {
+  --navy: #6d28d9;       /* violeta */
+  --navy-700: #5b4fe0;
+  --navy-600: #4f46e5;
+  --blue: #3b82f6;       /* azul */
+  --blue-soft: #ebeafe;
+}
+:root[data-tema="violetazul"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(124, 58, 237, 0.24), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(59, 130, 246, 0.26), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(79, 70, 229, 0.18), transparent 55%),
+    linear-gradient(135deg, #efecff 0%, #e9ecff 45%, #eef2ff 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="violetazul"] .sidebar {
+  background: linear-gradient(165deg, rgba(124, 58, 237, 0.86) 0%, rgba(79, 70, 229, 0.88) 45%, rgba(37, 99, 235, 0.9) 100%);
+}
+:root[data-tema="violetazul"] .nav a { color: #dfdcff; }
+:root[data-tema="violetazul"] .nav-section { color: #afb4f3; }
+:root[data-tema="violetazul"] .brand-sub { color: #cdc8fa; }
+:root[data-tema="violetazul"] .btn-primary {
+  background: linear-gradient(165deg, rgba(124, 58, 237, 0.92) 0%, rgba(79, 70, 229, 0.93) 50%, rgba(37, 99, 235, 0.95) 100%);
+}
+:root[data-tema="violetazul"] .rol-lector { background: #c7bdfd; color: #2e1065; }
+:root[data-tema="violetazul"] .login-page { background: linear-gradient(135deg, #7c3aed 0%, #312e81 55%, #2563eb 100%); }
+:root[data-tema="violetazul"] .login-blob.b1 { background: #a855f7; }
+:root[data-tema="violetazul"] .login-blob.b2 { background: #2563eb; }
+:root[data-tema="violetazul"] .login-blob.b3 { background: #818cf8; }
+
+/* ============================================================
    MODO NOCHE (para todos los usuarios) — oscuro con azules apagados
    ============================================================ */
 :root[data-modo="noche"] {
@@ -818,3 +851,29 @@ tbody tr:last-child td { border-bottom: none; }
 :root[data-tema="violeta"][data-modo="noche"] .login-blob.b1 { background: #a855f7; }
 :root[data-tema="violeta"][data-modo="noche"] .login-blob.b2 { background: #7e22ce; }
 :root[data-tema="violeta"][data-modo="noche"] .login-blob.b3 { background: #c084fc; }
+
+/* --- Jovanna: violeta con azul en oscuro --- */
+:root[data-tema="violetazul"][data-modo="noche"] {
+  --navy: #c9c3fb; --navy-700: #bdc7fb; --navy-600: #c7d3fc;
+  --blue: #6b8ff0; --blue-soft: rgba(99, 102, 241, 0.22);
+}
+:root[data-tema="violetazul"][data-modo="noche"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(124, 58, 237, 0.20), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(59, 130, 246, 0.20), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(79, 70, 229, 0.14), transparent 55%),
+    linear-gradient(135deg, #140f2a 0%, #0f0c1f 45%, #111631 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="violetazul"][data-modo="noche"] .sidebar {
+  background: linear-gradient(165deg, rgba(76, 29, 149, 0.86) 0%, rgba(49, 46, 129, 0.88) 45%, rgba(30, 58, 138, 0.92) 100%);
+}
+:root[data-tema="violetazul"][data-modo="noche"] .nav-section { color: #9b9ddb; }
+:root[data-tema="violetazul"][data-modo="noche"] .brand-sub { color: #bcb8ef; }
+:root[data-tema="violetazul"][data-modo="noche"] .btn-primary {
+  background: linear-gradient(165deg, rgba(124, 58, 237, 0.92) 0%, rgba(79, 70, 229, 0.93) 50%, rgba(37, 99, 235, 0.95) 100%);
+}
+:root[data-tema="violetazul"][data-modo="noche"] .login-page { background: linear-gradient(135deg, #3b1178 0%, #140b26 55%, #1e3a8a 100%); }
+:root[data-tema="violetazul"][data-modo="noche"] .login-blob.b1 { background: #a855f7; }
+:root[data-tema="violetazul"][data-modo="noche"] .login-blob.b2 { background: #2563eb; }
+:root[data-tema="violetazul"][data-modo="noche"] .login-blob.b3 { background: #818cf8; }
