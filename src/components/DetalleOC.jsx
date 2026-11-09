@@ -5,6 +5,7 @@ import FlowStepper from "./FlowStepper";
 import { EstadoChip, EtapaChip } from "./Chip";
 import Semaforo from "./Semaforo";
 import Progreso from "./Progreso";
+import GlassDropdown from "./GlassDropdown";
 import Icon from "./Icon";
 import { useAuth } from "../context/AuthContext";
 import { ESTADOS_ENVIO } from "../constants/catalogs";
@@ -55,8 +56,8 @@ export default function DetalleOC({ oc, onClose }) {
     setEditar(false);
   };
 
-  const avanzar = async (e) => {
-    await cambiarEstado(oc.id, e.target.value);
+  const avanzar = async (v) => {
+    await cambiarEstado(oc.id, v);
   };
 
   const cerrar = async () => {
@@ -99,12 +100,12 @@ export default function DetalleOC({ oc, onClose }) {
             <Semaforo oc={oc} showLabel />
             {oc.noAplica && <span className="chip" style={{ background: "#64748b" }}>No aplica · {oc.noAplica}</span>}
             {esAdmin && !oc.cerrada && (
-              <label style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center", fontSize: 13 }}>
-                Cambiar estado:
-                <select className="select-inline" value={oc.estadoEnvio} onChange={avanzar}>
-                  {ESTADOS_ENVIO.map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </label>
+              <div style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center", fontSize: 13 }}>
+                <span className="td-mut">Cambiar estado:</span>
+                <div style={{ width: 180 }}>
+                  <GlassDropdown value={oc.estadoEnvio} onChange={avanzar} options={ESTADOS_ENVIO} />
+                </div>
+              </div>
             )}
             {!esAdmin && (
               <span className="chip soft" style={{ marginLeft: "auto" }}><Icon name="eye" size={14} /> Solo lectura</span>

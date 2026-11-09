@@ -2,7 +2,6 @@ import { useState } from "react";
 import DetalleOC from "./DetalleOC";
 import { EstadoChip, EtapaChip } from "./Chip";
 import Semaforo from "./Semaforo";
-import Progreso from "./Progreso";
 import Icon from "./Icon";
 import { fmtFecha, fmtNum, partidasDe, facturasDe, cantidadTotal } from "../utils/format";
 import { evalEntrega } from "../utils/estimacion";
@@ -49,7 +48,7 @@ export default function OCTable({
               <th>Cant.</th>
               <th>Proveedor</th>
               <th>Estado</th>
-              {mostrarEtapa && <th>Etapa / progreso</th>}
+              {mostrarEtapa && <th>Etapa</th>}
               <th>Estim. Bloobit</th>
               <th>Factura</th>
               {mostrarIndicador && <th>Indicador</th>}
@@ -94,10 +93,7 @@ export default function OCTable({
                   <td>{o.proveedor || "—"}</td>
                   <td><EstadoChip estado={o.estadoEnvio} /></td>
                   {mostrarEtapa && (
-                    <td>
-                      <EtapaChip etapa={o.etapa} cerrada={o.cerrada} />
-                      <div style={{ marginTop: 6 }}><Progreso etapa={o.etapa} cerrada={o.cerrada} /></div>
-                    </td>
+                    <td><EtapaChip etapa={o.etapa} cerrada={o.cerrada} /></td>
                   )}
                   <td className="td-mut">{fmtFecha(o.fechaEstimadaBloobit)}</td>
                   <td onClick={(e) => e.stopPropagation()}>

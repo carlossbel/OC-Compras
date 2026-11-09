@@ -317,11 +317,12 @@ tbody tr:last-child td { border-bottom: none; }
 .flow-step { display:flex; align-items:center; gap:8px; }
 .flow-node {
   display:flex; align-items:center; gap:8px; padding: 8px 14px; border-radius: 30px;
-  background: #fff; border: 1.5px solid var(--border); font-weight:600; font-size:12.5px; color: var(--muted);
+  background: var(--glass); border: 1.5px solid var(--glass-border); font-weight:600; font-size:12.5px; color: var(--muted);
 }
-.flow-node.done { border-color: var(--green); color: var(--green); background:#ecfdf5; }
-.flow-node.current { border-color: var(--navy-700); color: var(--navy-700); background: var(--blue-soft); box-shadow: 0 0 0 3px rgba(36,71,168,.12); }
-.flow-arrow { width: 26px; height: 2px; background: var(--border); margin: 0 4px; }
+.flow-node.done { border-color: var(--green); color: var(--green); background: rgba(16, 185, 129, 0.14); }
+.flow-node.current { border-color: var(--navy-700); color: var(--navy-700); background: var(--blue-soft); box-shadow: 0 0 0 3px var(--blue-soft); }
+.flow-arrow { width: 26px; height: 2px; background: var(--glass-border); margin: 0 4px; }
+.flow-num { display: inline-grid; place-items: center; width: 18px; height: 18px; }
 
 /* ---------- Login (glassmorphism) ---------- */
 .login-page {
