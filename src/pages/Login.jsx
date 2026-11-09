@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { USUARIOS } from "../constants/usuarios";
 import Icon from "../components/Icon";
@@ -9,6 +9,12 @@ export default function Login() {
   const [nombre, setNombre] = useState("");
   const [pass, setPass] = useState("");
   const [error, setError] = useState("");
+
+  // Previsualiza el color del usuario seleccionado en el propio login.
+  useEffect(() => {
+    const u = USUARIOS.find((x) => x.nombre === nombre);
+    document.documentElement.setAttribute("data-tema", u?.tema || "azul");
+  }, [nombre]);
 
   const submit = (e) => {
     e.preventDefault();
