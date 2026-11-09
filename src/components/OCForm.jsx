@@ -9,6 +9,8 @@ import { fmtFecha, partidasDe, facturasDe } from "../utils/format";
 import { estimarFecha } from "../utils/estimacion";
 import PdfLinkField from "./PdfLinkField";
 import ProveedorField from "./ProveedorField";
+import GlassDropdown from "./GlassDropdown";
+import GlassDate from "./GlassDate";
 import Icon from "./Icon";
 
 const VACIO = {
@@ -164,9 +166,7 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
           <div className="form-grid">
             <div className="field">
               <label>N° de partida</label>
-              <select value={pa.partida} onChange={(e) => setPartida(idx, "partida", e.target.value)}>
-                {PARTIDAS.map((n) => <option key={n} value={n}>{n}</option>)}
-              </select>
+              <GlassDropdown value={pa.partida} onChange={(v) => setPartida(idx, "partida", v)} options={PARTIDAS} />
             </div>
             <div className="field">
               <label>Clave de producto</label>
@@ -195,53 +195,46 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
         <ProveedorField value={f.proveedor} onChange={setVal("proveedor")} />
         <div className="field">
           <label>Estado de envío <span className="td-mut" style={{ fontWeight: 400 }}>· semáforo</span></label>
-          <select value={f.estadoEnvio} onChange={set("estadoEnvio")}>
-            {ESTADOS_ENVIO.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
+          <GlassDropdown value={f.estadoEnvio} onChange={setVal("estadoEnvio")} options={ESTADOS_ENVIO} />
         </div>
 
         <div className="field">
           <label>Recepción OC cliente</label>
-          <input type="date" value={f.fechaRecepcionOC} onChange={set("fechaRecepcionOC")} />
+          <GlassDate value={f.fechaRecepcionOC} onChange={setVal("fechaRecepcionOC")} />
         </div>
         <div className="field">
           <label>Envío a compras</label>
-          <input type="date" value={f.fechaEnvioCompras} onChange={set("fechaEnvioCompras")} />
+          <GlassDate value={f.fechaEnvioCompras} onChange={setVal("fechaEnvioCompras")} />
         </div>
 
         <div className="field">
           <label>Tiempo de entrega al cliente</label>
-          <select value={f.tiempoEntregaCliente} onChange={set("tiempoEntregaCliente")}>
-            <option value="">— Seleccionar —</option>
-            {TIEMPOS_ENTREGA.map((t) => <option key={t} value={t}>{t}</option>)}
-          </select>
+          <GlassDropdown value={f.tiempoEntregaCliente} onChange={setVal("tiempoEntregaCliente")} options={TIEMPOS_ENTREGA} />
         </div>
         <EstimadaCalc label="Fecha estimada al cliente" base={f.fechaRecepcionOC} tiempo={f.tiempoEntregaCliente} />
 
         <div className="field">
           <label>Fecha del proceso <span className="td-mut" style={{ fontWeight: 400 }}>· envío al proveedor</span></label>
-          <input type="date" value={f.fechaProceso} onChange={set("fechaProceso")} />
+          <GlassDate value={f.fechaProceso} onChange={setVal("fechaProceso")} />
         </div>
         <div className="field">
           <label>Tiempo de entrega a Bloobit</label>
-          <select value={f.tiempoEntregaBloobit} onChange={set("tiempoEntregaBloobit")}>
-            <option value="">— Seleccionar —</option>
-            {TIEMPOS_ENTREGA.map((t) => <option key={t} value={t}>{t}</option>)}
-          </select>
+          <GlassDropdown value={f.tiempoEntregaBloobit} onChange={setVal("tiempoEntregaBloobit")} options={TIEMPOS_ENTREGA} />
         </div>
 
         <EstimadaCalc label="Fecha estimada a Bloobit" base={f.fechaProceso || f.fechaRecepcionOC} tiempo={f.tiempoEntregaBloobit} alerta />
         <div className="field">
           <label>Fecha de entrega al cliente</label>
-          <input type="date" value={f.fechaEntregaRealCliente} onChange={set("fechaEntregaRealCliente")} />
+          <GlassDate value={f.fechaEntregaRealCliente} onChange={setVal("fechaEntregaRealCliente")} />
         </div>
 
         <div className="field">
           <label>Indicador <span className="td-mut" style={{ fontWeight: 400 }}>· ¿no aplica?</span></label>
-          <select value={f.noAplica} onChange={set("noAplica")}>
-            <option value="">Sí aplica (normal)</option>
-            {NO_APLICA_OPCIONES.map((o) => <option key={o} value={o}>No aplica · {o}</option>)}
-          </select>
+          <GlassDropdown
+            value={f.noAplica}
+            onChange={setVal("noAplica")}
+            options={[{ value: "", label: "Sí aplica (normal)" }, ...NO_APLICA_OPCIONES.map((o) => ({ value: o, label: `No aplica · ${o}` }))]}
+          />
           <span className="td-mut" style={{ fontSize: 12 }}>
             Si eliges un motivo, la orden se excluye de los indicadores.
           </span>

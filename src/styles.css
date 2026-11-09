@@ -234,6 +234,52 @@ tbody tr:last-child td { border-bottom: none; }
 .form-section { margin: 18px 0; padding: 16px; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(255, 255, 255, 0.35); }
 .form-section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
 .form-section-head h3 { margin: 0; font-size: 14px; display: flex; align-items: center; gap: 7px; color: var(--navy-700); }
+/* Desplegable glass (formularios) */
+.gdrop { position: relative; width: 100%; }
+.gdrop-btn {
+  width: 100%; display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--glass-border); border-radius: 10px; padding: 10px 12px;
+  background: var(--glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  color: var(--text); font-size: 14px; font-family: inherit; cursor: pointer; text-align: left;
+  transition: border-color .15s, background .15s;
+}
+.gdrop-btn:hover { background: var(--glass-strong); }
+.gdrop-btn:focus-visible { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, .15); }
+.gdrop-btn.placeholder .gdrop-val { color: var(--muted); }
+.gdrop-val { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gdrop-chev { color: var(--muted); transition: transform .18s; flex-shrink: 0; }
+.gdrop-chev.open { transform: rotate(180deg); }
+.gdrop-menu {
+  position: absolute; left: 0; right: 0; z-index: 30;
+  background: var(--glass-strong);
+  backdrop-filter: blur(26px) saturate(165%); -webkit-backdrop-filter: blur(26px) saturate(165%);
+  border: 1px solid var(--glass-border); border-radius: 12px; padding: 6px;
+  overflow-y: auto; box-shadow: 0 18px 44px rgba(16, 24, 40, .22);
+}
+.gdrop-opt { display: block; width: 100%; text-align: left; background: transparent; border: none; color: var(--text); padding: 9px 12px; border-radius: 8px; font-size: 14px; cursor: pointer; }
+.gdrop-opt:hover { background: var(--blue-soft); }
+.gdrop-opt.sel { background: var(--blue-soft); color: var(--navy-700); font-weight: 600; }
+
+/* Calendario glass */
+.gdate { position: relative; width: 100%; }
+.gdate-menu {
+  position: absolute; left: 0; z-index: 30; width: 286px; max-width: 92vw;
+  background: var(--glass-strong);
+  backdrop-filter: blur(26px) saturate(165%); -webkit-backdrop-filter: blur(26px) saturate(165%);
+  border: 1px solid var(--glass-border); border-radius: 14px; padding: 12px;
+  box-shadow: 0 18px 44px rgba(16, 24, 40, .24);
+}
+.gdate-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-weight: 700; color: var(--text); text-transform: capitalize; }
+.gdate-nav { background: var(--glass); border: 1px solid var(--glass-border); color: var(--text); width: 28px; height: 28px; border-radius: 8px; font-size: 17px; line-height: 1; cursor: pointer; }
+.gdate-nav:hover { background: var(--blue-soft); }
+.gdate-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.gdate-dows span { text-align: center; font-size: 11px; color: var(--muted); font-weight: 600; padding: 4px 0; }
+.gdate-day { aspect-ratio: 1; border: none; background: transparent; color: var(--text); border-radius: 8px; font-size: 13px; cursor: pointer; }
+.gdate-day:hover { background: var(--blue-soft); }
+.gdate-day.hoy { outline: 1px solid var(--blue); }
+.gdate-day.sel { background: var(--blue-soft); color: var(--navy-700); font-weight: 800; outline: 1.5px solid var(--blue); }
+.gdate-foot { display: flex; justify-content: space-between; margin-top: 10px; }
+
 /* Pestañas de partidas */
 .partida-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
 .partida-tab { background: rgba(255, 255, 255, 0.45); border: 1px solid var(--glass-border); color: var(--muted); padding: 7px 15px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; transition: background .15s, color .15s; }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useData } from "../context/DataContext";
 import { useAuth } from "../context/AuthContext";
 import { crearProveedor, eliminarProveedor } from "../services/ocService";
+import GlassDropdown from "./GlassDropdown";
 import Icon from "./Icon";
 
 // Campo de proveedor: desplegable + opción "Otro" (agregar, admin) + borrar (solo Carlos Beltran).
@@ -13,12 +14,12 @@ export default function ProveedorField({ value, onChange }) {
   const [gestionar, setGestionar] = useState(false);
   const [guardando, setGuardando] = useState(false);
 
-  const onSelect = (e) => {
-    if (e.target.value === "__otro__") {
+  const onSelect = (v) => {
+    if (v === "__otro__") {
       setModoOtro(true);
       setNuevo("");
     } else {
-      onChange(e.target.value);
+      onChange(v);
     }
   };
 
@@ -64,13 +65,15 @@ export default function ProveedorField({ value, onChange }) {
           <button type="button" className="btn btn-outline btn-sm" onClick={() => setModoOtro(false)}>Cancelar</button>
         </div>
       ) : (
-        <select value={value || ""} onChange={onSelect}>
-          <option value="">— Seleccionar —</option>
-          {/* Asegura que el proveedor seleccionado siempre se muestre, aunque aún no llegue de Firestore */}
-          {value && !proveedores.includes(value) && <option value={value}>{value}</option>}
-          {proveedores.map((p) => <option key={p} value={p}>{p}</option>)}
-          <option value="__otro__">➕ Otro…</option>
-        </select>
+        <GlassDropdown
+          value={value || ""}
+          onChange={onSelect}
+          options={[
+            ...(value && !proveedores.includes(value) ? [{ value, label: value }] : []),
+            ...proveedores.map((p) => ({ value: p, label: p })),
+            { value: "__otro__", label: "➕ Otro…" },
+          ]}
+        />
       )}
 
       {/* Gestión de proveedores agregados — solo Carlos Beltran (sistemas) */}
