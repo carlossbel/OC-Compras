@@ -71,7 +71,7 @@ export default function ProveedorField({ value, onChange }) {
           options={[
             ...(value && !proveedores.includes(value) ? [{ value, label: value }] : []),
             ...proveedores.map((p) => ({ value: p, label: p })),
-            { value: "__otro__", label: "➕ Otro…" },
+            { value: "__otro__", label: <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><Icon name="plus" size={14} /> Otro…</span> },
           ]}
         />
       )}
