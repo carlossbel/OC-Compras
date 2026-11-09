@@ -66,6 +66,8 @@ export default function ProveedorField({ value, onChange }) {
       ) : (
         <select value={value || ""} onChange={onSelect}>
           <option value="">— Seleccionar —</option>
+          {/* Asegura que el proveedor seleccionado siempre se muestre, aunque aún no llegue de Firestore */}
+          {value && !proveedores.includes(value) && <option value={value}>{value}</option>}
           {proveedores.map((p) => <option key={p} value={p}>{p}</option>)}
           <option value="__otro__">➕ Otro…</option>
         </select>

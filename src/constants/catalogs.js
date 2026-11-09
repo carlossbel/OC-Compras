@@ -44,7 +44,6 @@ export const TIEMPOS_ENTREGA = [
   "INMEDIATO",
   "1-5 Dias Habiles",
   "2 a 5 Días hábiles",
-  "5-8 días hábiles",
   "5 a 8 Días hábiles",
   "8 a 12 Días hábiles",
   "2 a 3 Semanas",
