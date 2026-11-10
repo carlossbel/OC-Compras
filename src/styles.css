@@ -697,6 +697,39 @@ tbody tr:last-child td { border-bottom: none; }
 :root[data-tema="violetazul"] .login-blob.b3 { background: #818cf8; }
 
 /* ============================================================
+   TEMA PETRÓLEO (Carlos) — teal/petróleo + terracota + cian
+   ============================================================ */
+:root[data-tema="petroleo"] {
+  --navy: #006067;       /* petróleo */
+  --navy-700: #0a7580;
+  --navy-600: #299DA6;
+  --blue: #299DA6;
+  --blue-soft: #e2f6f8;
+}
+:root[data-tema="petroleo"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(41, 157, 166, 0.24), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(115, 222, 230, 0.26), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(187, 113, 62, 0.14), transparent 55%),
+    linear-gradient(135deg, #e9f7f8 0%, #e2f4f6 45%, #eef9fb 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="petroleo"] .sidebar {
+  background: linear-gradient(165deg, rgba(0, 96, 103, 0.9) 0%, rgba(13, 110, 120, 0.92) 45%, rgba(4, 70, 76, 0.95) 100%);
+}
+:root[data-tema="petroleo"] .nav a { color: #cfeef1; }
+:root[data-tema="petroleo"] .nav-section { color: #8ecfd6; }
+:root[data-tema="petroleo"] .brand-sub { color: #aee1e7; }
+:root[data-tema="petroleo"] .btn-primary {
+  background: linear-gradient(165deg, rgba(187, 113, 62, 0.95) 0%, rgba(160, 88, 44, 0.96) 50%, rgba(120, 52, 10, 0.98) 100%);
+}
+:root[data-tema="petroleo"] .rol-admin { background: #BB713E; color: #fff; }
+:root[data-tema="petroleo"] .login-page { background: linear-gradient(135deg, #006067 0%, #03363b 55%, #299DA6 100%); }
+:root[data-tema="petroleo"] .login-blob.b1 { background: #299DA6; }
+:root[data-tema="petroleo"] .login-blob.b2 { background: #BB713E; }
+:root[data-tema="petroleo"] .login-blob.b3 { background: #73DEE6; }
+
+/* ============================================================
    MODO NOCHE (para todos los usuarios) — oscuro con azules apagados
    ============================================================ */
 :root[data-modo="noche"] {
@@ -983,3 +1016,29 @@ tbody tr { transition: background .15s ease; }
     scroll-behavior: auto !important;
   }
 }
+
+/* --- Carlos: petróleo en oscuro (teal oscuro + terracota + cian) --- */
+:root[data-tema="petroleo"][data-modo="noche"] {
+  --navy: #7fdbe4; --navy-700: #93e1e9; --navy-600: #a9e8ee;
+  --blue: #299DA6; --blue-soft: rgba(41, 157, 166, 0.24);
+}
+:root[data-tema="petroleo"][data-modo="noche"] body {
+  background:
+    radial-gradient(1100px 780px at 8% -5%, rgba(41, 157, 166, 0.20), transparent 55%),
+    radial-gradient(1000px 720px at 105% 12%, rgba(115, 222, 230, 0.18), transparent 55%),
+    radial-gradient(900px 900px at 50% 115%, rgba(187, 113, 62, 0.16), transparent 55%),
+    linear-gradient(135deg, #05171a 0%, #031214 45%, #07211f 100%);
+  background-attachment: fixed;
+}
+:root[data-tema="petroleo"][data-modo="noche"] .sidebar {
+  background: linear-gradient(165deg, rgba(0, 74, 80, 0.88) 0%, rgba(3, 54, 59, 0.9) 45%, rgba(2, 40, 44, 0.93) 100%);
+}
+:root[data-tema="petroleo"][data-modo="noche"] .nav-section { color: #6fb8bf; }
+:root[data-tema="petroleo"][data-modo="noche"] .brand-sub { color: #9fd6dc; }
+:root[data-tema="petroleo"][data-modo="noche"] .btn-primary {
+  background: linear-gradient(165deg, rgba(187, 113, 62, 0.95) 0%, rgba(150, 82, 40, 0.96) 50%, rgba(102, 41, 0, 0.98) 100%);
+}
+:root[data-tema="petroleo"][data-modo="noche"] .login-page { background: linear-gradient(135deg, #024045 0%, #02161a 55%, #0a5560 100%); }
+:root[data-tema="petroleo"][data-modo="noche"] .login-blob.b1 { background: #299DA6; }
+:root[data-tema="petroleo"][data-modo="noche"] .login-blob.b2 { background: #BB713E; }
+:root[data-tema="petroleo"][data-modo="noche"] .login-blob.b3 { background: #73DEE6; }
