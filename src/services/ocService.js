@@ -96,3 +96,23 @@ export async function crearProveedor(nombre) {
 export async function eliminarProveedor(id) {
   return deleteDoc(doc(db, COL_PROV, id));
 }
+
+// ---- Clientes (asignados a cada vendedor) ----
+const COL_CLI = "clientes";
+
+export function suscribirClientes(callback) {
+  const q = query(collection(db, COL_CLI), orderBy("nombre"));
+  return onSnapshot(
+    q,
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => { console.error("Error al leer clientes:", err); callback([]); }
+  );
+}
+
+export async function crearCliente(nombre, vendedor) {
+  return addDoc(collection(db, COL_CLI), { nombre: nombre.trim(), vendedor: vendedor || "", creadoEn: serverTimestamp() });
+}
+
+export async function eliminarCliente(id) {
+  return deleteDoc(doc(db, COL_CLI, id));
+}

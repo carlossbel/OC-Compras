@@ -9,9 +9,11 @@ import { fmtFecha, partidasDe, facturasDe } from "../utils/format";
 import { estimarFecha } from "../utils/estimacion";
 import PdfLinkField from "./PdfLinkField";
 import ProveedorField from "./ProveedorField";
+import ClienteField from "./ClienteField";
 import GlassDropdown from "./GlassDropdown";
 import GlassDate from "./GlassDate";
 import Icon from "./Icon";
+import { PREFIJO_VENDEDOR } from "../constants/vendedores";
 
 const VACIO = {
   cliente: "",
@@ -130,10 +132,11 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
     <form onSubmit={submit}>
       {/* ===== Datos de la orden (CROL) ===== */}
       <div className="form-grid">
-        <div className="field">
-          <label>Cliente <span className="req">*</span></label>
-          <input value={f.cliente} onChange={set("cliente")} placeholder="De la OC" />
-        </div>
+        <ClienteField
+          value={f.cliente}
+          onChange={setVal("cliente")}
+          vendedor={PREFIJO_VENDEDOR[(partidas[0]?.claveProducto || "").trim().slice(0, 3).toUpperCase()] || ""}
+        />
         <div className="field">
           <label>OC del Cliente</label>
           <input value={f.ocCliente} onChange={set("ocCliente")} placeholder="Ej. ST_26_06" />

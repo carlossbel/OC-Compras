@@ -5,6 +5,7 @@ import { useData } from "../context/DataContext";
 import { useAuth } from "../context/AuthContext";
 import { COLOR_ESTADO, ESTADOS_ENVIO } from "../constants/catalogs";
 import { indicadorEntregas } from "../utils/estimacion";
+import { vendedorDeUsuario, vendedorDeOC } from "../constants/vendedores";
 
 function Donut({ data }) {
   const total = data.reduce((s, d) => s + d.value, 0);
@@ -51,12 +52,17 @@ function Donut({ data }) {
 
 export default function Dashboard() {
   const { pendientes, cerradas, inicio, seguimiento, finalizado } = useData();
-  const { esAdmin } = useAuth();
+  const { esAdmin, user } = useAuth();
   const nav = useNavigate();
+
+  const miVendedor = vendedorDeUsuario(user?.nombre);
+  const pendientesChart = miVendedor
+    ? pendientes.filter((o) => vendedorDeOC(o) === miVendedor)
+    : pendientes;
 
   const donut = ESTADOS_ENVIO.map((s) => ({
     label: s,
-    value: pendientes.filter((o) => o.estadoEnvio === s).length,
+    value: pendientesChart.filter((o) => o.estadoEnvio === s).length,
     color: COLOR_ESTADO[s],
   })).filter((d) => d.value > 0);
 
@@ -101,7 +107,7 @@ export default function Dashboard() {
         <div className="grid cards-2" style={{ marginTop: 16 }}>
           <div className="card">
             <div className="section-title" style={{ margin: "0 0 14px" }}>
-              Partidas por estado de envío
+              Partidas por estado de envío{miVendedor ? ` · ${miVendedor}` : ""}
             </div>
             {donut.length ? (
               <Donut data={donut} />
@@ -138,18 +144,6 @@ export default function Dashboard() {
             ) : (
               <div className="empty"><Icon name="checkCircle" size={40} strokeWidth={1.4} style={{ opacity: .5, marginBottom: 8 }} /><div>Aún no hay órdenes cerradas con fecha de entrega para evaluar.</div></div>
             )}
-          </div>
-        </div>
-
-        <div className="card" style={{ marginTop: 16 }}>
-          <div className="section-title" style={{ margin: "0 0 14px" }}>Accesos rápidos</div>
-          <div className="grid cards-4">
-            {esAdmin
-              ? <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/nueva")}><Icon name="plus" size={16} /> Registrar nueva OC</button>
-              : <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/reportes")}><Icon name="chart" size={16} /> Ver reportes</button>}
-            <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/inicio")}><Icon name="inbox" size={16} /> Ir a Inicio</button>
-            <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/seguimiento")}><Icon name="truck" size={16} /> Ir a Seguimiento</button>
-            <button className="btn btn-ghost" style={{ justifyContent: "flex-start", padding: 16 }} onClick={() => nav("/cerradas")}><Icon name="archive" size={16} /> Órdenes cerradas</button>
           </div>
         </div>
       </div>

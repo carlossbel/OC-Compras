@@ -10,6 +10,7 @@ import Pendientes from "./pages/Pendientes";
 import Cerradas from "./pages/Cerradas";
 import Buscador from "./pages/Buscador";
 import Reportes from "./pages/Reportes";
+import Clientes from "./pages/Clientes";
 import Ayuda from "./pages/Ayuda";
 
 export default function App() {
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="/finalizados" element={<Etapa etapa="Finalizado" />} />
           <Route path="/cerradas" element={<Cerradas />} />
           <Route path="/reportes" element={<Reportes />} />
+          <Route path="/clientes" element={<Clientes />} />
           <Route path="/buscador" element={<Buscador />} />
           <Route path="/ayuda" element={<Ayuda />} />
           <Route path="*" element={<Navigate to="/" replace />} />

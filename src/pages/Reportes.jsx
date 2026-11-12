@@ -44,6 +44,92 @@ function exportarCSV(rows) {
   URL.revokeObjectURL(url);
 }
 
+function esc(v) {
+  return (v === null || v === undefined ? "" : String(v))
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function exportarPDF(rows, f, ind) {
+  const cols = [
+    ["Cliente", "cliente"], ["OC Cliente", "ocCliente"], ["CROL", "crol"],
+    ["Clave", "claveProducto"], ["Descripción", "descripcion"],
+    ["Cant.", "cantidad"], ["Proveedor", "proveedor"], ["Estado", "estadoEnvio"],
+    ["Etapa", "etapa"], ["Recepción OC", "fechaRecepcionOC"],
+    ["Estimada cliente", "fechaEstimadaCliente"], ["Entrega real", "fechaEntregaRealCliente"],
+  ];
+  const hoy = new Date().toLocaleDateString("es-MX", { day: "2-digit", month: "long", year: "numeric" });
+  const rango = (f.desde || f.hasta)
+    ? `${f.desde ? fmtFecha(f.desde) : "inicio"} — ${f.hasta ? fmtFecha(f.hasta) : "hoy"} (por ${CAMPOS_FECHA.find((c) => c.v === f.campoFecha)?.t})`
+    : "Todas las fechas";
+  const filtros = [
+    f.etapa !== "Todas" ? `Etapa: ${f.etapa}` : null,
+    f.estado !== "Todos" ? `Estado: ${f.estado}` : null,
+    f.proveedor !== "Todos" ? `Proveedor: ${f.proveedor}` : null,
+    f.cliente.trim() ? `Cliente: ${f.cliente.trim()}` : null,
+  ].filter(Boolean).join(" · ") || "Sin filtros adicionales";
+
+  const thead = cols.map((c) => `<th>${esc(c[0])}</th>`).join("");
+  const tbody = rows.map((o) =>
+    `<tr>${cols.map(([, k]) => `<td>${esc(o[k])}</td>`).join("")}</tr>`
+  ).join("");
+  const porEstado = ESTADOS_ENVIO.map((s) => {
+    const n = rows.filter((o) => o.estadoEnvio === s).length;
+    return `<span class="pill">${esc(s)}: <b>${n}</b></span>`;
+  }).join("");
+
+  const html = `<!doctype html><html lang="es"><head><meta charset="utf-8">
+<title>Reporte OC Bloobit · ${esc(hoy)}</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: #1a2234; margin: 28px; font-size: 11px; }
+  h1 { font-size: 20px; margin: 0; letter-spacing: 1px; color: #0b2a4a; }
+  .sub { color: #5b6b82; font-size: 11px; margin-top: 2px; }
+  .head { border-bottom: 3px solid #0b2a4a; padding-bottom: 12px; margin-bottom: 16px;
+          display: flex; justify-content: space-between; align-items: flex-end; }
+  .meta { text-align: right; color: #5b6b82; font-size: 10px; }
+  .kpis { display: flex; gap: 10px; margin: 0 0 14px; flex-wrap: wrap; }
+  .kpi { border: 1px solid #d8e0ec; border-radius: 8px; padding: 8px 14px; min-width: 110px; }
+  .kpi .n { font-size: 20px; font-weight: 800; color: #0b2a4a; }
+  .kpi .l { font-size: 9px; text-transform: uppercase; letter-spacing: .6px; color: #5b6b82; }
+  .info { background: #f3f6fb; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 10px; color: #3a4a63; }
+  .info div { margin: 2px 0; }
+  .pill { display: inline-block; background: #eef2f8; border-radius: 20px; padding: 2px 10px; margin: 2px 4px 2px 0; font-size: 10px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #0b2a4a; color: #fff; text-align: left; padding: 6px 7px; font-size: 9px; text-transform: uppercase; letter-spacing: .4px; }
+  td { padding: 5px 7px; border-bottom: 1px solid #e6ebf3; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8fafd; }
+  .foot { margin-top: 18px; color: #94a3b8; font-size: 9px; text-align: center; }
+  @media print { body { margin: 14mm; } }
+</style></head><body>
+  <div class="head">
+    <div><h1>BLOOBIT · Reporte de Órdenes de Compra</h1>
+      <div class="sub">Formato FO-AB-001 · Generado el ${esc(hoy)}</div></div>
+    <div class="meta">${esc(rows.length)} resultados<br>${esc(ind.cantidad.toLocaleString("es-MX"))} piezas</div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="n">${ind.porEtapa.Inicio}</div><div class="l">Inicio</div></div>
+    <div class="kpi"><div class="n">${ind.porEtapa.Seguimiento}</div><div class="l">Seguimiento</div></div>
+    <div class="kpi"><div class="n">${ind.porEtapa.Finalizado}</div><div class="l">Finalizado</div></div>
+    <div class="kpi"><div class="n">${ind.porEtapa.Cerrada}</div><div class="l">Cerradas</div></div>
+    <div class="kpi"><div class="n">${ind.pct === null ? "—" : ind.pct + "%"}</div><div class="l">A tiempo (${ind.evaluadas})</div></div>
+  </div>
+  <div class="info">
+    <div><b>Rango:</b> ${esc(rango)}</div>
+    <div><b>Filtros:</b> ${esc(filtros)}</div>
+    <div style="margin-top:6px">${porEstado}</div>
+  </div>
+  <table><thead><tr>${thead}</tr></thead><tbody>${tbody || `<tr><td colspan="${cols.length}" style="text-align:center;color:#94a3b8;padding:20px">Sin resultados</td></tr>`}</tbody></table>
+  <div class="foot">Bloobit — Sistema de Órdenes de Compra · Documento generado automáticamente</div>
+  <script>window.onload = function(){ window.focus(); window.print(); };</script>
+</body></html>`;
+
+  const w = window.open("", "_blank");
+  if (!w) { alert("Permite las ventanas emergentes para generar el PDF."); return; }
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+}
+
 function Stat({ label, value, color, sub }) {
   return (
     <div className="stat">
@@ -100,8 +186,11 @@ export default function Reportes() {
   return (
     <>
       <Topbar title="Reportes">
-        <button className="btn btn-primary" onClick={() => exportarCSV(rows)} disabled={!rows.length}>
-          <Icon name="download" size={16} /> Exportar CSV
+        <button className="btn btn-outline" onClick={() => exportarCSV(rows)} disabled={!rows.length}>
+          <Icon name="download" size={16} /> CSV
+        </button>
+        <button className="btn btn-primary" onClick={() => exportarPDF(rows, f, ind)} disabled={!rows.length}>
+          <Icon name="file" size={16} /> Exportar PDF
         </button>
       </Topbar>
 

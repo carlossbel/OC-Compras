@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { suscribirOrdenes, suscribirProveedores } from "../services/ocService";
+import { suscribirOrdenes, suscribirProveedores, suscribirClientes } from "../services/ocService";
 import { PROVEEDORES } from "../constants/catalogs";
+import { vendedorDeOC } from "../constants/vendedores";
 
 const DataCtx = createContext(null);
 
@@ -8,6 +9,7 @@ export function DataProvider({ children }) {
   const [ordenes, setOrdenes] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [provExtra, setProvExtra] = useState([]); // proveedores agregados por usuarios [{id, nombre}]
+  const [cliExtra, setCliExtra] = useState([]); // clientes agregados [{id, nombre, vendedor}]
 
   useEffect(() => {
     const unsub = suscribirOrdenes((rows) => {
@@ -19,6 +21,11 @@ export function DataProvider({ children }) {
 
   useEffect(() => {
     const unsub = suscribirProveedores((rows) => setProvExtra(rows));
+    return () => unsub();
+  }, []);
+
+  useEffect(() => {
+    const unsub = suscribirClientes((rows) => setCliExtra(rows));
     return () => unsub();
   }, []);
 
@@ -42,8 +49,30 @@ export function DataProvider({ children }) {
     return [...PROVEEDORES, ...extra].sort((a, b) => a.localeCompare(b, "es"));
   }, [provExtra]);
 
+  // Clientes por vendedor: derivados de las órdenes (por prefijo de clave) + agregados manualmente.
+  const clientesPorVendedor = useMemo(() => {
+    const map = {}; // vendedor -> Set de clientes
+    const add = (vend, cli) => {
+      if (!cli) return;
+      const v = vend || "(sin vendedor)";
+      (map[v] = map[v] || new Set()).add(cli.trim());
+    };
+    for (const o of ordenes) add(vendedorDeOC(o), (o.cliente || "").trim());
+    for (const c of cliExtra) add(c.vendedor, (c.nombre || "").trim());
+    const out = {};
+    Object.keys(map).forEach((v) => { out[v] = [...map[v]].filter(Boolean).sort((a, b) => a.localeCompare(b, "es")); });
+    return out;
+  }, [ordenes, cliExtra]);
+
+  // Todos los nombres de cliente (para el desplegable de Nueva OC).
+  const clientes = useMemo(() => {
+    const set = new Set();
+    Object.values(clientesPorVendedor).forEach((arr) => arr.forEach((c) => set.add(c)));
+    return [...set].sort((a, b) => a.localeCompare(b, "es"));
+  }, [clientesPorVendedor]);
+
   return (
-    <DataCtx.Provider value={{ ordenes, cargando, proveedores, provExtra, ...derivados }}>
+    <DataCtx.Provider value={{ ordenes, cargando, proveedores, provExtra, clientes, clientesPorVendedor, cliExtra, ...derivados }}>
       {children}
     </DataCtx.Provider>
   );
