@@ -43,9 +43,6 @@ export default function Layout({ children }) {
           <NavLink to="/reportes" className={link}>
             <Icon name="chart" className="nav-icon" /> Reportes
           </NavLink>
-          <NavLink to="/ayuda" className={link}>
-            <Icon name="help" className="nav-icon" /> Ayuda
-          </NavLink>
 
           <div className="nav-section">Histórico</div>
           <NavLink to="/pendientes" className={link}>
@@ -72,8 +69,12 @@ export default function Layout({ children }) {
             {cerradas.length > 0 && <span className="badge">{cerradas.length}</span>}
           </NavLink>
 
+          <div className="nav-divider" />
           <NavLink to="/clientes" className={link}>
             <Icon name="user" className="nav-icon" /> Clientes
+          </NavLink>
+          <NavLink to="/ayuda" className={link}>
+            <Icon name="help" className="nav-icon" /> Ayuda
           </NavLink>
         </nav>
 

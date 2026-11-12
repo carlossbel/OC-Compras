@@ -514,6 +514,14 @@ tbody tr:last-child td { border-bottom: none; }
 .ayuda-tip b { color: var(--navy); }
 .ayuda-sem { display: grid; grid-template-columns: 14px 82px 1fr; align-items: center; gap: 10px; font-size: 14px; }
 .ayuda-sem .ayuda-desc { color: var(--muted); font-size: 13px; }
+.ayuda-filtros { display: flex; flex-direction: column; gap: 12px; }
+.ayuda-filtro { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: var(--muted); line-height: 1.55; }
+.ayuda-filtro b { color: var(--text); }
+.ayuda-filtro .ayuda-ic {
+  flex-shrink: 0; width: 32px; height: 32px; border-radius: 9px; margin-top: 1px;
+  display: grid; place-items: center; color: var(--navy-700);
+  background: var(--blue-soft); border: 1px solid var(--glass-border);
+}
 .ayuda-rol { padding: 14px; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(255, 255, 255, 0.4); }
 .linkbtn { background: none; border: none; color: var(--navy-700); font-weight: 600; padding: 0; font-size: 12px; cursor: pointer; text-decoration: underline; }
 

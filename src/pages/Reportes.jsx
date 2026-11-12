@@ -4,6 +4,7 @@ import OCTable from "../components/OCTable";
 import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
 import { ESTADOS_ENVIO, ETAPAS } from "../constants/catalogs";
+import { VENDEDORES, vendedorDeOC } from "../constants/vendedores";
 import { indicadorEntregas } from "../utils/estimacion";
 import { fmtFecha, cantidadTotal } from "../utils/format";
 
@@ -64,8 +65,9 @@ function exportarPDF(rows, f, ind) {
   const filtros = [
     f.etapa !== "Todas" ? `Etapa: ${f.etapa}` : null,
     f.estado !== "Todos" ? `Estado: ${f.estado}` : null,
+    f.vendedor && f.vendedor !== "Todos" ? `Vendedor: ${f.vendedor}` : null,
     f.proveedor !== "Todos" ? `Proveedor: ${f.proveedor}` : null,
-    f.cliente.trim() ? `Cliente: ${f.cliente.trim()}` : null,
+    (f.cliente || "").trim() ? `Cliente: ${f.cliente.trim()}` : null,
   ].filter(Boolean).join(" · ") || "Sin filtros adicionales";
 
   const thead = cols.map((c) => `<th>${esc(c[0])}</th>`).join("");
@@ -142,19 +144,20 @@ function Stat({ label, value, color, sub }) {
 }
 
 export default function Reportes() {
-  const { ordenes, cargando, proveedores } = useData();
+  const { ordenes, cargando, proveedores, clientes } = useData();
   const [f, setF] = useState({
     campoFecha: "fechaRecepcionOC",
     desde: "",
     hasta: "",
     etapa: "Todas",
     estado: "Todos",
+    vendedor: "Todos",
     proveedor: "Todos",
     cliente: "",
   });
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
   const limpiar = () =>
-    setF({ campoFecha: "fechaRecepcionOC", desde: "", hasta: "", etapa: "Todas", estado: "Todos", proveedor: "Todos", cliente: "" });
+    setF({ campoFecha: "fechaRecepcionOC", desde: "", hasta: "", etapa: "Todas", estado: "Todos", vendedor: "Todos", proveedor: "Todos", cliente: "" });
 
   const rows = useMemo(() => {
     const cli = f.cliente.trim().toLowerCase();
@@ -162,6 +165,7 @@ export default function Reportes() {
       if (f.etapa === "Cerrada") { if (!o.cerrada) return false; }
       else if (f.etapa !== "Todas") { if (o.cerrada || o.etapa !== f.etapa) return false; }
       if (f.estado !== "Todos" && o.estadoEnvio !== f.estado) return false;
+      if (f.vendedor !== "Todos" && vendedorDeOC(o) !== f.vendedor) return false;
       if (f.proveedor !== "Todos" && o.proveedor !== f.proveedor) return false;
       if (cli && !(o.cliente || "").toLowerCase().includes(cli)) return false;
       const fv = o[f.campoFecha];
@@ -231,6 +235,13 @@ export default function Reportes() {
               </select>
             </div>
             <div className="field">
+              <label>Vendedor</label>
+              <select value={f.vendedor} onChange={set("vendedor")}>
+                <option value="Todos">Todos</option>
+                {VENDEDORES.map((v) => <option key={v} value={v}>{v}</option>)}
+              </select>
+            </div>
+            <div className="field">
               <label>Proveedor</label>
               <select value={f.proveedor} onChange={set("proveedor")}>
                 <option value="Todos">Todos</option>
@@ -239,7 +250,10 @@ export default function Reportes() {
             </div>
             <div className="field">
               <label>Cliente</label>
-              <input value={f.cliente} onChange={set("cliente")} placeholder="Nombre del cliente" />
+              <select value={f.cliente} onChange={set("cliente")}>
+                <option value="">Todos</option>
+                {clientes.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
             </div>
             <div className="field" style={{ justifyContent: "flex-end" }}>
               <button className="btn btn-outline" onClick={limpiar}>Limpiar filtros</button>

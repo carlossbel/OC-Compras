@@ -123,22 +123,22 @@ export default function Ayuda() {
             fechas). Además, en <b>Inicio</b>, <b>Seguimiento</b>, <b>Finalizados</b> y <b>Todas</b> tienes
             una barra de filtros compacta:
           </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <div className="ayuda-sem" style={{ alignItems: "flex-start" }}>
-              <span className="icon-box on" style={{ width: 30, height: 30, flexShrink: 0 }}><Icon name="search" size={15} /></span>
-              <span className="ayuda-desc"><b>Texto:</b> busca por CROL, clave, producto, cliente o factura.</span>
+          <div className="ayuda-filtros">
+            <div className="ayuda-filtro">
+              <span className="ayuda-ic"><Icon name="search" size={15} /></span>
+              <span><b>Texto:</b> busca por CROL, clave, producto, cliente o factura.</span>
             </div>
-            <div className="ayuda-sem" style={{ alignItems: "flex-start" }}>
-              <span className="icon-box on" style={{ width: 30, height: 30, flexShrink: 0 }}><Icon name="user" size={15} /></span>
-              <span className="ayuda-desc"><b>Vendedor:</b> la caja con icono de usuario despliega la lista; elige uno para ver solo sus órdenes.</span>
+            <div className="ayuda-filtro">
+              <span className="ayuda-ic"><Icon name="user" size={15} /></span>
+              <span><b>Vendedor:</b> la caja con icono de usuario despliega la lista; elige uno para ver solo sus órdenes.</span>
             </div>
-            <div className="ayuda-sem" style={{ alignItems: "flex-start" }}>
-              <span className="icon-box on" style={{ width: 30, height: 30, flexShrink: 0 }}><Icon name="calendar" size={15} /></span>
-              <span className="ayuda-desc"><b>Fechas:</b> abre el calendario, elige la <b>fecha inicial</b> y luego la <b>final</b> para filtrar ese rango.</span>
+            <div className="ayuda-filtro">
+              <span className="ayuda-ic"><Icon name="calendar" size={15} /></span>
+              <span><b>Fechas:</b> abre el calendario, elige la <b>fecha inicial</b> y luego la <b>final</b> para filtrar ese rango.</span>
             </div>
-            <div className="ayuda-sem" style={{ alignItems: "flex-start" }}>
-              <span className="icon-box on" style={{ width: 30, height: 30, flexShrink: 0 }}><Icon name="trash" size={15} /></span>
-              <span className="ayuda-desc"><b>Limpiar:</b> restablece todos los filtros.</span>
+            <div className="ayuda-filtro">
+              <span className="ayuda-ic"><Icon name="trash" size={15} /></span>
+              <span><b>Limpiar:</b> restablece todos los filtros.</span>
             </div>
           </div>
         </div>
