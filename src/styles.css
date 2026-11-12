@@ -117,19 +117,39 @@ button { font-family: inherit; cursor: pointer; }
 .sidebar-foot .foot-icon:hover { background: rgba(255,255,255,.2); }
 
 /* Buscador flotante (arriba a la derecha) */
-.search-fab {
-  position: fixed; top: 11px; right: 18px; z-index: 40;
-  width: 42px; height: 42px; border-radius: 50%;
+/* Lupa de buscador dentro del topbar (no se empalma con las acciones) */
+.topbar-search {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
   display: grid; place-items: center; cursor: pointer;
   background: var(--glass-strong); color: var(--navy-700);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 6px 18px rgba(23, 48, 122, .18);
-  backdrop-filter: blur(16px) saturate(150%); -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(12px) saturate(150%); -webkit-backdrop-filter: blur(12px) saturate(150%);
   transition: transform .15s ease, background .15s;
 }
-.search-fab:hover { transform: scale(1.08); background: var(--blue-soft); }
-.search-fab:active { transform: scale(.95); }
-.topbar { padding-right: 74px; }
+.topbar-search:hover { transform: scale(1.06); background: var(--blue-soft); }
+.topbar-search:active { transform: scale(.95); }
+
+/* Botón solo-icono y barra de filtros compacta (etapas / todas / buscador) */
+.btn-icon { padding: 8px; border-radius: 9px; }
+.filtros-mini { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.filtros-mini .busc-text { flex: 1 1 220px; min-width: 180px; }
+.filtros-mini .mini-e { width: 180px; }
+.filtros-mini .mini-v { width: 155px; }
+.filtros-mini .mini-d { width: 148px; }
+.mini-ctl { display: flex; align-items: center; gap: 7px; }
+.mini-ctl .mini-ic { color: var(--muted); flex-shrink: 0; }
+.busc-row { margin-bottom: 12px; }
+.busc-text {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  border-radius: 10px; padding: 9px 13px; color: var(--muted);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.busc-text input { border: none; background: transparent; outline: none; width: 100%; font-size: 13px; color: var(--text); }
+@media (max-width: 760px) {
+  .filtros-mini .mini-e, .filtros-mini .mini-v, .filtros-mini .mini-d { width: 100%; }
+  .filtros-mini .busc-text { flex-basis: 100%; }
+}
 
 .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .topbar {

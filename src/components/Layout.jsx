@@ -97,10 +97,6 @@ export default function Layout({ children }) {
       </aside>
 
       <div className="main">
-        {/* Buscador general flotante (arriba a la derecha) */}
-        <button className="search-fab" title="Buscar" onClick={() => nav("/buscador")}>
-          <Icon name="search" size={20} />
-        </button>
         {children}
       </div>
     </div>
