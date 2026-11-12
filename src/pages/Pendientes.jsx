@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Topbar from "../components/Topbar";
 import OCTable from "../components/OCTable";
 import GlassDropdown from "../components/GlassDropdown";
-import GlassDate from "../components/GlassDate";
+import IconSelect from "../components/IconSelect";
+import RangeDate from "../components/RangeDate";
 import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
 import { useAuth } from "../context/AuthContext";
@@ -50,12 +51,8 @@ export default function Pendientes() {
             <input placeholder="Buscar CROL, clave, producto…" value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
           <div className="mini-e"><GlassDropdown value={etapa} onChange={setEtapa} options={[{ value: "Todas", label: "Todas las etapas" }, ...ETAPAS.map((e) => ({ value: e, label: e }))]} /></div>
-          <div className="mini-ctl" title="Vendedor">
-            <Icon name="user" size={15} className="mini-ic" />
-            <div className="mini-v"><GlassDropdown value={vendedor} onChange={setVendedor} placeholder="Vendedor" options={[{ value: "", label: "Todos" }, ...VENDEDORES.map((v) => ({ value: v, label: v }))]} /></div>
-          </div>
-          <div className="mini-d"><GlassDate value={desde} onChange={setDesde} placeholder="Desde" /></div>
-          <div className="mini-d"><GlassDate value={hasta} onChange={setHasta} placeholder="Hasta" /></div>
+          <IconSelect icon="user" title="Vendedor" value={vendedor} onChange={setVendedor} options={[{ value: "", label: "Todos los vendedores" }, ...VENDEDORES.map((v) => ({ value: v, label: v }))]} />
+          <RangeDate desde={desde} hasta={hasta} onChange={(d, h) => { setDesde(d); setHasta(h); }} />
           <button className="btn btn-outline btn-icon" onClick={limpiar} title="Limpiar"><Icon name="trash" size={15} /></button>
           <span className="chip soft">{rows.length}</span>
         </div>

@@ -147,9 +147,34 @@ button { font-family: inherit; cursor: pointer; }
 }
 .busc-text input { border: none; background: transparent; outline: none; width: 100%; font-size: 13px; color: var(--text); }
 @media (max-width: 760px) {
-  .filtros-mini .mini-e, .filtros-mini .mini-v, .filtros-mini .mini-d { width: 100%; }
+  .filtros-mini .mini-e { width: 100%; }
   .filtros-mini .busc-text { flex-basis: 100%; }
 }
+
+/* Caja con icono que despliega (vendedor / rango de fechas) */
+.gdrop.icon-sel, .gdate.icon-sel { position: relative; width: auto; flex-shrink: 0; }
+.icon-box {
+  position: relative; width: 40px; height: 40px; border-radius: 10px;
+  display: grid; place-items: center; cursor: pointer;
+  background: var(--glass); color: var(--text);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  transition: background .15s, border-color .15s, transform .12s;
+}
+.icon-box:hover { background: var(--glass-strong); transform: translateY(-1px); }
+.icon-box.on { border-color: var(--blue); color: var(--navy-700); background: var(--blue-soft); }
+.icon-box-dot {
+  position: absolute; top: 5px; right: 5px; width: 7px; height: 7px;
+  border-radius: 50%; background: var(--blue);
+}
+.icon-sel-menu { min-width: 190px; }
+.gdrop.icon-sel .gdrop-menu, .gdate.icon-sel .gdate-menu { right: 0; left: auto; }
+.gdate-rango {
+  font-size: 12px; color: var(--muted); text-align: center;
+  padding: 2px 4px 8px; border-bottom: 1px solid var(--glass-border); margin-bottom: 6px;
+}
+.gdate-day.inrango { background: var(--blue-soft); border-radius: 0; color: var(--navy-700); }
+.gdate-day.inrango.sel { background: var(--navy-700); color: #fff; border-radius: 8px; }
 
 .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .topbar {
