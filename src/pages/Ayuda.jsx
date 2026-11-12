@@ -71,8 +71,11 @@ export default function Ayuda() {
           {esAdmin ? (
             <>
               <Paso n="1" titulo="Crear una orden">
-                Ve a <b>Nueva OC</b>, llena los datos (cliente, CROL, producto, proveedor, fechas y
-                tiempos de entrega) y presiona <b>Crear orden</b>. Nace en la etapa que corresponda a su estado.
+                Ve a <b>Nueva OC</b> y llena los datos: elige el <b>cliente</b> de la lista (o agrégalo),
+                captura el <b>CROL</b>, el <b>proveedor</b> y hasta <b>10 partidas</b> con las pestañas
+                “Agregar”. Define el <b>tiempo de entrega</b> y presiona <b>Crear orden</b>. Puedes registrar
+                varias <b>facturas</b> y marcar <b>“No aplica”</b> (backorder, parcial, proyecto, paquetería…)
+                para excluirla de los indicadores. Nace en la etapa que corresponda a su estado.
               </Paso>
               <Paso n="2" titulo="Dar seguimiento">
                 Abre la orden desde <b>Inicio</b>, <b>Seguimiento</b> o <b>Finalizados</b> y cambia su
@@ -94,11 +97,13 @@ export default function Ayuda() {
                 ver las órdenes en cada etapa. Haz clic en cualquiera para ver su detalle completo.
               </Paso>
               <Paso n="2" titulo="Buscar">
-                Usa el <b>Buscador</b> para encontrar una orden por CROL, factura, cliente, producto o proveedor.
+                Toca la <b>lupa</b> del encabezado para abrir el <b>Buscador</b> y encontrar una orden por
+                CROL, clave, producto, cliente o proveedor. También puedes filtrar por <b>etapa</b>,
+                <b> vendedor</b> y <b>rango de fechas</b>.
               </Paso>
               <Paso n="3" titulo="Reportes">
                 En <b>Reportes</b> filtra por fechas, etapa, estado, proveedor o cliente, revisa los
-                indicadores y exporta a CSV.
+                indicadores y exporta a <b>CSV</b> o <b>PDF</b>.
               </Paso>
               <div className="ayuda-tip">
                 <Icon name="eye" size={16} />
@@ -106,6 +111,49 @@ export default function Ayuda() {
               </div>
             </>
           )}
+        </div>
+
+        {/* Buscar y filtrar */}
+        <div className="card" style={{ marginBottom: 16 }}>
+          <div className="section-title" style={{ margin: "0 0 10px" }}>
+            <Icon name="search" size={17} /> Buscar y filtrar
+          </div>
+          <p className="td-mut" style={{ margin: "0 0 12px", lineHeight: 1.6, fontSize: 13 }}>
+            La <b>lupa</b> arriba a la derecha abre el <b>Buscador</b> general (texto + etapa + vendedor +
+            fechas). Además, en <b>Inicio</b>, <b>Seguimiento</b>, <b>Finalizados</b> y <b>Todas</b> tienes
+            una barra de filtros compacta:
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div className="ayuda-sem" style={{ alignItems: "flex-start" }}>
+              <span className="icon-box on" style={{ width: 30, height: 30, flexShrink: 0 }}><Icon name="search" size={15} /></span>
+              <span className="ayuda-desc"><b>Texto:</b> busca por CROL, clave, producto, cliente o factura.</span>
+            </div>
+            <div className="ayuda-sem" style={{ alignItems: "flex-start" }}>
+              <span className="icon-box on" style={{ width: 30, height: 30, flexShrink: 0 }}><Icon name="user" size={15} /></span>
+              <span className="ayuda-desc"><b>Vendedor:</b> la caja con icono de usuario despliega la lista; elige uno para ver solo sus órdenes.</span>
+            </div>
+            <div className="ayuda-sem" style={{ alignItems: "flex-start" }}>
+              <span className="icon-box on" style={{ width: 30, height: 30, flexShrink: 0 }}><Icon name="calendar" size={15} /></span>
+              <span className="ayuda-desc"><b>Fechas:</b> abre el calendario, elige la <b>fecha inicial</b> y luego la <b>final</b> para filtrar ese rango.</span>
+            </div>
+            <div className="ayuda-sem" style={{ alignItems: "flex-start" }}>
+              <span className="icon-box on" style={{ width: 30, height: 30, flexShrink: 0 }}><Icon name="trash" size={15} /></span>
+              <span className="ayuda-desc"><b>Limpiar:</b> restablece todos los filtros.</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Clientes por vendedor */}
+        <div className="card" style={{ marginBottom: 16 }}>
+          <div className="section-title" style={{ margin: "0 0 10px" }}>
+            <Icon name="user" size={17} /> Clientes por vendedor
+          </div>
+          <p className="td-mut" style={{ margin: 0, lineHeight: 1.6, fontSize: 13 }}>
+            El módulo <b>Clientes</b> muestra la cartera de cada vendedor. Lo mejor: <b>los clientes se
+            agregan solos</b> conforme registras las OC —no hay que capturarlos aparte—. El sistema sabe
+            de quién es cada cliente por el <b>prefijo</b> (las 3 primeras letras) de la clave de producto.
+            Cada persona puede agregar clientes a su propia cartera (Karla y Ana, a cualquiera).
+          </p>
         </div>
 
         {/* Semáforo */}
