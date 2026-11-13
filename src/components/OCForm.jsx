@@ -28,6 +28,7 @@ const VACIO = {
   tiempoEntregaBloobit: "",
   estadoEnvio: "Pendiente",
   noAplica: "",
+  noAplicaDetalle: "",
   fechaEntregaRealCliente: "",
   comentario: "",
 };
@@ -242,7 +243,18 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
             Si eliges un motivo, la orden se excluye de los indicadores.
           </span>
         </div>
-        <div className="field" />
+        {f.noAplica === "Otro" ? (
+          <div className="field">
+            <label>Detalle <span className="td-mut" style={{ fontWeight: 400 }}>· ¿qué pasó?</span></label>
+            <input
+              value={f.noAplicaDetalle}
+              onChange={setVal("noAplicaDetalle")}
+              placeholder="Describe el motivo…"
+            />
+          </div>
+        ) : (
+          <div className="field" />
+        )}
       </div>
 
       {/* ===== Facturas ===== */}

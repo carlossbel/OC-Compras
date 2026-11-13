@@ -34,10 +34,8 @@ export const NO_APLICA_OPCIONES = [
   "Proyecto",
   "Arrendamiento",
   "Paquetería",
-  "Estafeta",
-  "FedEx",
-  "DHL",
-  "Redpack",
+  "Cierre de mes",
+  "Otro",
 ];
 
 export const TIEMPOS_ENTREGA = [

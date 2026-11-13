@@ -98,7 +98,7 @@ export default function DetalleOC({ oc, onClose }) {
             <EtapaChip etapa={oc.etapa} cerrada={oc.cerrada} />
             <EstadoChip estado={oc.estadoEnvio} />
             <Semaforo oc={oc} showLabel />
-            {oc.noAplica && <span className="chip" style={{ background: "#64748b" }}>No aplica · {oc.noAplica}</span>}
+            {oc.noAplica && <span className="chip" style={{ background: "#64748b" }}>No aplica · {oc.noAplica}{oc.noAplica === "Otro" && oc.noAplicaDetalle ? `: ${oc.noAplicaDetalle}` : ""}</span>}
             {esAdmin && !oc.cerrada && (
               <div style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center", fontSize: 13 }}>
                 <span className="td-mut">Cambiar estado:</span>
@@ -129,7 +129,7 @@ export default function DetalleOC({ oc, onClose }) {
               <Item k="T. entrega Bloobit" v={oc.tiempoEntregaBloobit} />
               <Item k="Estimada Bloobit" v={fmtFecha(oc.fechaEstimadaBloobit)} alerta={estaAtrasada(oc)} />
               <Item k="Entrega real cliente" v={fmtFecha(oc.fechaEntregaRealCliente)} />
-              <Item k="Indicador" v={oc.noAplica ? `No aplica · ${oc.noAplica}` : "Sí aplica"} />
+              <Item k="Indicador" v={oc.noAplica ? `No aplica · ${oc.noAplica}${oc.noAplica === "Otro" && oc.noAplicaDetalle ? `: ${oc.noAplicaDetalle}` : ""}` : "Sí aplica"} />
             </div>
 
             {/* Partidas */}

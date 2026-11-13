@@ -4,7 +4,7 @@ import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
 import { useAuth } from "../context/AuthContext";
 import { COLOR_ESTADO, ESTADOS_ENVIO } from "../constants/catalogs";
-import { indicadorEntregas } from "../utils/estimacion";
+import { indicadorEntregas, indicadorIngreso } from "../utils/estimacion";
 import { vendedorDeUsuario, vendedorDeOC } from "../constants/vendedores";
 
 function Donut({ data }) {
@@ -51,9 +51,12 @@ function Donut({ data }) {
 }
 
 export default function Dashboard() {
-  const { pendientes, cerradas, inicio, seguimiento, finalizado } = useData();
+  const { ordenes, pendientes, cerradas, inicio, seguimiento, finalizado } = useData();
   const { esAdmin, user } = useAuth();
   const nav = useNavigate();
+
+  const ing = indicadorIngreso(ordenes);               // ¿ingreso de OC dentro de 2 días hábiles?
+  const noAplicaCerradas = cerradas.filter((o) => o.noAplica).length;
 
   const miVendedor = vendedorDeUsuario(user?.nombre);
   const pendientesChart = miVendedor
@@ -144,6 +147,60 @@ export default function Dashboard() {
             ) : (
               <div className="empty"><Icon name="checkCircle" size={40} strokeWidth={1.4} style={{ opacity: .5, marginBottom: 8 }} /><div>Aún no hay órdenes cerradas con fecha de entrega para evaluar.</div></div>
             )}
+          </div>
+        </div>
+
+        <div className="grid cards-2" style={{ marginTop: 16 }}>
+          {/* Indicador de ingreso de OC dentro de 2 días hábiles */}
+          <div className="card">
+            <div className="section-title" style={{ margin: "0 0 14px" }}>
+              Indicador · Ingreso de OC a tiempo (≤ 2 días hábiles)
+            </div>
+            {ing.total > 0 ? (
+              <>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 14 }}>
+                  <span style={{ fontSize: 42, fontWeight: 800, color: "var(--blue)" }}>{ing.pct}%</span>
+                  <span className="td-mut">dentro de los 2 días · {ing.total} órdenes evaluadas</span>
+                </div>
+                <div className="ind-bar">
+                  <span style={{ width: `${ing.pct}%`, background: "var(--blue)" }} />
+                  <span style={{ width: `${100 - ing.pct}%`, background: "var(--amber, #f59e0b)" }} />
+                </div>
+                <div style={{ display: "flex", gap: 20, marginTop: 14 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ width: 11, height: 11, borderRadius: 3, background: "var(--blue)" }} />
+                    <span className="td-mut">Dentro de 2 días</span> <b>{ing.aTiempo}</b>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ width: 11, height: 11, borderRadius: 3, background: "#f59e0b" }} />
+                    <span className="td-mut">Fuera del plazo</span> <b>{ing.fuera}</b>
+                  </div>
+                </div>
+                <div className="td-mut" style={{ fontSize: 12, marginTop: 10 }}>
+                  Compara la <b>fecha de envío a compras</b> con la <b>fecha de proceso</b> (días hábiles).
+                </div>
+              </>
+            ) : (
+              <div className="empty"><Icon name="inbox" size={40} strokeWidth={1.4} style={{ opacity: .5, marginBottom: 8 }} /><div>Aún no hay órdenes con fecha de envío a compras y de proceso para evaluar.</div></div>
+            )}
+          </div>
+
+          {/* Contador de No aplica en cerradas */}
+          <div className="card">
+            <div className="section-title" style={{ margin: "0 0 14px" }}>
+              Cerradas marcadas “No aplica”
+            </div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 6 }}>
+              <span style={{ fontSize: 46, fontWeight: 800, color: "#64748b" }}>{noAplicaCerradas}</span>
+              <span className="td-mut">de {cerradas.length} órdenes cerradas</span>
+            </div>
+            <div className="ind-bar">
+              <span style={{ width: `${cerradas.length ? Math.round((noAplicaCerradas / cerradas.length) * 100) : 0}%`, background: "#64748b" }} />
+              <span style={{ width: `${cerradas.length ? 100 - Math.round((noAplicaCerradas / cerradas.length) * 100) : 100}%`, background: "var(--glass-border)" }} />
+            </div>
+            <div className="td-mut" style={{ fontSize: 12, marginTop: 12 }}>
+              Órdenes excluidas de los indicadores (backorder, parcial, proyecto, paquetería, cierre de mes, etc.).
+            </div>
           </div>
         </div>
       </div>

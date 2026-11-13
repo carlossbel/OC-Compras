@@ -94,6 +94,47 @@ export function evalEntrega(o) {
   return real <= est ? "aTiempo" : "atrasada";
 }
 
+// Días hábiles entre dos fechas, inclusivo (equivalente a NETWORKDAYS de Excel).
+function networkDays(aStr, bStr) {
+  let a = parseLocal(aStr), b = parseLocal(bStr);
+  if (!a || !b) return null;
+  if (b < a) { const t = a; a = b; b = t; }
+  let count = 0;
+  const d = new Date(a);
+  while (d <= b) { if (esHabil(d)) count++; d.setDate(d.getDate() + 1); }
+  return count;
+}
+
+// Indicador "Ingreso de OC": ¿se ingresó/procesó dentro de 2 días hábiles del envío a compras?
+// Fórmula del Excel: (NETWORKDAYS(fechaEnvioCompras, fechaProceso) - 1) <= 2
+// Devuelve "aTiempo" | "fuera" | "noAplica" | null (sin datos).
+export function evalIngreso(o) {
+  if (!o) return null;
+  if (o.noAplica) return "noAplica";
+  const d = o.fechaEnvioCompras, k = o.fechaProceso;
+  if (!d || !k) return null;
+  const nd = networkDays(d, k);
+  if (nd === null) return null;
+  return (nd - 1) <= 2 ? "aTiempo" : "fuera";
+}
+
+// Indicador de ingreso de OC dentro de 2 días hábiles sobre un conjunto de órdenes.
+// Excluye las marcadas como "no aplica".
+export function indicadorIngreso(orders) {
+  let aTiempo = 0, fuera = 0, excluidas = 0;
+  for (const o of orders || []) {
+    if (o.noAplica) { excluidas++; continue; }
+    const d = o.fechaEnvioCompras, k = o.fechaProceso;
+    if (!d || !k) continue;
+    const nd = networkDays(d, k);
+    if (nd === null) continue;
+    (nd - 1) <= 2 ? aTiempo++ : fuera++;
+  }
+  const total = aTiempo + fuera;
+  const pct = total ? Math.round((aTiempo / total) * 100) : null;
+  return { aTiempo, fuera, total, pct, excluidas };
+}
+
 // Indicador de entregas a tiempo sobre un conjunto de órdenes.
 // Compara la entrega real al cliente contra la fecha estimada al cliente.
 // Excluye las marcadas como "no aplica" (backorder, parcial, proyecto, arrendamiento, paquetería).
