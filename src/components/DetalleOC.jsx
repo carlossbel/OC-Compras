@@ -13,11 +13,14 @@ import { fmtFecha, fmtNum, partidasDe, facturasDe, cantidadTotal } from "../util
 import { estaAtrasada } from "../utils/estimacion";
 import {
   actualizarOrden,
+  crearOrden,
   cambiarEstado,
   cerrarOrden,
   reabrirOrden,
   eliminarOrden,
 } from "../services/ocService";
+
+const norm = (s) => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 
 function Item({ k, v, alerta }) {
   return (
@@ -48,12 +51,28 @@ function PdfLink({ k, url }) {
 }
 
 export default function DetalleOC({ oc, onClose }) {
-  const { esAdmin } = useAuth();
+  const { esAdmin, esSuper, user } = useAuth();
   const [editar, setEditar] = useState(false);
+  const [duplicar, setDuplicar] = useState(false);
+
+  // Karla y Ana (y Sistemas) pueden duplicar órdenes para no re-capturarlas.
+  const puedeDuplicar = esSuper || ["karla arriaga", "ana garcia"].includes(norm(user?.nombre));
+
+  // Copia de la orden sin los campos del sistema (para nacer como orden nueva).
+  const duplicado = (() => {
+    const { id, cerrada, creadoEn, actualizadoEn, fechaCierre, etapa, ...resto } = oc;
+    return resto;
+  })();
 
   const onGuardar = async (data) => {
     await actualizarOrden(oc.id, data);
     setEditar(false);
+  };
+
+  const onDuplicar = async (data) => {
+    await crearOrden(data);
+    setDuplicar(false);
+    onClose();
   };
 
   const avanzar = async (v) => {
@@ -79,7 +98,7 @@ export default function DetalleOC({ oc, onClose }) {
 
   return (
     <Modal
-      title={editar ? "Editar OC" : `OC ${oc.crol || oc.ocCliente || ""}`}
+      title={editar ? "Editar OC" : duplicar ? "Duplicar OC" : `OC ${oc.crol || oc.ocCliente || ""}`}
       onClose={onClose}
     >
       {editar ? (
@@ -89,6 +108,19 @@ export default function DetalleOC({ oc, onClose }) {
           onSubmit={onGuardar}
           onCancel={() => setEditar(false)}
         />
+      ) : duplicar ? (
+        <>
+          <div className="ayuda-tip" style={{ marginBottom: 14 }}>
+            <Icon name="copy" size={16} />
+            <span>Estás <b>duplicando</b> esta orden. Revisa y ajusta los datos; al guardar se creará una <b>orden nueva</b>.</span>
+          </div>
+          <OCForm
+            inicial={duplicado}
+            modo="crear"
+            onSubmit={onDuplicar}
+            onCancel={() => setDuplicar(false)}
+          />
+        </>
       ) : (
         <>
           <FlowStepper etapa={oc.etapa} cerrada={oc.cerrada} />
@@ -186,6 +218,9 @@ export default function DetalleOC({ oc, onClose }) {
             <div className="form-actions" style={{ justifyContent: "space-between" }}>
               <button className="btn btn-danger" onClick={borrar}><Icon name="trash" size={16} /> Eliminar</button>
               <div style={{ display: "flex", gap: 10 }}>
+                {puedeDuplicar && (
+                  <button className="btn btn-outline" onClick={() => setDuplicar(true)} title="Duplicar orden"><Icon name="copy" size={16} /></button>
+                )}
                 <button className="btn btn-outline" onClick={() => setEditar(true)}><Icon name="edit" size={16} /> Editar</button>
                 {oc.cerrada ? (
                   <button className="btn btn-ghost" onClick={reabrir}>Reabrir</button>
