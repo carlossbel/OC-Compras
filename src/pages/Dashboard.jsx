@@ -159,10 +159,10 @@ export default function Dashboard() {
                   {semaforoPorVendedor.map((r) => (
                     <tr key={r.v}>
                       <td style={{ textAlign: "left", fontWeight: 600 }}>{r.v}</td>
-                      <td><b className="sem-link" style={{ color: "#10b981" }} onClick={() => irASemaforo(r.v, "verde")} title="Ver estas órdenes">{r.verde}</b></td>
-                      <td><b className="sem-link" style={{ color: "#f59e0b" }} onClick={() => irASemaforo(r.v, "amarillo")} title="Ver estas órdenes">{r.amarillo}</b></td>
-                      <td><b className="sem-link" style={{ color: "#ef4444" }} onClick={() => irASemaforo(r.v, "rojo")} title="Ver atrasadas">{r.rojo}</b></td>
-                      <td><b className="sem-link" onClick={() => irASemaforo(r.v, "")} title="Ver todas sus órdenes">{r.total}</b></td>
+                      <td><span className="cnt v link" onClick={() => irASemaforo(r.v, "verde")} title="Ver estas órdenes">{r.verde}</span></td>
+                      <td><span className="cnt a link" onClick={() => irASemaforo(r.v, "amarillo")} title="Ver estas órdenes">{r.amarillo}</span></td>
+                      <td><span className="cnt r link" onClick={() => irASemaforo(r.v, "rojo")} title="Ver atrasadas">{r.rojo}</span></td>
+                      <td><span className="cnt n link" onClick={() => irASemaforo(r.v, "")} title="Ver todas sus órdenes">{r.total}</span></td>
                     </tr>
                   ))}
                 </tbody>

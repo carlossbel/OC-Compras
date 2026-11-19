@@ -514,14 +514,43 @@ tbody tr:last-child td { border-bottom: none; }
 .ayuda-tip b { color: var(--navy); }
 .ayuda-sem { display: grid; grid-template-columns: 14px 82px 1fr; align-items: center; gap: 10px; font-size: 14px; }
 .ayuda-sem .ayuda-desc { color: var(--muted); font-size: 13px; }
-/* Tabla de semáforo por vendedor (dashboard) */
-.tabla-semaforo { width: 100%; border-collapse: collapse; font-size: 13px; }
-.tabla-semaforo th { text-align: center; padding: 8px 10px; color: var(--muted); font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--glass-border); white-space: nowrap; }
-.tabla-semaforo td { text-align: center; padding: 8px 10px; border-bottom: 1px solid var(--glass-border); }
-.tabla-semaforo tbody tr:hover { background: var(--blue-soft); }
-.sem-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
-.tabla-semaforo .sem-link { cursor: pointer; padding: 2px 8px; border-radius: 6px; transition: background .12s; }
-.tabla-semaforo .sem-link:hover { background: var(--blue-soft); text-decoration: underline; }
+/* Tablas de semáforo / cerradas por mes (dashboard y reportes) */
+.tabla-semaforo { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+.tabla-semaforo thead th {
+  text-align: center; padding: 10px 14px; white-space: nowrap;
+  color: var(--muted); font-weight: 700; font-size: 10.5px;
+  text-transform: uppercase; letter-spacing: .5px;
+  background: rgba(148, 163, 184, .09);
+  border-bottom: 1px solid var(--glass-border);
+}
+.tabla-semaforo thead th:first-child { text-align: left; border-top-left-radius: 12px; }
+.tabla-semaforo thead th:last-child { border-top-right-radius: 12px; }
+.tabla-semaforo tbody td { text-align: center; padding: 11px 14px; border-bottom: 1px solid var(--glass-border); }
+.tabla-semaforo tbody tr:nth-child(even) td { background: rgba(148, 163, 184, .05); }
+.tabla-semaforo tbody tr:hover td { background: var(--blue-soft); }
+.tabla-semaforo tbody tr.tot td { background: rgba(148, 163, 184, .12); font-weight: 700; border-bottom: none; border-top: 2px solid var(--glass-border); }
+.tabla-semaforo tbody tr.tot td:first-child { border-bottom-left-radius: 12px; }
+.tabla-semaforo tbody tr.tot td:last-child { border-bottom-right-radius: 12px; }
+.sem-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+
+/* Badges de conteo dentro de las tablas */
+.cnt { display: inline-block; min-width: 36px; padding: 3px 11px; border-radius: 999px; font-weight: 700; font-size: 12.5px; line-height: 1.35; }
+.cnt.v { color: #059669; background: rgba(16, 185, 129, .14); }
+.cnt.a { color: #b45309; background: rgba(245, 158, 11, .16); }
+.cnt.r { color: #dc2626; background: rgba(239, 68, 68, .14); }
+.cnt.n { color: var(--text); background: rgba(148, 163, 184, .16); }
+.cnt.mut { color: var(--muted); background: transparent; min-width: 0; padding: 3px 6px; }
+.cnt.link { cursor: pointer; transition: filter .12s, transform .12s, box-shadow .12s; }
+.cnt.link:hover { filter: brightness(.96); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(23, 48, 122, .14); }
+.pct-badge { display: inline-block; min-width: 50px; padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 12.5px; background: rgba(59, 130, 246, .13); color: var(--navy-700); }
+
+:root[data-modo="noche"] .tabla-semaforo thead th { background: rgba(255, 255, 255, .05); }
+:root[data-modo="noche"] .tabla-semaforo tbody tr:nth-child(even) td { background: rgba(255, 255, 255, .03); }
+:root[data-modo="noche"] .tabla-semaforo tbody tr.tot td { background: rgba(255, 255, 255, .07); }
+:root[data-modo="noche"] .cnt.v { color: #34d399; }
+:root[data-modo="noche"] .cnt.a { color: #fbbf24; }
+:root[data-modo="noche"] .cnt.r { color: #f87171; }
+:root[data-modo="noche"] .pct-badge { color: #cfe0ff; }
 
 /* Filas de órdenes atrasadas (semáforo rojo) resaltadas en las etapas/listas */
 tbody tr.fila-atrasada { background: rgba(239, 68, 68, 0.08); box-shadow: inset 3px 0 0 #ef4444; }

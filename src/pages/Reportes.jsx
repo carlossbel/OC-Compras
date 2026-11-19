@@ -373,7 +373,8 @@ export default function Reportes() {
         <div className="card" style={{ marginTop: 16 }}>
           <div className="section-title" style={{ margin: "0 0 4px" }}>Indicador de cerradas por mes</div>
           <div className="td-mut" style={{ fontSize: 12, marginBottom: 12 }}>
-            Cumplimiento de entregas de las OC cerradas, por mes de entrega. Usa los filtros de fecha (desde / hasta) para acotar el rango.
+            Cumplimiento de entregas de las OC cerradas, agrupado por mes de entrega real. Para acotar un rango, elige
+            <b> «Entrega real al cliente»</b> en “Filtrar por fecha” y fija desde / hasta.
           </div>
           {porMes.filas.length ? (
             <div style={{ overflowX: "auto" }}>
@@ -392,20 +393,20 @@ export default function Reportes() {
                   {porMes.filas.map((r) => (
                     <tr key={r.ym}>
                       <td style={{ textAlign: "left", fontWeight: 600 }}>{fmtMes(r.ym)}</td>
-                      <td><b>{r.cerradas}</b></td>
-                      <td><b style={{ color: "#10b981" }}>{r.aTiempo}</b></td>
-                      <td><b style={{ color: "#ef4444" }}>{r.atrasadas}</b></td>
-                      <td><span className="td-mut">{r.noAplica}</span></td>
-                      <td><b>{r.pct === null ? "—" : `${r.pct}%`}</b></td>
+                      <td><span className="cnt n">{r.cerradas}</span></td>
+                      <td><span className="cnt v">{r.aTiempo}</span></td>
+                      <td><span className="cnt r">{r.atrasadas}</span></td>
+                      <td><span className="cnt mut">{r.noAplica}</span></td>
+                      <td><span className="pct-badge">{r.pct === null ? "—" : `${r.pct}%`}</span></td>
                     </tr>
                   ))}
-                  <tr style={{ borderTop: "2px solid var(--glass-border)" }}>
-                    <td style={{ textAlign: "left", fontWeight: 700 }}>Total</td>
-                    <td><b>{porMes.total.cerradas}</b></td>
-                    <td><b style={{ color: "#10b981" }}>{porMes.total.aTiempo}</b></td>
-                    <td><b style={{ color: "#ef4444" }}>{porMes.total.atrasadas}</b></td>
-                    <td><span className="td-mut">{porMes.total.noAplica}</span></td>
-                    <td><b>{porMes.total.pct === null ? "—" : `${porMes.total.pct}%`}</b></td>
+                  <tr className="tot">
+                    <td style={{ textAlign: "left" }}>Total</td>
+                    <td><span className="cnt n">{porMes.total.cerradas}</span></td>
+                    <td><span className="cnt v">{porMes.total.aTiempo}</span></td>
+                    <td><span className="cnt r">{porMes.total.atrasadas}</span></td>
+                    <td><span className="cnt mut">{porMes.total.noAplica}</span></td>
+                    <td><span className="pct-badge">{porMes.total.pct === null ? "—" : `${porMes.total.pct}%`}</span></td>
                   </tr>
                 </tbody>
               </table>
