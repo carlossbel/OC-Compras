@@ -55,13 +55,14 @@ export default function Dashboard() {
   const { esAdmin, user } = useAuth();
   const nav = useNavigate();
 
-  const ing = indicadorIngreso(ordenes);               // ¿ingreso de OC dentro de 2 días hábiles?
-
   const miVendedor = vendedorDeUsuario(user?.nombre);
 
-  // Cerradas del perfil (si es vendedor, solo las suyas) y su conteo de "No aplica".
+  // Órdenes y cerradas del perfil (si es vendedor, solo las suyas).
+  const ordenesPerfil = miVendedor ? ordenes.filter((o) => vendedorDeOC(o) === miVendedor) : ordenes;
   const cerradasPerfil = miVendedor ? cerradas.filter((o) => vendedorDeOC(o) === miVendedor) : cerradas;
   const noAplicaCerradas = cerradasPerfil.filter((o) => o.noAplica).length;
+
+  const ing = indicadorIngreso(ordenesPerfil);         // ¿ingreso de OC dentro de 2 días hábiles? (por perfil)
 
   // Contador de semáforo por vendedor. Si el perfil es de un vendedor, solo el suyo.
   const semaforoPorVendedor = (() => {
@@ -89,7 +90,8 @@ export default function Dashboard() {
     color: COLOR_ESTADO[s],
   })).filter((d) => d.value > 0);
 
-  const ind = indicadorEntregas(cerradas);
+  const indGeneral = indicadorEntregas(cerradas);      // general (para la tarjeta de Cerradas)
+  const ind = indicadorEntregas(cerradasPerfil);       // entregas a tiempo por perfil
 
   const stats = [
     { label: "Inicio", value: inicio.length, sub: "Por procesar", color: "#f59e0b", to: "/inicio" },
@@ -98,7 +100,7 @@ export default function Dashboard() {
     {
       label: "Cerradas",
       value: cerradas.length,
-      sub: ind.pct !== null ? `${ind.pct}% entregas a tiempo` : "Histórico",
+      sub: indGeneral.pct !== null ? `${indGeneral.pct}% entregas a tiempo` : "Histórico",
       color: "#64748b",
       to: "/cerradas",
     },
@@ -179,7 +181,7 @@ export default function Dashboard() {
 
           <div className="card">
             <div className="section-title" style={{ margin: "0 0 14px" }}>
-              Indicador · Entregas a tiempo (cerradas)
+              Indicador · Entregas a tiempo (cerradas){miVendedor ? ` · ${miVendedor}` : ""}
             </div>
             {ind.total > 0 ? (
               <>
@@ -212,7 +214,7 @@ export default function Dashboard() {
           {/* Indicador de ingreso de OC dentro de 2 días hábiles */}
           <div className="card">
             <div className="section-title" style={{ margin: "0 0 14px" }}>
-              Indicador · Ingreso de OC a tiempo (≤ 2 días hábiles)
+              Indicador · Ingreso de OC a tiempo (≤ 2 días hábiles){miVendedor ? ` · ${miVendedor}` : ""}
             </div>
             {ing.total > 0 ? (
               <>
