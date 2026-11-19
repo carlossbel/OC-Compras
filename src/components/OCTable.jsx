@@ -4,7 +4,7 @@ import { EstadoChip, EtapaChip } from "./Chip";
 import Semaforo from "./Semaforo";
 import Icon from "./Icon";
 import { fmtFecha, fmtNum, partidasDe, facturasDe, cantidadTotal } from "../utils/format";
-import { evalEntrega } from "../utils/estimacion";
+import { evalEntrega, colorSemaforo } from "../utils/estimacion";
 
 const IND = {
   aTiempo: { txt: "A tiempo", color: "#10b981", bg: "#ecfdf5" },
@@ -72,7 +72,7 @@ export default function OCTable({
                 const desc = primera.descripcion || "";
                 const facs = facturasDe(o);
                 return (
-                <tr key={o.id} onClick={() => setSel(o)} style={{ cursor: "pointer" }}>
+                <tr key={o.id} onClick={() => setSel(o)} style={{ cursor: "pointer" }} className={colorSemaforo(o) === "rojo" ? "fila-atrasada" : ""}>
                   <td><Semaforo oc={o} /></td>
                   <td className="td-strong">
                     {o.cliente || "—"}

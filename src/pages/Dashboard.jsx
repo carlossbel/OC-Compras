@@ -241,7 +241,7 @@ export default function Dashboard() {
                     <th style={{ textAlign: "left" }}>Vendedor</th>
                     <th><span className="sem-dot" style={{ background: "#10b981" }} /> A tiempo</th>
                     <th><span className="sem-dot" style={{ background: "#f59e0b" }} /> En proceso</th>
-                    <th className="col-rojo"><span className="sem-dot" style={{ background: "#ef4444" }} /> Atrasada</th>
+                    <th><span className="sem-dot" style={{ background: "#ef4444" }} /> Atrasada</th>
                     <th>Total</th>
                   </tr>
                 </thead>
@@ -251,7 +251,7 @@ export default function Dashboard() {
                       <td style={{ textAlign: "left", fontWeight: 600 }}>{r.v}</td>
                       <td><b style={{ color: "#10b981" }}>{r.verde}</b></td>
                       <td><b style={{ color: "#f59e0b" }}>{r.amarillo}</b></td>
-                      <td className="col-rojo"><b style={{ color: "#ef4444" }}>{r.rojo}</b></td>
+                      <td><b style={{ color: "#ef4444" }}>{r.rojo}</b></td>
                       <td><b>{r.total}</b></td>
                     </tr>
                   ))}

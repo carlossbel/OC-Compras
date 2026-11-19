@@ -520,10 +520,12 @@ tbody tr:last-child td { border-bottom: none; }
 .tabla-semaforo td { text-align: center; padding: 8px 10px; border-bottom: 1px solid var(--glass-border); }
 .tabla-semaforo tbody tr:hover { background: var(--blue-soft); }
 .sem-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
-.tabla-semaforo .col-rojo { background: rgba(239, 68, 68, 0.10); }
-.tabla-semaforo th.col-rojo { color: #ef4444; }
-.tabla-semaforo tbody tr:hover .col-rojo { background: rgba(239, 68, 68, 0.16); }
-:root[data-modo="noche"] .tabla-semaforo .col-rojo { background: rgba(239, 68, 68, 0.16); }
+
+/* Filas de órdenes atrasadas (semáforo rojo) resaltadas en las etapas/listas */
+tbody tr.fila-atrasada { background: rgba(239, 68, 68, 0.08); box-shadow: inset 3px 0 0 #ef4444; }
+tbody tr.fila-atrasada:hover { background: rgba(239, 68, 68, 0.14); }
+:root[data-modo="noche"] tbody tr.fila-atrasada { background: rgba(239, 68, 68, 0.14); }
+:root[data-modo="noche"] tbody tr.fila-atrasada:hover { background: rgba(239, 68, 68, 0.2); }
 
 .ayuda-filtros { display: flex; flex-direction: column; gap: 12px; }
 .ayuda-filtro { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: var(--muted); line-height: 1.55; }
