@@ -160,6 +160,14 @@ const PATHS = {
       <path d="M7 11V7a5 5 0 0 1 10 0v4" />
     </>
   ),
+  semaforo: (
+    <>
+      <rect x="7" y="2" width="10" height="20" rx="5" />
+      <circle cx="12" cy="7" r="1.5" />
+      <circle cx="12" cy="12" r="1.5" />
+      <circle cx="12" cy="17" r="1.5" />
+    </>
+  ),
   chevronDown: <polyline points="6 9 12 15 18 9" />,
   moon: <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />,
   sun: (

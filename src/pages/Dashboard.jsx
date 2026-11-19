@@ -4,8 +4,12 @@ import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
 import { useAuth } from "../context/AuthContext";
 import { COLOR_ESTADO, ESTADOS_ENVIO } from "../constants/catalogs";
-import { indicadorEntregas, indicadorIngreso } from "../utils/estimacion";
-import { vendedorDeUsuario, vendedorDeOC } from "../constants/vendedores";
+import { indicadorEntregas, indicadorIngreso, colorSemaforo } from "../utils/estimacion";
+import { vendedorDeUsuario, vendedorDeOC, VENDEDORES } from "../constants/vendedores";
+
+const normNom = (s) => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+// Usuarios que pueden ver el contador de "No aplica" en cerradas.
+const VE_NO_APLICA = ["cuauhtemoc munoz", "mario crisanto", "barbara perez", "carlos beltran", "karla arriaga", "ana garcia"];
 
 function Donut({ data }) {
   const total = data.reduce((s, d) => s + d.value, 0);
@@ -57,6 +61,23 @@ export default function Dashboard() {
 
   const ing = indicadorIngreso(ordenes);               // ¿ingreso de OC dentro de 2 días hábiles?
   const noAplicaCerradas = cerradas.filter((o) => o.noAplica).length;
+  const veNoAplica = VE_NO_APLICA.includes(normNom(user?.nombre));
+
+  // Contador de semáforo por vendedor (sobre todas sus órdenes).
+  const semaforoPorVendedor = (() => {
+    const map = {};
+    for (const v of VENDEDORES) map[v] = { verde: 0, amarillo: 0, rojo: 0 };
+    for (const o of ordenes) {
+      const v = vendedorDeOC(o);
+      if (!map[v]) continue;
+      const c = colorSemaforo(o); // "verde" | "amarillo" | "rojo"
+      if (map[v][c] !== undefined) map[v][c]++;
+    }
+    return VENDEDORES
+      .map((v) => ({ v, ...map[v], total: map[v].verde + map[v].amarillo + map[v].rojo }))
+      .filter((r) => r.total > 0)
+      .sort((a, b) => b.total - a.total);
+  })();
 
   const miVendedor = vendedorDeUsuario(user?.nombre);
   const pendientesChart = miVendedor
@@ -185,22 +206,62 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* Contador de No aplica en cerradas */}
-          <div className="card">
-            <div className="section-title" style={{ margin: "0 0 14px" }}>
-              Cerradas marcadas “No aplica”
+          {/* Contador de No aplica en cerradas (solo usuarios autorizados) */}
+          {veNoAplica && (
+            <div className="card">
+              <div className="section-title" style={{ margin: "0 0 14px" }}>
+                Cerradas marcadas “No aplica”
+              </div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 6 }}>
+                <span style={{ fontSize: 46, fontWeight: 800, color: "#64748b" }}>{noAplicaCerradas}</span>
+                <span className="td-mut">de {cerradas.length} órdenes cerradas</span>
+              </div>
+              <div className="ind-bar">
+                <span style={{ width: `${cerradas.length ? Math.round((noAplicaCerradas / cerradas.length) * 100) : 0}%`, background: "#64748b" }} />
+                <span style={{ width: `${cerradas.length ? 100 - Math.round((noAplicaCerradas / cerradas.length) * 100) : 100}%`, background: "var(--glass-border)" }} />
+              </div>
+              <div className="td-mut" style={{ fontSize: 12, marginTop: 12 }}>
+                Órdenes excluidas de los indicadores (backorder, parcial, proyecto, paquetería, cierre de mes, etc.).
+              </div>
             </div>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 6 }}>
-              <span style={{ fontSize: 46, fontWeight: 800, color: "#64748b" }}>{noAplicaCerradas}</span>
-              <span className="td-mut">de {cerradas.length} órdenes cerradas</span>
+          )}
+        </div>
+
+        {/* Semáforo por vendedor */}
+        <div className="card" style={{ marginTop: 16 }}>
+          <div className="section-title" style={{ margin: "0 0 14px", display: "flex", alignItems: "center", gap: 8 }}>
+            <Icon name="semaforo" size={17} /> Semáforo por vendedor
+          </div>
+          {semaforoPorVendedor.length ? (
+            <div style={{ overflowX: "auto" }}>
+              <table className="tabla-semaforo">
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: "left" }}>Vendedor</th>
+                    <th><span className="sem-dot" style={{ background: "#10b981" }} /> Verde</th>
+                    <th><span className="sem-dot" style={{ background: "#f59e0b" }} /> Amarillo</th>
+                    <th><span className="sem-dot" style={{ background: "#ef4444" }} /> Rojo</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {semaforoPorVendedor.map((r) => (
+                    <tr key={r.v}>
+                      <td style={{ textAlign: "left", fontWeight: 600 }}>{r.v}</td>
+                      <td><b style={{ color: "#10b981" }}>{r.verde}</b></td>
+                      <td><b style={{ color: "#f59e0b" }}>{r.amarillo}</b></td>
+                      <td><b style={{ color: "#ef4444" }}>{r.rojo}</b></td>
+                      <td><b>{r.total}</b></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <div className="ind-bar">
-              <span style={{ width: `${cerradas.length ? Math.round((noAplicaCerradas / cerradas.length) * 100) : 0}%`, background: "#64748b" }} />
-              <span style={{ width: `${cerradas.length ? 100 - Math.round((noAplicaCerradas / cerradas.length) * 100) : 100}%`, background: "var(--glass-border)" }} />
-            </div>
-            <div className="td-mut" style={{ fontSize: 12, marginTop: 12 }}>
-              Órdenes excluidas de los indicadores (backorder, parcial, proyecto, paquetería, cierre de mes, etc.).
-            </div>
+          ) : (
+            <div className="empty"><Icon name="semaforo" size={40} strokeWidth={1.4} style={{ opacity: .5, marginBottom: 8 }} /><div>Aún no hay órdenes para evaluar el semáforo.</div></div>
+          )}
+          <div className="td-mut" style={{ fontSize: 12, marginTop: 10 }}>
+            Verde = a tiempo / en plazo · Amarillo = en proceso · Rojo = atrasada.
           </div>
         </div>
       </div>

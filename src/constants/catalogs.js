@@ -23,6 +23,14 @@ export const ETAPA_POR_ESTADO = {
 
 export const ETAPAS = ["Inicio", "Seguimiento", "Finalizado"];
 
+// Opciones para filtrar por estado del semáforo.
+export const SEMAFORO_OPCIONES = [
+  { value: "", label: "Todos los semáforos" },
+  { value: "verde", label: "🟢 Verde · a tiempo / en plazo" },
+  { value: "amarillo", label: "🟡 Amarillo · en proceso" },
+  { value: "rojo", label: "🔴 Rojo · atrasada" },
+];
+
 // Números de partida seleccionables (1 al 10)
 export const PARTIDAS = Array.from({ length: 10 }, (_, i) => i + 1);
 

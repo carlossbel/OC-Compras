@@ -6,11 +6,14 @@ import RangeDate from "../components/RangeDate";
 import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
 import { VENDEDORES, vendedorDeOC } from "../constants/vendedores";
+import { colorSemaforo } from "../utils/estimacion";
+import { SEMAFORO_OPCIONES } from "../constants/catalogs";
 
 export default function Cerradas() {
   const { cerradas, cargando } = useData();
   const [q, setQ] = useState("");
   const [vendedor, setVendedor] = useState("");
+  const [semaforo, setSemaforo] = useState("");
   const [desde, setDesde] = useState("");
   const [hasta, setHasta] = useState("");
 
@@ -18,6 +21,7 @@ export default function Cerradas() {
     const t = q.trim().toLowerCase();
     return cerradas.filter((o) => {
       if (vendedor && vendedorDeOC(o) !== vendedor) return false;
+      if (semaforo && colorSemaforo(o) !== semaforo) return false;
       const f = o.fechaRecepcionOC;
       if (desde && (!f || f < desde)) return false;
       if (hasta && (!f || f > hasta)) return false;
@@ -27,9 +31,9 @@ export default function Cerradas() {
       }
       return true;
     });
-  }, [cerradas, q, vendedor, desde, hasta]);
+  }, [cerradas, q, vendedor, semaforo, desde, hasta]);
 
-  const limpiar = () => { setQ(""); setVendedor(""); setDesde(""); setHasta(""); };
+  const limpiar = () => { setQ(""); setVendedor(""); setSemaforo(""); setDesde(""); setHasta(""); };
 
   return (
     <>
@@ -42,6 +46,7 @@ export default function Cerradas() {
             <input placeholder="Buscar CROL, clave, producto…" value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
           <IconSelect icon="user" title="Vendedor" value={vendedor} onChange={setVendedor} options={[{ value: "", label: "Todos los vendedores" }, ...VENDEDORES.map((v) => ({ value: v, label: v }))]} />
+          <IconSelect icon="semaforo" title="Semáforo" value={semaforo} onChange={setSemaforo} options={SEMAFORO_OPCIONES} />
           <RangeDate desde={desde} hasta={hasta} onChange={(d, h) => { setDesde(d); setHasta(h); }} />
           <button className="btn btn-outline btn-icon" onClick={limpiar} title="Limpiar"><Icon name="trash" size={15} /></button>
           <span className="chip soft">{rows.length}</span>

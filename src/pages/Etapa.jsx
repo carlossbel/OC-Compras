@@ -8,6 +8,8 @@ import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
 import { useAuth } from "../context/AuthContext";
 import { VENDEDORES, vendedorDeOC } from "../constants/vendedores";
+import { colorSemaforo } from "../utils/estimacion";
+import { SEMAFORO_OPCIONES } from "../constants/catalogs";
 
 const INFO = {
   Inicio: { titulo: "Inicio", desc: "Órdenes recién ingresadas · por procesar", key: "inicio" },
@@ -27,6 +29,7 @@ export default function Etapa({ etapa }) {
   const nav = useNavigate();
   const [q, setQ] = useState("");
   const [vendedor, setVendedor] = useState("");
+  const [semaforo, setSemaforo] = useState("");
   const [desde, setDesde] = useState("");
   const [hasta, setHasta] = useState("");
   const info = INFO[etapa];
@@ -36,14 +39,15 @@ export default function Etapa({ etapa }) {
     const t = q.trim().toLowerCase();
     return rows.filter((o) => {
       if (vendedor && vendedorDeOC(o) !== vendedor) return false;
+      if (semaforo && colorSemaforo(o) !== semaforo) return false;
       const f = o.fechaRecepcionOC;
       if (desde && (!f || f < desde)) return false;
       if (hasta && (!f || f > hasta)) return false;
       return coincide(o, t);
     });
-  }, [rows, q, vendedor, desde, hasta]);
+  }, [rows, q, vendedor, semaforo, desde, hasta]);
 
-  const limpiar = () => { setQ(""); setVendedor(""); setDesde(""); setHasta(""); };
+  const limpiar = () => { setQ(""); setVendedor(""); setSemaforo(""); setDesde(""); setHasta(""); };
 
   return (
     <>
@@ -58,6 +62,7 @@ export default function Etapa({ etapa }) {
             <input placeholder="Buscar CROL, clave, producto…" value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
           <IconSelect icon="user" title="Vendedor" value={vendedor} onChange={setVendedor} options={[{ value: "", label: "Todos los vendedores" }, ...VENDEDORES.map((v) => ({ value: v, label: v }))]} />
+          <IconSelect icon="semaforo" title="Semáforo" value={semaforo} onChange={setSemaforo} options={SEMAFORO_OPCIONES} />
           <RangeDate desde={desde} hasta={hasta} onChange={(d, h) => { setDesde(d); setHasta(h); }} />
           <button className="btn btn-outline btn-icon" onClick={limpiar} title="Limpiar"><Icon name="trash" size={15} /></button>
           <span className="chip soft">{filtradas.length}</span>

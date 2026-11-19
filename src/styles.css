@@ -514,6 +514,13 @@ tbody tr:last-child td { border-bottom: none; }
 .ayuda-tip b { color: var(--navy); }
 .ayuda-sem { display: grid; grid-template-columns: 14px 82px 1fr; align-items: center; gap: 10px; font-size: 14px; }
 .ayuda-sem .ayuda-desc { color: var(--muted); font-size: 13px; }
+/* Tabla de semáforo por vendedor (dashboard) */
+.tabla-semaforo { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tabla-semaforo th { text-align: center; padding: 8px 10px; color: var(--muted); font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--glass-border); white-space: nowrap; }
+.tabla-semaforo td { text-align: center; padding: 8px 10px; border-bottom: 1px solid var(--glass-border); }
+.tabla-semaforo tbody tr:hover { background: var(--blue-soft); }
+.sem-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+
 .ayuda-filtros { display: flex; flex-direction: column; gap: 12px; }
 .ayuda-filtro { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: var(--muted); line-height: 1.55; }
 .ayuda-filtro b { color: var(--text); }

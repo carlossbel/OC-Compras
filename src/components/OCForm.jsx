@@ -247,8 +247,9 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
           <div className="field">
             <label>Detalle <span className="td-mut" style={{ fontWeight: 400 }}>· ¿qué pasó?</span></label>
             <input
-              value={f.noAplicaDetalle || ""}
-              onChange={set("noAplicaDetalle")}
+              type="text"
+              value={typeof f.noAplicaDetalle === "string" ? f.noAplicaDetalle : ""}
+              onChange={(e) => setF((prev) => ({ ...prev, noAplicaDetalle: e.target.value }))}
               placeholder="Describe el motivo…"
             />
           </div>
