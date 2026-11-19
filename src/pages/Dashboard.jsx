@@ -64,12 +64,12 @@ export default function Dashboard() {
 
   const ing = indicadorIngreso(ordenesPerfil);         // ¿ingreso de OC dentro de 2 días hábiles? (por perfil)
 
-  // Contador de semáforo por vendedor. Si el perfil es de un vendedor, solo el suyo.
+  // Contador de semáforo por vendedor (sobre las órdenes activas / pendientes).
   const semaforoPorVendedor = (() => {
     const vendedoresTabla = miVendedor ? [miVendedor] : VENDEDORES;
     const map = {};
     for (const v of vendedoresTabla) map[v] = { verde: 0, amarillo: 0, rojo: 0 };
-    for (const o of ordenes) {
+    for (const o of pendientes) {
       const v = vendedorDeOC(o);
       if (!map[v]) continue;
       const c = colorSemaforo(o); // "verde" | "amarillo" | "rojo"
@@ -80,6 +80,14 @@ export default function Dashboard() {
       .filter((r) => r.total > 0)
       .sort((a, b) => b.total - a.total);
   })();
+
+  // Ir a la lista "Todas" filtrada por semáforo (y vendedor).
+  const irASemaforo = (vend, estado) => {
+    const p = new URLSearchParams();
+    if (estado) p.set("semaforo", estado);
+    if (vend) p.set("vendedor", vend);
+    nav(`/pendientes?${p.toString()}`);
+  };
   const pendientesChart = miVendedor
     ? pendientes.filter((o) => vendedorDeOC(o) === miVendedor)
     : pendientes;
@@ -151,10 +159,10 @@ export default function Dashboard() {
                   {semaforoPorVendedor.map((r) => (
                     <tr key={r.v}>
                       <td style={{ textAlign: "left", fontWeight: 600 }}>{r.v}</td>
-                      <td><b style={{ color: "#10b981" }}>{r.verde}</b></td>
-                      <td><b style={{ color: "#f59e0b" }}>{r.amarillo}</b></td>
-                      <td><b style={{ color: "#ef4444" }}>{r.rojo}</b></td>
-                      <td><b>{r.total}</b></td>
+                      <td><b className="sem-link" style={{ color: "#10b981" }} onClick={() => irASemaforo(r.v, "verde")} title="Ver estas órdenes">{r.verde}</b></td>
+                      <td><b className="sem-link" style={{ color: "#f59e0b" }} onClick={() => irASemaforo(r.v, "amarillo")} title="Ver estas órdenes">{r.amarillo}</b></td>
+                      <td><b className="sem-link" style={{ color: "#ef4444" }} onClick={() => irASemaforo(r.v, "rojo")} title="Ver atrasadas">{r.rojo}</b></td>
+                      <td><b className="sem-link" onClick={() => irASemaforo(r.v, "")} title="Ver todas sus órdenes">{r.total}</b></td>
                     </tr>
                   ))}
                 </tbody>

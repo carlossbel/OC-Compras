@@ -520,6 +520,8 @@ tbody tr:last-child td { border-bottom: none; }
 .tabla-semaforo td { text-align: center; padding: 8px 10px; border-bottom: 1px solid var(--glass-border); }
 .tabla-semaforo tbody tr:hover { background: var(--blue-soft); }
 .sem-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+.tabla-semaforo .sem-link { cursor: pointer; padding: 2px 8px; border-radius: 6px; transition: background .12s; }
+.tabla-semaforo .sem-link:hover { background: var(--blue-soft); text-decoration: underline; }
 
 /* Filas de órdenes atrasadas (semáforo rojo) resaltadas en las etapas/listas */
 tbody tr.fila-atrasada { background: rgba(239, 68, 68, 0.08); box-shadow: inset 3px 0 0 #ef4444; }

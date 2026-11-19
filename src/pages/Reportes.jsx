@@ -5,7 +5,7 @@ import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
 import { ESTADOS_ENVIO, ETAPAS } from "../constants/catalogs";
 import { VENDEDORES, vendedorDeOC } from "../constants/vendedores";
-import { indicadorEntregas } from "../utils/estimacion";
+import { indicadorEntregas, evalEntrega } from "../utils/estimacion";
 import { fmtFecha, cantidadTotal } from "../utils/format";
 
 const CAMPOS_FECHA = [
@@ -14,6 +14,13 @@ const CAMPOS_FECHA = [
   { v: "fechaEstimadaCliente", t: "Estimada al cliente" },
   { v: "fechaEntregaRealCliente", t: "Entrega real al cliente" },
 ];
+
+const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+function fmtMes(ym) {
+  const [y, m] = ym.split("-").map(Number);
+  const nom = MESES[m - 1] || "";
+  return `${nom.charAt(0).toUpperCase() + nom.slice(1)} ${y}`;
+}
 
 function csvEscape(v) {
   const s = v === null || v === undefined ? "" : String(v);
@@ -50,7 +57,7 @@ function esc(v) {
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function exportarPDF(rows, f, ind) {
+function exportarPDF(rows, f, ind, porMes) {
   const cols = [
     ["Cliente", "cliente"], ["OC Cliente", "ocCliente"], ["CROL", "crol"],
     ["Clave", "claveProducto"], ["Descripción", "descripcion"],
@@ -79,6 +86,17 @@ function exportarPDF(rows, f, ind) {
     return `<span class="pill">${esc(s)}: <b>${n}</b></span>`;
   }).join("");
 
+  const pm = porMes || { filas: [], total: { cerradas: 0, aTiempo: 0, atrasadas: 0, noAplica: 0, pct: null } };
+  const mesRows = pm.filas.map((r) =>
+    `<tr><td style="text-align:left">${esc(fmtMes(r.ym))}</td><td>${r.cerradas}</td><td>${r.aTiempo}</td><td>${r.atrasadas}</td><td>${r.noAplica}</td><td>${r.pct === null ? "—" : r.pct + "%"}</td></tr>`
+  ).join("");
+  const mesTotal = `<tr class="tot"><td style="text-align:left">Total</td><td>${pm.total.cerradas}</td><td>${pm.total.aTiempo}</td><td>${pm.total.atrasadas}</td><td>${pm.total.noAplica}</td><td>${pm.total.pct === null ? "—" : pm.total.pct + "%"}</td></tr>`;
+  const seccionMes = pm.filas.length
+    ? `<h2 class="sec">Indicador de cerradas por mes</h2>
+       <table class="mes"><thead><tr><th>Mes</th><th>Cerradas</th><th>A tiempo</th><th>Atrasadas</th><th>No aplica</th><th>% a tiempo</th></tr></thead>
+       <tbody>${mesRows}${mesTotal}</tbody></table>`
+    : "";
+
   const html = `<!doctype html><html lang="es"><head><meta charset="utf-8">
 <title>Reporte OC Bloobit · ${esc(hoy)}</title>
 <style>
@@ -101,6 +119,10 @@ function exportarPDF(rows, f, ind) {
   td { padding: 5px 7px; border-bottom: 1px solid #e6ebf3; vertical-align: top; }
   tr:nth-child(even) td { background: #f8fafd; }
   .foot { margin-top: 18px; color: #94a3b8; font-size: 9px; text-align: center; }
+  h2.sec { font-size: 13px; color: #0b2a4a; margin: 16px 0 8px; }
+  table.mes th, table.mes td { text-align: center; }
+  table.mes th:first-child, table.mes td:first-child { text-align: left; }
+  table.mes tr.tot td { font-weight: 700; background: #eef2f8; }
   @media print { body { margin: 14mm; } }
 </style></head><body>
   <div class="head">
@@ -120,6 +142,8 @@ function exportarPDF(rows, f, ind) {
     <div><b>Filtros:</b> ${esc(filtros)}</div>
     <div style="margin-top:6px">${porEstado}</div>
   </div>
+  ${seccionMes}
+  <h2 class="sec">Detalle de órdenes</h2>
   <table><thead><tr>${thead}</tr></thead><tbody>${tbody || `<tr><td colspan="${cols.length}" style="text-align:center;color:#94a3b8;padding:20px">Sin resultados</td></tr>`}</tbody></table>
   <div class="foot">Bloobit — Sistema de Órdenes de Compra · Documento generado automáticamente</div>
   <script>window.onload = function(){ window.focus(); window.print(); };</script>
@@ -187,13 +211,41 @@ export default function Reportes() {
     return { porEtapa, cantidad, aTiempo: ent.aTiempo, atrasadas: ent.atrasadas, evaluadas: ent.total, pct: ent.pct };
   }, [rows]);
 
+  // Indicador de cerradas por mes (agrupado por mes de entrega real).
+  const porMes = useMemo(() => {
+    const map = {}; // "YYYY-MM" -> {cerradas, aTiempo, atrasadas, noAplica}
+    for (const o of rows) {
+      if (!o.cerrada) continue;
+      const fecha = o.fechaEntregaRealCliente || o.fechaCierre || o.fechaRecepcionOC || "";
+      const ym = String(fecha).slice(0, 7);
+      if (!/^\d{4}-\d{2}$/.test(ym)) continue;
+      const m = (map[ym] = map[ym] || { cerradas: 0, aTiempo: 0, atrasadas: 0, noAplica: 0 });
+      m.cerradas++;
+      if (o.noAplica) { m.noAplica++; continue; }
+      const r = evalEntrega(o);
+      if (r === "aTiempo") m.aTiempo++;
+      else if (r === "atrasada") m.atrasadas++;
+    }
+    const filas = Object.keys(map).sort().reverse().map((ym) => {
+      const m = map[ym];
+      const ev = m.aTiempo + m.atrasadas;
+      return { ym, ...m, pct: ev ? Math.round((m.aTiempo / ev) * 100) : null };
+    });
+    const tot = filas.reduce((a, r) => ({
+      cerradas: a.cerradas + r.cerradas, aTiempo: a.aTiempo + r.aTiempo,
+      atrasadas: a.atrasadas + r.atrasadas, noAplica: a.noAplica + r.noAplica,
+    }), { cerradas: 0, aTiempo: 0, atrasadas: 0, noAplica: 0 });
+    const evT = tot.aTiempo + tot.atrasadas;
+    return { filas, total: { ...tot, pct: evT ? Math.round((tot.aTiempo / evT) * 100) : null } };
+  }, [rows]);
+
   return (
     <>
       <Topbar title="Reportes">
         <button className="btn btn-outline" onClick={() => exportarCSV(rows)} disabled={!rows.length}>
           <Icon name="download" size={16} /> CSV
         </button>
-        <button className="btn btn-primary" onClick={() => exportarPDF(rows, f, ind)} disabled={!rows.length}>
+        <button className="btn btn-primary" onClick={() => exportarPDF(rows, f, ind, porMes)} disabled={!rows.length}>
           <Icon name="file" size={16} /> Exportar PDF
         </button>
       </Topbar>
@@ -315,6 +367,52 @@ export default function Reportes() {
               })}
             </div>
           </div>
+        </div>
+
+        {/* Indicador de cerradas por mes */}
+        <div className="card" style={{ marginTop: 16 }}>
+          <div className="section-title" style={{ margin: "0 0 4px" }}>Indicador de cerradas por mes</div>
+          <div className="td-mut" style={{ fontSize: 12, marginBottom: 12 }}>
+            Cumplimiento de entregas de las OC cerradas, por mes de entrega. Usa los filtros de fecha (desde / hasta) para acotar el rango.
+          </div>
+          {porMes.filas.length ? (
+            <div style={{ overflowX: "auto" }}>
+              <table className="tabla-semaforo">
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: "left" }}>Mes</th>
+                    <th>Cerradas</th>
+                    <th><span className="sem-dot" style={{ background: "#10b981" }} /> A tiempo</th>
+                    <th><span className="sem-dot" style={{ background: "#ef4444" }} /> Atrasadas</th>
+                    <th>No aplica</th>
+                    <th>% a tiempo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {porMes.filas.map((r) => (
+                    <tr key={r.ym}>
+                      <td style={{ textAlign: "left", fontWeight: 600 }}>{fmtMes(r.ym)}</td>
+                      <td><b>{r.cerradas}</b></td>
+                      <td><b style={{ color: "#10b981" }}>{r.aTiempo}</b></td>
+                      <td><b style={{ color: "#ef4444" }}>{r.atrasadas}</b></td>
+                      <td><span className="td-mut">{r.noAplica}</span></td>
+                      <td><b>{r.pct === null ? "—" : `${r.pct}%`}</b></td>
+                    </tr>
+                  ))}
+                  <tr style={{ borderTop: "2px solid var(--glass-border)" }}>
+                    <td style={{ textAlign: "left", fontWeight: 700 }}>Total</td>
+                    <td><b>{porMes.total.cerradas}</b></td>
+                    <td><b style={{ color: "#10b981" }}>{porMes.total.aTiempo}</b></td>
+                    <td><b style={{ color: "#ef4444" }}>{porMes.total.atrasadas}</b></td>
+                    <td><span className="td-mut">{porMes.total.noAplica}</span></td>
+                    <td><b>{porMes.total.pct === null ? "—" : `${porMes.total.pct}%`}</b></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="empty"><Icon name="calendar" size={36} strokeWidth={1.4} style={{ opacity: .5, marginBottom: 8 }} /><div>No hay órdenes cerradas con fecha de entrega en este filtro.</div></div>
+          )}
         </div>
 
         <div style={{ marginTop: 16 }}>

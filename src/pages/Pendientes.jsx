@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Topbar from "../components/Topbar";
 import OCTable from "../components/OCTable";
 import GlassDropdown from "../components/GlassDropdown";
@@ -16,10 +16,11 @@ export default function Pendientes() {
   const { pendientes, cargando } = useData();
   const { esAdmin } = useAuth();
   const nav = useNavigate();
+  const [sp] = useSearchParams();
   const [q, setQ] = useState("");
   const [etapa, setEtapa] = useState("Todas");
-  const [vendedor, setVendedor] = useState("");
-  const [semaforo, setSemaforo] = useState("");
+  const [vendedor, setVendedor] = useState(sp.get("vendedor") || "");
+  const [semaforo, setSemaforo] = useState(sp.get("semaforo") || "");
   const [desde, setDesde] = useState("");
   const [hasta, setHasta] = useState("");
 
