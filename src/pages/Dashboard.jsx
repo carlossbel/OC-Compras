@@ -63,23 +63,24 @@ export default function Dashboard() {
   const noAplicaCerradas = cerradas.filter((o) => o.noAplica).length;
   const veNoAplica = VE_NO_APLICA.includes(normNom(user?.nombre));
 
-  // Contador de semáforo por vendedor (sobre todas sus órdenes).
+  const miVendedor = vendedorDeUsuario(user?.nombre);
+
+  // Contador de semáforo por vendedor. Si el perfil es de un vendedor, solo el suyo.
   const semaforoPorVendedor = (() => {
+    const vendedoresTabla = miVendedor ? [miVendedor] : VENDEDORES;
     const map = {};
-    for (const v of VENDEDORES) map[v] = { verde: 0, amarillo: 0, rojo: 0 };
+    for (const v of vendedoresTabla) map[v] = { verde: 0, amarillo: 0, rojo: 0 };
     for (const o of ordenes) {
       const v = vendedorDeOC(o);
       if (!map[v]) continue;
       const c = colorSemaforo(o); // "verde" | "amarillo" | "rojo"
       if (map[v][c] !== undefined) map[v][c]++;
     }
-    return VENDEDORES
+    return vendedoresTabla
       .map((v) => ({ v, ...map[v], total: map[v].verde + map[v].amarillo + map[v].rojo }))
       .filter((r) => r.total > 0)
       .sort((a, b) => b.total - a.total);
   })();
-
-  const miVendedor = vendedorDeUsuario(user?.nombre);
   const pendientesChart = miVendedor
     ? pendientes.filter((o) => vendedorDeOC(o) === miVendedor)
     : pendientes;
@@ -230,7 +231,7 @@ export default function Dashboard() {
         {/* Semáforo por vendedor */}
         <div className="card" style={{ marginTop: 16 }}>
           <div className="section-title" style={{ margin: "0 0 14px", display: "flex", alignItems: "center", gap: 8 }}>
-            <Icon name="semaforo" size={17} /> Semáforo por vendedor
+            <Icon name="semaforo" size={17} /> {miVendedor ? `Mi semáforo · ${miVendedor}` : "Semáforo por vendedor"}
           </div>
           {semaforoPorVendedor.length ? (
             <div style={{ overflowX: "auto" }}>
@@ -238,9 +239,9 @@ export default function Dashboard() {
                 <thead>
                   <tr>
                     <th style={{ textAlign: "left" }}>Vendedor</th>
-                    <th><span className="sem-dot" style={{ background: "#10b981" }} /> Verde</th>
-                    <th><span className="sem-dot" style={{ background: "#f59e0b" }} /> Amarillo</th>
-                    <th><span className="sem-dot" style={{ background: "#ef4444" }} /> Rojo</th>
+                    <th><span className="sem-dot" style={{ background: "#10b981" }} /> A tiempo</th>
+                    <th><span className="sem-dot" style={{ background: "#f59e0b" }} /> En proceso</th>
+                    <th className="col-rojo"><span className="sem-dot" style={{ background: "#ef4444" }} /> Atrasada</th>
                     <th>Total</th>
                   </tr>
                 </thead>
@@ -250,7 +251,7 @@ export default function Dashboard() {
                       <td style={{ textAlign: "left", fontWeight: 600 }}>{r.v}</td>
                       <td><b style={{ color: "#10b981" }}>{r.verde}</b></td>
                       <td><b style={{ color: "#f59e0b" }}>{r.amarillo}</b></td>
-                      <td><b style={{ color: "#ef4444" }}>{r.rojo}</b></td>
+                      <td className="col-rojo"><b style={{ color: "#ef4444" }}>{r.rojo}</b></td>
                       <td><b>{r.total}</b></td>
                     </tr>
                   ))}
