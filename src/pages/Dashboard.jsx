@@ -113,9 +113,8 @@ export default function Dashboard() {
       </Topbar>
 
       <div className="content">
-        <div style={{ marginBottom: 22 }}>
-          <h2 style={{ margin: "0 0 2px" }}>Resumen general</h2>
-          <p className="td-mut" style={{ margin: 0 }}>Órdenes de compra por etapa e indicador de cumplimiento.</p>
+        <div style={{ marginBottom: 14 }}>
+          <h3 style={{ margin: 0, fontSize: 14, color: "var(--muted)", fontWeight: 700, letterSpacing: .3 }}>Resumen general</h3>
         </div>
 
         <div className="grid cards-4">
@@ -129,10 +128,12 @@ export default function Dashboard() {
           ))}
         </div>
 
+        <h2 style={{ margin: "26px 0 4px" }}>Resumen de tus órdenes</h2>
+
         {/* Semáforo (arriba de partidas por estado de envío) */}
-        <div className="card" style={{ marginTop: 16 }}>
+        <div className="card" style={{ marginTop: 12 }}>
           <div className="section-title" style={{ margin: "0 0 14px", display: "flex", alignItems: "center", gap: 8 }}>
-            <Icon name="semaforo" size={17} /> {miVendedor ? `Mi semáforo · ${miVendedor}` : "Semáforo por vendedor"}
+            <Icon name="semaforo" size={17} /> {miVendedor ? "Mi semáforo" : "Semáforo por vendedor"}
           </div>
           {semaforoPorVendedor.length ? (
             <div style={{ overflowX: "auto" }}>
@@ -162,15 +163,12 @@ export default function Dashboard() {
           ) : (
             <div className="empty"><Icon name="semaforo" size={40} strokeWidth={1.4} style={{ opacity: .5, marginBottom: 8 }} /><div>Aún no hay órdenes para evaluar el semáforo.</div></div>
           )}
-          <div className="td-mut" style={{ fontSize: 12, marginTop: 10 }}>
-            Verde = a tiempo / en plazo · Amarillo = en proceso · Rojo = atrasada.
-          </div>
         </div>
 
         <div className="grid cards-2" style={{ marginTop: 16 }}>
           <div className="card">
             <div className="section-title" style={{ margin: "0 0 14px" }}>
-              Partidas por estado de envío{miVendedor ? ` · ${miVendedor}` : ""}
+              Partidas por estado de envío
             </div>
             {donut.length ? (
               <Donut data={donut} />
@@ -181,7 +179,7 @@ export default function Dashboard() {
 
           <div className="card">
             <div className="section-title" style={{ margin: "0 0 14px" }}>
-              Indicador · Entregas a tiempo (cerradas){miVendedor ? ` · ${miVendedor}` : ""}
+              Entregas a tiempo (cerradas)
             </div>
             {ind.total > 0 ? (
               <>
@@ -214,7 +212,7 @@ export default function Dashboard() {
           {/* Indicador de ingreso de OC dentro de 2 días hábiles */}
           <div className="card">
             <div className="section-title" style={{ margin: "0 0 14px" }}>
-              Indicador · Ingreso de OC a tiempo (≤ 2 días hábiles){miVendedor ? ` · ${miVendedor}` : ""}
+              Ingreso de OC a tiempo
             </div>
             {ing.total > 0 ? (
               <>
@@ -248,7 +246,7 @@ export default function Dashboard() {
           {/* Contador de No aplica en cerradas (todos, con los datos del perfil) */}
           <div className="card">
             <div className="section-title" style={{ margin: "0 0 14px" }}>
-              Cerradas marcadas “No aplica”{miVendedor ? ` · ${miVendedor}` : ""}
+              Cerradas marcadas “No aplica”
             </div>
             <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 6 }}>
               <span style={{ fontSize: 46, fontWeight: 800, color: "#64748b" }}>{noAplicaCerradas}</span>
