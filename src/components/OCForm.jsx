@@ -151,8 +151,8 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
       <div className="form-section">
         <div className="form-section-head">
           <h3><Icon name="user" size={16} /> Cliente(s) y OC {clientesOC.length > 1 && <span className="td-mut" style={{ fontWeight: 400 }}>({clientesOC.length})</span>}</h3>
-          <button type="button" className="btn btn-ghost btn-sm" onClick={addCliente}>
-            <Icon name="plus" size={14} /> Agregar cliente
+          <button type="button" className="icon-btn sm" onClick={addCliente} title="Agregar cliente">
+            <Icon name="plus" size={15} />
           </button>
         </div>
         {clientesOC.map((c, i) => (
