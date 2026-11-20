@@ -42,6 +42,13 @@ export function partidasDe(o) {
   return [];
 }
 
+// Devuelve el arreglo de clientes/OC de una orden (o lo arma desde el formato viejo de 1 cliente).
+export function clientesDe(o) {
+  if (o && Array.isArray(o.clientesOC) && o.clientesOC.length) return o.clientesOC;
+  if (o && (o.cliente || o.ocCliente)) return [{ cliente: o.cliente || "", ocCliente: o.ocCliente || "" }];
+  return [];
+}
+
 // Devuelve el arreglo de facturas de una orden (o lo arma desde el formato viejo).
 export function facturasDe(o) {
   if (o && Array.isArray(o.facturas) && o.facturas.length) return o.facturas;

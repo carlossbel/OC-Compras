@@ -5,7 +5,7 @@ import {
   PARTIDAS,
   NO_APLICA_OPCIONES,
 } from "../constants/catalogs";
-import { fmtFecha, partidasDe, facturasDe } from "../utils/format";
+import { fmtFecha, partidasDe, facturasDe, clientesDe } from "../utils/format";
 import { estimarFecha } from "../utils/estimacion";
 import PdfLinkField from "./PdfLinkField";
 import ProveedorField from "./ProveedorField";
@@ -60,6 +60,9 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
   const [facturas, setFacturas] = useState(
     inicial && facturasDe(inicial).length ? facturasDe(inicial) : [{ numero: "", url: "" }]
   );
+  const [clientesOC, setClientesOC] = useState(
+    inicial && clientesDe(inicial).length ? clientesDe(inicial).map((c) => ({ cliente: c.cliente || "", ocCliente: c.ocCliente || "" })) : [{ cliente: "", ocCliente: "" }]
+  );
   const [activa, setActiva] = useState(0); // pestaña de partida activa
   const [guardando, setGuardando] = useState(false);
 
@@ -89,9 +92,19 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
   const addFactura = () => setFacturas([...facturas, { numero: "", url: "" }]);
   const removeFactura = (i) => setFacturas(facturas.filter((_, idx) => idx !== i));
 
+  // ---- Cliente(s) y OC ----
+  const vendedorDeCliente = PREFIJO_VENDEDOR[(partidas[0]?.claveProducto || "").trim().slice(0, 3).toUpperCase()] || "";
+  const setCli = (i, k, v) => setClientesOC(clientesOC.map((x, idx) => (idx === i ? { ...x, [k]: v } : x)));
+  const addCliente = () => setClientesOC([...clientesOC, { cliente: "", ocCliente: "" }]);
+  const removeCliente = (i) => { if (clientesOC.length > 1) setClientesOC(clientesOC.filter((_, idx) => idx !== i)); };
+
   const submit = async (e) => {
     e.preventDefault();
-    if (!f.cliente.trim()) return alert("El cliente es obligatorio.");
+    const clientesLimpios = clientesOC
+      .map((c) => ({ cliente: (c.cliente || "").trim(), ocCliente: (c.ocCliente || "").trim() }))
+      .filter((c) => c.cliente || c.ocCliente);
+    if (!clientesLimpios.length || !clientesLimpios[0].cliente)
+      return alert("El cliente es obligatorio.");
     const partidasLimpias = partidas
       .filter((p) => (p.descripcion || "").trim() || (p.claveProducto || "").trim() || p.cantidad !== "")
       .map((p) => ({
@@ -111,9 +124,12 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
     try {
       const payload = {
         ...f,
+        clientesOC: clientesLimpios,
         partidas: partidasLimpias,
         facturas: facturasLimpias,
         // Campos legados para compatibilidad de vistas/búsqueda/export
+        cliente: clientesLimpios[0].cliente,
+        ocCliente: clientesLimpios[0].ocCliente,
         claveProducto: partidasLimpias[0].claveProducto,
         descripcion: partidasLimpias[0].descripcion,
         cantidad: partidasLimpias[0].cantidad,
@@ -131,17 +147,34 @@ export default function OCForm({ inicial, onSubmit, onCancel, modo = "crear" }) 
 
   return (
     <form onSubmit={submit}>
+      {/* ===== Cliente(s) y OC ===== */}
+      <div className="form-section">
+        <div className="form-section-head">
+          <h3><Icon name="user" size={16} /> Cliente(s) y OC {clientesOC.length > 1 && <span className="td-mut" style={{ fontWeight: 400 }}>({clientesOC.length})</span>}</h3>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={addCliente}>
+            <Icon name="plus" size={14} /> Agregar cliente
+          </button>
+        </div>
+        {clientesOC.map((c, i) => (
+          <div key={i} className="cliente-oc-row">
+            <ClienteField value={c.cliente} onChange={(v) => setCli(i, "cliente", v)} vendedor={vendedorDeCliente} />
+            <div className="field">
+              <label>OC del Cliente</label>
+              <input value={c.ocCliente} onChange={(e) => setCli(i, "ocCliente", e.target.value)} placeholder="Ej. ST_26_06" />
+            </div>
+            {clientesOC.length > 1 ? (
+              <button type="button" className="icon-btn-del" title="Quitar cliente" onClick={() => removeCliente(i)}>
+                <Icon name="trash" size={14} />
+              </button>
+            ) : (
+              <span />
+            )}
+          </div>
+        ))}
+      </div>
+
       {/* ===== Datos de la orden (CROL) ===== */}
       <div className="form-grid">
-        <ClienteField
-          value={f.cliente}
-          onChange={setVal("cliente")}
-          vendedor={PREFIJO_VENDEDOR[(partidas[0]?.claveProducto || "").trim().slice(0, 3).toUpperCase()] || ""}
-        />
-        <div className="field">
-          <label>OC del Cliente</label>
-          <input value={f.ocCliente} onChange={set("ocCliente")} placeholder="Ej. ST_26_06" />
-        </div>
         <div className="field">
           <label>CROL</label>
           <input value={f.crol} onChange={set("crol")} placeholder="Folio de la OC en CROL" />

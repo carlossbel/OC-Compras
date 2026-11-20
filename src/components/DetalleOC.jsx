@@ -9,7 +9,7 @@ import GlassDropdown from "./GlassDropdown";
 import Icon from "./Icon";
 import { useAuth } from "../context/AuthContext";
 import { ESTADOS_ENVIO } from "../constants/catalogs";
-import { fmtFecha, fmtNum, partidasDe, facturasDe, cantidadTotal } from "../utils/format";
+import { fmtFecha, fmtNum, partidasDe, facturasDe, clientesDe, cantidadTotal } from "../utils/format";
 import { estaAtrasada } from "../utils/estimacion";
 import {
   actualizarOrden,
@@ -146,8 +146,21 @@ export default function DetalleOC({ oc, onClose }) {
 
           <div className="card" style={{ marginBottom: 18 }}>
             <div className="detail-grid">
-              <Item k="Cliente" v={oc.cliente} />
-              <Item k="OC Cliente" v={oc.ocCliente} />
+              {clientesDe(oc).length > 1 ? (
+                <div className="detail-item" style={{ gridColumn: "1 / -1" }}>
+                  <div className="k">Clientes y OC</div>
+                  <div className="v">
+                    {clientesDe(oc).map((c, i) => (
+                      <div key={i}>{c.cliente || "—"}{c.ocCliente ? ` · OC: ${c.ocCliente}` : ""}</div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <Item k="Cliente" v={oc.cliente} />
+                  <Item k="OC Cliente" v={oc.ocCliente} />
+                </>
+              )}
               <Item k="CROL" v={oc.crol} />
               <PdfLink k="Vínculo CROL" url={oc.crolUrl} />
               <Item k="Proveedor" v={oc.proveedor} />

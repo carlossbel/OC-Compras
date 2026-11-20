@@ -3,7 +3,7 @@ import DetalleOC from "./DetalleOC";
 import { EstadoChip, EtapaChip } from "./Chip";
 import Semaforo from "./Semaforo";
 import Icon from "./Icon";
-import { fmtFecha, fmtNum, partidasDe, facturasDe, cantidadTotal } from "../utils/format";
+import { fmtFecha, fmtNum, partidasDe, facturasDe, clientesDe, cantidadTotal } from "../utils/format";
 import { evalEntrega, colorSemaforo } from "../utils/estimacion";
 
 const IND = {
@@ -76,6 +76,7 @@ export default function OCTable({
                   <td><Semaforo oc={o} /></td>
                   <td className="td-strong">
                     {o.cliente || "—"}
+                    {clientesDe(o).length > 1 && <span className="chip soft" style={{ fontSize: 10, marginLeft: 6 }}>+{clientesDe(o).length - 1}</span>}
                     {o.noAplica && <div className="chip soft" style={{ fontSize: 10, marginTop: 3 }}>No aplica · {o.noAplica}</div>}
                   </td>
                   <td>
