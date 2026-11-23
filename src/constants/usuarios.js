@@ -18,6 +18,8 @@ export const USUARIOS = [
   { nombre: "Jovanna Hernandez", pass: "181125", rol: "lector", tema: "violetazul" },
   { nombre: "Leo Torrero", pass: "030625", rol: "lector" },
 
+  { nombre: "Miguel Rincon", pass: "1234", rol: "lector" },
+
   // Solo lectura (contraseña temporal 0000 — actualizar)
   { nombre: "Cuauhtemoc Muñoz", pass: "0000", rol: "lector" },
   { nombre: "Mario Crisanto", pass: "0000", rol: "lector" },
