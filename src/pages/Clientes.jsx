@@ -5,7 +5,7 @@ import Icon from "../components/Icon";
 import { useData } from "../context/DataContext";
 import { useAuth } from "../context/AuthContext";
 import { VENDEDORES, vendedorDeUsuario } from "../constants/vendedores";
-import { crearCliente, eliminarCliente } from "../services/ocService";
+import { crearCliente, editarCliente, eliminarCliente } from "../services/ocService";
 
 const norm = (s) => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 // Solo estas personas pueden agregar o quitar clientes.
@@ -38,6 +38,53 @@ function ModalAgregar({ vendedor, onClose }) {
         <button className="btn btn-primary" onClick={add} disabled={!nombre.trim() || guardando}>
           <Icon name="plus" size={15} /> {guardando ? "Guardando…" : "Agregar"}
         </button>
+      </div>
+    </Modal>
+  );
+}
+
+function ModalEditar({ vendedor, lista, onClose }) {
+  const [vals, setVals] = useState(() => Object.fromEntries(lista.map((c) => [c.id, c.nombre])));
+  const [guardando, setGuardando] = useState(null);
+  const guardar = async (c) => {
+    const n = (vals[c.id] || "").trim();
+    if (!n || n === c.nombre) return;
+    setGuardando(c.id);
+    try { await editarCliente(c.id, n); }
+    catch (e) { console.error(e); alert("No se pudo editar el cliente."); }
+    finally { setGuardando(null); }
+  };
+  return (
+    <Modal title={`Editar clientes · ${vendedor}`} onClose={onClose} maxWidth={480}>
+      {lista.length === 0 ? (
+        <div className="td-mut" style={{ fontSize: 13, lineHeight: 1.6 }}>
+          No hay clientes agregados manualmente para editar. Los clientes derivados de las órdenes no se editan aquí.
+        </div>
+      ) : (
+        <>
+          <div className="td-mut" style={{ fontSize: 12, marginBottom: 10 }}>Edita el nombre y guarda cada cliente:</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 340, overflowY: "auto" }}>
+            {lista.map((c) => {
+              const cambiado = (vals[c.id] || "").trim() && (vals[c.id] || "").trim() !== c.nombre;
+              return (
+                <div key={c.id} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <input
+                    value={vals[c.id] ?? ""}
+                    onChange={(e) => setVals((p) => ({ ...p, [c.id]: e.target.value }))}
+                    onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); guardar(c); } }}
+                    style={{ flex: 1 }}
+                  />
+                  <button type="button" className="icon-btn sm" title="Guardar" onClick={() => guardar(c)} disabled={!cambiado || guardando === c.id}>
+                    <Icon name="check" size={15} />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+      <div className="form-actions" style={{ justifyContent: "flex-end", marginTop: 16 }}>
+        <button className="btn btn-outline" onClick={onClose}>Cerrar</button>
       </div>
     </Modal>
   );
@@ -122,6 +169,9 @@ export default function Clientes() {
                         <button type="button" className="icon-btn sm" title="Agregar cliente" onClick={() => setModal({ tipo: "add", v })}>
                           <Icon name="plus" size={15} />
                         </button>
+                        <button type="button" className="icon-btn sm" title="Editar clientes" onClick={() => setModal({ tipo: "edit", v })}>
+                          <Icon name="edit" size={14} />
+                        </button>
                         <button type="button" className="icon-btn-del sm" title="Quitar cliente" onClick={() => setModal({ tipo: "del", v })}>
                           <Icon name="trash" size={13} />
                         </button>
@@ -146,6 +196,9 @@ export default function Clientes() {
 
       {modal?.tipo === "add" && (
         <ModalAgregar vendedor={modal.v} onClose={() => setModal(null)} />
+      )}
+      {modal?.tipo === "edit" && (
+        <ModalEditar vendedor={modal.v} lista={eliminablesDe(modal.v)} onClose={() => setModal(null)} />
       )}
       {modal?.tipo === "del" && (
         <ModalQuitar vendedor={modal.v} lista={eliminablesDe(modal.v)} onClose={() => setModal(null)} />

@@ -113,6 +113,10 @@ export async function crearCliente(nombre, vendedor) {
   return addDoc(collection(db, COL_CLI), { nombre: nombre.trim(), vendedor: vendedor || "", creadoEn: serverTimestamp() });
 }
 
+export async function editarCliente(id, nombre) {
+  return updateDoc(doc(db, COL_CLI, id), { nombre: nombre.trim(), actualizadoEn: serverTimestamp() });
+}
+
 export async function eliminarCliente(id) {
   return deleteDoc(doc(db, COL_CLI, id));
 }
