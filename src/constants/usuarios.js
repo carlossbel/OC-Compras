@@ -16,7 +16,7 @@ export const USUARIOS = [
   { nombre: "Laura Valle", pass: "030625", rol: "lector", tema: "violeta" },
   { nombre: "Carlos Medina", pass: "251125", rol: "lector" },
   { nombre: "Jovanna Hernandez", pass: "181125", rol: "lector", tema: "violetazul" },
-  { nombre: "Leo Torrero", pass: "030625", rol: "lector" },
+  { nombre: "Leonardo Ortega", pass: "030625", rol: "lector" },
 
   { nombre: "Miguel Rincon", pass: "1234", rol: "lector" },
 
